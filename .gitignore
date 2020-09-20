@@ -1,0 +1,11 @@
+.idea
+backend/.idea
+frontend/node_modules
+backend/backend/__pycache__
+backend/user/__pycache__
+backend/user/migrations
+backend/employee/__pycache__
+backend/employee/migrations
+backend/employee/data/*.csv
+backend/db.sqlite3
+venv
