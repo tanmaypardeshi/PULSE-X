@@ -103,7 +103,7 @@
         "hashtag": "['#Murphy', '#SeniorCat', '#AreYouStillWatching', '#Covid19']",
         "product": 103,
         "sentiment": 0,
-        "flag": 5,
+        "flag": 0,
         "visited": false
     }
 },
@@ -968,6 +968,60 @@
         "product": 9,
         "sentiment": -1,
         "flag": 1,
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 55,
+    "fields": {
+        "user": 9,
+        "text": "i drink i know things tyrion lannister got covid_19 stuckathome wine redredwine redwine gameofthrones tyrionlannister el casa di pastor lanthier https //t.co/aotuaumikl",
+        "lang": "en",
+        "country_code": "CA",
+        "created_at": "2020-03-29T00:21:45Z",
+        "date": "2020-03-29",
+        "time": "00:21:45",
+        "hashtag": "['#got', '#covid_19', '#stuckathome', '#wine', '#redredwine', '#redwine', '#gameofthrones', '#tyrionlannister']",
+        "product": 99,
+        "sentiment": 0,
+        "flag": 2,
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 56,
+    "fields": {
+        "user": 9,
+        "text": "don ’ judge me🤦🏽‍♀️🤦🏽‍♀️😭😩😂😂 savagechallenge megantheestallion tiktok tiktokdance chicago tiktokandquarantine coronavirus quarantine quarantineanddance bored whenboredomstrikes majorettedance majorette… https //t.co/qvd6jj17fs",
+        "lang": "en",
+        "country_code": "US",
+        "created_at": "2020-03-29T00:21:48Z",
+        "date": "2020-03-29",
+        "time": "00:21:48",
+        "hashtag": "['#savagechallenge', '#megantheestallion', '#tiktok', '#tiktokdance', '#chicago', '#tiktokandquarantine', '#coronavirus', '#quarantine', '#quarantineanddance', '#bored', '#whenboredomstrikes', '#majorettedance', '#majorette']",
+        "product": 72,
+        "sentiment": 0,
+        "flag": 3,
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 57,
+    "fields": {
+        "user": 9,
+        "text": "stop covid_19 covid_19mexico please close mexican airspace incoming international pax flight 's now aeromexico kml unitedairlines",
+        "lang": "en",
+        "country_code": "MX",
+        "created_at": "2020-03-29T00:21:56Z",
+        "date": "2020-03-29",
+        "time": "00:21:56",
+        "hashtag": "['#Covid_19', '#covid_19mexico', '#Aeromexico', '#kml', '#UnitedAirlines']",
+        "product": 5,
+        "sentiment": -1,
+        "flag": 3,
         "visited": false
     }
 }

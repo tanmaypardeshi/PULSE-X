@@ -146,7 +146,7 @@ class EmployeeDetailView(generics.ListAPIView):
             employee = User.objects.get(id=request.data['id'])
             name = f"{employee.first_name} {employee.last_name}"
             email = employee.email
-            manager_id = employee.manager_id
+            manager_id = employee.manager_id.id
             last_login = employee.last_name
             date_joined = employee.date_joined
             flag0 = Review.objects.filter(user=employee, flag=0).count()
@@ -155,7 +155,7 @@ class EmployeeDetailView(generics.ListAPIView):
             flag3 = Review.objects.filter(user=employee, flag=3).count()
             flag4 = Review.objects.filter(user=employee, flag=4).count()
             flag5 = Review.objects.filter(user=employee, flag=5).count()
-            total = Review.objects.all().count()
+            total = Review.objects.filter(user=employee).count()
 
             return Response({
                 'success': True,
