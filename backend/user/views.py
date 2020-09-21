@@ -44,36 +44,6 @@ class UserView(APIView):
         return Response(response, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class MangerView(APIView):
-    permission_classes = (IsAuthenticated, IsManager,)
-    authentication_classes = (JSONWebTokenAuthentication,)
-
-    def post(self, request, *args, **kwargs):
-        try:
-            email = request.data['email']
-            password = request.data['password']
-            first_name = request.data['first_name']
-            last_name = request.data['last_name']
-            employee = User.objects.create_user(email=email, password=password)
-            employee.first_name = first_name
-            employee.last_name = last_name
-            employee.is_employee = True
-            employee.is_rnd = False
-            employee.is_manager = False
-            employee.manager_id = request.user
-            employee.save()
-
-            return Response({
-                'success': True,
-                'message': 'Saved employee'
-            }, status=status.HTTP_200_OK)
-        except:
-            return Response({
-                'success': False,
-                'message': 'Could not save employee.'
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-
 class LoginView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer

@@ -8,6 +8,8 @@ urlpatterns = [
     # employee
     path('api/employee/', include('employee.urls')),
 
+    # manager
+    path('api/manager/', include('manager.urls')),
     # admin
     path('admin/', admin.site.urls),
 ]

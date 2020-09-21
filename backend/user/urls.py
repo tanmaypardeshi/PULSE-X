@@ -1,12 +1,10 @@
 from django.urls import path
 from .views import (UserView, LoginView, ProfileView, OTPView,
-                    VerifyOtp, ForgotPassword, ChangePassword,
-                    MangerView, )
+                    VerifyOtp, ForgotPassword, ChangePassword, )
 
 urlpatterns = [
     path('register/', UserView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
-    path('login_employee/', MangerView.as_view(), name='manager'),
     path('profile/', ProfileView.as_view(), name='view'),
     path('otp/', OTPView.as_view(), name='otp'),
     path('verify/', VerifyOtp.as_view(), name='verify'),

@@ -37,5 +37,4 @@ def get_set():
         objects['flag'] = temp['flag'][iterator[i]]
         review.append(objects)
         objects = {}
-
     return review
