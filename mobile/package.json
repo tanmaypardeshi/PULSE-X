@@ -17,6 +17,7 @@
     "@skele/components": "^1.0.0-alpha.40",
     "axios": "^0.20.0",
     "expo": "~38.0.8",
+    "expo-local-authentication": "~9.1.1",
     "expo-secure-store": "~9.0.1",
     "expo-status-bar": "^1.0.2",
     "react": "~16.11.0",

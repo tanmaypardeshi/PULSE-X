@@ -72,6 +72,10 @@ const Stats = ({navigation}) => {
     const [loading, setLoading] = React.useState(false)
 
     useFocusEffect(React.useCallback(() => {
+        fetchData()
+    }, []))
+
+    const fetchData = () => {
         SecureStore.getItemAsync('token')
         .then(token => {
             setLoading(true)
@@ -98,7 +102,7 @@ const Stats = ({navigation}) => {
         })
         .then(token => {
             return Axios.get(
-                `${SERVER_URI}/employee/flag/`,
+                `${SERVER_URI}/employee/flag_data/`,
                 {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
@@ -145,8 +149,7 @@ const Stats = ({navigation}) => {
             setLoading(false);
         })
         .catch(err => console.log(err))
-        
-    }, []))
+    }
     
     return(
         <ScrollView contentContainerStyle={{flexGrow: 1}}>

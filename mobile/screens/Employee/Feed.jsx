@@ -35,7 +35,7 @@ export default ({navigation}) => (
 
 const defaultSnack = {
     del: false,
-    send: false,
+    read: false,
     save: false,
     reply: false
 }
@@ -45,7 +45,7 @@ const Home = ({navigation}) => {
     const [showReply, setShowReply] = React.useState(false)
     const [swiped, setSwiped] = React.useState(false)
     const [snack, setSnack] = React.useState(defaultSnack)
-    const [cardData, setCardData] = React.useState(false)
+    const [cardData, setCardData] = React.useState([])
     const [loading, setLoading] = React.useState(true)
 
     useFocusEffect(React.useCallback(() => {
@@ -67,7 +67,7 @@ const Home = ({navigation}) => {
             )    
         )
         .then(res => {
-            console.log(res);
+            console.log(res.data.review_set);
             setCardData(res.data.review_set)
         })
         .catch(err => alert('Error in promise chain'))
@@ -78,25 +78,34 @@ const Home = ({navigation}) => {
     const swipeRef = React.useRef();
 
     const toggleSnack = key => e => {
+        if (e === 69) {
+            let tempCards = [...cardData]
+            setCardData(tempCards.slice(1))
+        }
         setSnack({...snack, [key]: true})
         setTimeout(() => setSnack(defaultSnack),3000)
     }
 
     return (
         <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            {cardData.length > 0 
+            ? 
             <Swiper
                 ref = {swipeRef}
                 useViewOverflow={false}
-                cards={new Array(10).fill(10)}
+                cards={cardData}
                 renderCard={(cardData, cardIndex) => 
-                    <Card>
+                    <Card index={cardIndex}>
                         <Card.Title
-                        title={`TITLE-${cardIndex}`}
-                        subtitle={new Date().toString()}
+                        title={`[ ${cardData.country_code} ]`}
+                        subtitle={new Date(cardData.created_at).toTimeString()}
+                        right={props =>
+                            <View><IconButton icon='account-network'/><IconButton icon='account-tie'/></View>
+                        }
                         />
                         <Card.Content>
                             <Paragraph>
-                                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+                                {cardData.text}
                             </Paragraph>
                         </Card.Content>
                         <Card.Actions style={{justifyContent: 'space-around'}}>
@@ -104,21 +113,21 @@ const Home = ({navigation}) => {
                                 icon='delete' 
                                 onPress={() => {
                                     setSwiped(false)
-                                    toggleSnack('del')()
+                                    toggleSnack('del')(69)
                                 }}
                             />
                             <IconButton 
-                                icon='email' 
+                                icon='eye' 
                                 onPress={() => {
                                     setSwiped(false)
-                                    toggleSnack('send')()
+                                    toggleSnack('read')(69)
                                 }}
                             />
                             <IconButton 
                                 icon='download' 
                                 onPress={() => {
                                     setSwiped(false)
-                                    toggleSnack('save')()
+                                    toggleSnack('save')(69)
                                 }}
                             />
                             <IconButton 
@@ -131,10 +140,9 @@ const Home = ({navigation}) => {
                         </Card.Actions>
                     </Card>
                 }
-                infinite={true}
                 onSwiped={() => setSwiped(true)}
                 onSwipedLeft={toggleSnack('del')}
-                onSwipedTop={toggleSnack('send')}
+                onSwipedTop={toggleSnack('read')}
                 onSwipedBottom={toggleSnack('save')}
                 onSwipedRight={() => setShowReply(true)}
                 cardIndex={0}
@@ -142,6 +150,9 @@ const Home = ({navigation}) => {
                 backgroundColor={'rgba(0,0,0,0)'}
             >
             </Swiper>
+            : 
+            null}
+            
             <Snackbar
                 theme={theme}
                 visible={snack.del}
@@ -180,7 +191,7 @@ const Home = ({navigation}) => {
             </Snackbar>
             <Snackbar
                 theme={theme}
-                visible={snack.send}
+                visible={snack.read}
                 onDismiss={() => setSnack(defaultSnack)}
                 duration={7000}
                 action={{
@@ -210,7 +221,7 @@ const Home = ({navigation}) => {
                         </Button>
                         <Button onPress={() => {
                             setShowReply(false)
-                            toggleSnack('reply')()
+                            toggleSnack('reply')(69)
                         }}>
                             Send
                         </Button>
