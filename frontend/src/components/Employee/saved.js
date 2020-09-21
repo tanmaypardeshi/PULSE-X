@@ -10,13 +10,15 @@ import { makeStyles,
         Tooltip,
         Menu,
         MenuItem,
-        Snackbar } from '@material-ui/core'
+        Snackbar,
+        Zoom } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { Delete,
         Visibility,
         Mail,
-        BookmarkBorder } from '@material-ui/icons'
-import NoSaved from './../../images/saved.svg'
+        Bookmark } from '@material-ui/icons'
+import  Saved from './../../images/saved.svg'
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -67,52 +69,48 @@ const useStyles = makeStyles((theme) => ({
     },
     noNewPost: {
         color: '#999999',
-        margin: '5% 34%',
+        margin: '5% 27%',
     },
     noNewText: {
-        margin: '0 0 0 36%'
+        margin: '0 0 0 32%'
+    },
+    saved: {
+        width: '60%',
+        marginTop: '3%',
+        marginLeft: '25%'
     }
 }))
 
-function Saved(props) {
+function Newest(props) {
 
     let classes = useStyles()
 
     const [datasource, setDatasource] = useState([])
+
     const [openSend, setSend] = useState(null)
     const [successbar, setSuccess] = useState(null)
     const [failbar, setFail] = useState(null)
     const [reply, setReply] = useState([])
 
     useEffect(() => {
-        let data = [
-            {
-                id : 1,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
+        let data = []
+        axios({
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            {
-                id : 2,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            },
-            {
-                id : 3,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            },
-            {
-                id : 4,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            },
-            {
-                id : 5,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            }
-        ]
-        setDatasource(data)
+            url: '/api/employee/saved/'
+        })
+        .then((res) => {
+            let reviews = res.data
+            console.log(res.data)
+            setDatasource(reviews)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }, [])
 
     const handleSend = (e) => {
@@ -123,142 +121,181 @@ function Saved(props) {
         setSend(null)
     }
 
-    const handleRemove = (e) => {
-        let posts = datasource.filter(post => post.id != e.currentTarget.id)
+    const handleRemove = (e, flag) => {
+        let current = datasource.find((post) => {
+            if(post.id == e.currentTarget.id) {
+                return post
+            }
+        })
+        axios({
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+            },
+            data: {
+                "text": current.text,
+                "lang": current.lang,
+                "country_code": current.country_code,
+                "created_at": current.created_at,
+                "date": current.date,
+                "time": current.time,
+                "hashtag": current.hashtag,
+                "product": current.product,
+                "sentiment": current.sentiment,
+                "flag": flag
+            },
+            url: '/api/employee/review/'
+        })
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+        let posts = datasource.filter((post) => {
+            if(post.id != e.currentTarget.id)
+                return post
+        })
         setDatasource(posts)
     }
 
-    const handleUnSave = (e) => {
-        handleRemove(e)
-    }
-
     const handleReply = (e) => {
-        handleRemove(e)
-    }
-
-    const handleChange = (e) => {
-        console.log(e.target.value, e.target.id)
-    }
-
-    const handleSendToDeveloper = (e) => {
-        handleClose()
-        setSuccess('Post sent to Developer!')
-        handleRemove(e)
+        handleRemove(e, 2)
     }
 
     const handleSendToManager = (e) => {
+        handleRemove(e, 3)
         handleClose()
-        setSuccess('Post sent to Manager!')
-        handleRemove(e)
+        //setSuccess('Post sent to Manager!')
     }
 
+    const handleSendToDeveloper = (e) => {
+        //console.log(e.currentTarget.id)
+        handleRemove(e, 4)
+        handleClose()
+        //setSuccess('Post sent to Developer!')
+    }
+
+    const handleSave = (e) => {
+        handleRemove(e, 5)
+    }
+
+    // const handleChange = (e) => {
+    //     console.log(e.target.value, e.target.id)
+    // }
+
     return(
-        <div className={classes.root}>
-            {
-                datasource.map((post) => (
-                    <div>
-                        <Card className={classes.card} variant='outlined'>
-                            <CardHeader
-                                title={<p className={classes.name}>Tweet</p>}
-                                subheader={<p className={classes.date}>{post.date}</p>}
-                                className={classes.heading}
-                                action={
-                                    <div className={classes.fourButtons}>
-                                        <Tooltip title='Send to Higher Authorities'>
-                                            <IconButton 
-                                             className={classes.actionButton}
-                                             onClick={handleSend}>
-                                                <Mail/>
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Menu
-                                        anchorEl={openSend}
-                                        keepMounted
-                                        open={Boolean(openSend)}
-                                        onClose={handleClose}
-                                        className={classes.menu}>
-                                            <MenuItem 
-                                             id={post.id}
-                                             onClick={handleSendToManager}
-                                            >
-                                                Send to Manager
-                                            </MenuItem>
-                                            <MenuItem 
-                                             id={post.id}
-                                             onClick={handleSendToDeveloper}
-                                            >
-                                                Send to Developer
-                                            </MenuItem>
-                                        </Menu>
-                                        <Tooltip title='Remove from Saved Items'>
-                                            <IconButton 
-                                             id={post.id}
-                                             onClick={handleUnSave}
-                                             className={classes.actionButton}>
-                                                <BookmarkBorder/>
-                                            </IconButton>
-                                        </Tooltip>
-                                    </div>
-                                }
-                            />
-                            <CardContent>
-                                <Typography className={classes.text}>{post.data}</Typography>
-                                <TextField 
-                                 id={post.id}
-                                 placeholder='Type a reply...'
-                                 multiline
-                                 variant='outlined'
-                                 size='small'
-                                 onChange={handleChange}
-                                 className={classes.reply}/>
-                                <Button
-                                 id={post.id}
-                                 variant='contained'
-                                 color='primary'
-                                 disableElevation
-                                 onChange={handleReply}
-                                 className={classes.replyButton}
-                                >
-                                    Reply
-                                </Button>
-                            </CardContent>
-                        </Card>
-                        <Snackbar 
-                        open={successbar}
-                        autoHideDuration={1000}
-                        anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                        }}
-                        >
-                        {
-                            successbar ? 
-                                <Alert severity='success'>{successbar}</Alert> :
-                                null
-                        }
-                        </Snackbar>
-                        <Snackbar
-                        open={failbar}
-                        autoHideDuration={1000}
-                        anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                        }}
-                        >
-                        {
-                            failbar ? 
-                                <Alert severity='error'>{failbar}</Alert> :
-                                null
-                        }
-                        </Snackbar>
-                   </div>
-                ))
-            }
+        <div className={classes.root} id='header'>
+                {
+                    datasource.map((post, index) => (
+                        <div>
+                            {/* <Zoom in={post.id}> */}
+                                <Card className={classes.card} variant='outlined'>
+                                    <CardHeader
+                                        title={<p className={classes.name}>Tweet</p>}
+                                        subheader={<p className={classes.date}>{post.date}</p>}
+                                        className={classes.heading}
+                                        action={
+                                            <div className={classes.fourButtons}>
+                                                <Tooltip title='Send to Higher Authorities'>
+                                                    <IconButton 
+                                                    className={classes.actionButton}
+                                                    onClick={handleSend}>
+                                                        <Mail/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Menu
+                                                anchorEl={openSend}
+                                                keepMounted
+                                                open={Boolean(openSend)}
+                                                onClose={handleClose}
+                                                className={classes.menu}>
+                                                    <MenuItem 
+                                                    id={post.id}
+                                                    onClick={handleSendToManager}
+                                                    >
+                                                        Send to Manager
+                                                    </MenuItem>
+                                                    <MenuItem 
+                                                    id={post.id}
+                                                    onClick={handleSendToDeveloper}
+                                                    >
+                                                        Send to Developer
+                                                    </MenuItem>
+                                                </Menu>
+                                                <Tooltip title='Remove from saved'>
+                                                    <IconButton 
+                                                    id={post.id}
+                                                    onClick={handleSave}
+                                                    className={classes.actionButton}>
+                                                        <Bookmark/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </div>
+                                        }
+                                    />
+                                    <CardContent>
+                                        <Typography className={classes.text}>{post.text}</Typography>
+                                        <TextField 
+                                        id={post.id}
+                                        placeholder='Type a reply...'
+                                        multiline
+                                        variant='outlined'
+                                        size='small'
+                                        //onChange={handleChange}
+                                        className={classes.reply}/>
+                                        <Button
+                                        id={post.id}
+                                        variant='contained'
+                                        color='primary'
+                                        disableElevation
+                                        onClick={handleReply}
+                                        className={classes.replyButton}
+                                        >
+                                            Reply
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            {/* </Zoom> */}
+                            <Snackbar 
+                            open={successbar}
+                            autoHideDuration={1000}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            >
+                            {
+                                successbar ? 
+                                    <Alert severity='success'>{successbar}</Alert> :
+                                    null
+                            }
+                            </Snackbar>
+                            <Snackbar
+                            open={failbar}
+                            autoHideDuration={1000}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            >
+                            {
+                                failbar ? 
+                                    <Alert severity='error'>{failbar}</Alert> :
+                                    null
+                            }
+                            </Snackbar>
+                    </div>
+                    ))
+                }
             {
                 !datasource.length ? 
                     <div className={classes.noNewPost}>
-                        <img src={NoSaved} alt='No new posts' width='600'/>
-                        <p className={classes.noNewText}>Nothing in saved posts.</p>
+                        <img src={Saved} alt='No new posts' className={classes.saved}/>
+                        <p className={classes.noNewText}>All done for now! Come back later for more.</p>
                     </div> :
                     null
             }
@@ -266,4 +303,4 @@ function Saved(props) {
     )
 }
 
-export default Saved
+export default Newest

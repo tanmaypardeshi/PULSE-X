@@ -18,6 +18,7 @@ import { Delete,
         Mail,
         Bookmark } from '@material-ui/icons'
 import GoalsMet from './../../images/goal_met.svg'
+import uuid from 'react-uuid'
 import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
@@ -88,6 +89,7 @@ function Newest(props) {
     const [reply, setReply] = useState([])
 
     useEffect(() => {
+        let data = []
         axios({
             method: "GET",
             headers: {
@@ -98,18 +100,50 @@ function Newest(props) {
             url: '/api/employee/review/'
         })
         .then((res) => {
-            let reviews = res.data.review_set
-            console.log(res.data.review_set)
-            setDatasource(reviews)
+            for(let i=0; i<res.data.review_set.length; i++) {
+                data.push({
+                    id: uuid(),
+                    ...res.data.review_set[i]
+                })
+            }
+            setDatasource(data)
         })
         .catch((error) => {
             console.log(error)
         })
+        
     }, [])
+
+    const getReviews = () => {
+        let data = datasource
+        console.log(data)
+        axios({
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+            },
+            url: '/api/employee/review/'
+        })
+        .then((res) => {
+            for(let i=0; i<res.data.review_set.length; i++) {
+                data.push({
+                    id: uuid(),
+                    ...res.data.review_set[i]
+                })
+            }
+            setDatasource(data)
+            console.log(datasource)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
 
     // useEffect(() => {
     //     document.addEventListener('scroll', trackScrolling)
-    // }, [...datasource])
+    // }, [])
 
     const isBottom = (el) => {
             return el.getBoundingClientRect().bottom <= window.innerHeight;
@@ -119,16 +153,8 @@ function Newest(props) {
         const wrappedElement = document.getElementById('header');
         if (isBottom(wrappedElement)) {
           console.log('header bottom reached');
-          console.log(datasource)
-          let data = [...datasource]
-          console.log(data)
-          data.push(
-            {
-                id : 6,
-                date : '20-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            }
-          )
+          let data = datasource
+          //Fetch
           console.log(data)
           setDatasource(data)
         }
@@ -142,51 +168,87 @@ function Newest(props) {
         setSend(null)
     }
 
-    const handleRemove = (e) => {
-        let posts = datasource
-        posts.splice(e.currentTarget.id, 1)
-        console.log(posts)
+    const handleRemove = (e, flag) => {
+
+        let current = datasource.find((post) => {
+            if(post.id === e.currentTarget.id) {
+                return post
+            }
+        })
+        axios({
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+            },
+            data: {
+                "text": current.text,
+                "lang": current.lang,
+                "country_code": current.country_code,
+                "created_at": current.created_at,
+                "date": current.date,
+                "time": current.time,
+                "hashtag": current.hashtag,
+                "product": current.product,
+                "sentiment": current.sentiment,
+                "flag": flag
+            },
+            url: '/api/employee/review/'
+        })
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+        let posts = datasource.filter((post) => {
+            if(post.id != e.currentTarget.id)
+                return post
+        })
         setDatasource(posts)
     }
 
     const handleDelete = (e) => {
-        handleRemove(e)
+        handleRemove(e, 0)
     }
 
     const handleRead = (e) => {
-        handleRemove(e)
-    }
-
-    const handleSave = (e) => {
-        handleRemove(e)
+        handleRemove(e, 1)
     }
 
     const handleReply = (e) => {
-        handleRemove(e)
-    }
-
-    const handleChange = (e) => {
-        console.log(e.target.value, e.target.id)
-    }
-
-    const handleSendToDeveloper = (e) => {
-        handleClose()
-        setSuccess('Post sent to Developer!')
-        handleRemove(e)
+        handleRemove(e, 2)
     }
 
     const handleSendToManager = (e) => {
+        handleRemove(e, 3)
         handleClose()
-        setSuccess('Post sent to Manager!')
-        handleRemove(e)
+        //setSuccess('Post sent to Manager!')
     }
+
+    const handleSendToDeveloper = (e) => {
+        //console.log(e.currentTarget.id)
+        handleRemove(e, 4)
+        handleClose()
+        //setSuccess('Post sent to Developer!')
+    }
+
+    const handleSave = (e) => {
+        handleRemove(e, 5)
+    }
+
+    // const handleChange = (e) => {
+    //     console.log(e.target.value, e.target.id)
+    // }
 
     return(
         <div className={classes.root} id='header'>
                 {
                     datasource.map((post, index) => (
                         <div>
-                            {/* <Zoom in={index}> */}
+                            {/* <Zoom in={post.id}> */}
                                 <Card className={classes.card} variant='outlined'>
                                     <CardHeader
                                         title={<p className={classes.name}>Tweet</p>}
@@ -196,7 +258,7 @@ function Newest(props) {
                                             <div className={classes.fourButtons}>
                                                 <Tooltip title='Chuck'>
                                                     <IconButton 
-                                                    id={index}
+                                                    id={post.id}
                                                     onClick={handleDelete}
                                                     className={classes.actionButton}>
                                                         <Delete/>
@@ -204,7 +266,7 @@ function Newest(props) {
                                                 </Tooltip>
                                                 <Tooltip title='Mark as Read'>
                                                     <IconButton 
-                                                    id={index}
+                                                    id={post.id}
                                                     onClick={handleRead}
                                                     className={classes.actionButton}>
                                                         <Visibility/>
@@ -212,6 +274,7 @@ function Newest(props) {
                                                 </Tooltip>
                                                 <Tooltip title='Send to Higher Authorities'>
                                                     <IconButton 
+                                                    id={post.id}
                                                     className={classes.actionButton}
                                                     onClick={handleSend}>
                                                         <Mail/>
@@ -224,7 +287,7 @@ function Newest(props) {
                                                 onClose={handleClose}
                                                 className={classes.menu}>
                                                     <MenuItem 
-                                                    id={index}
+                                                    id={post.id}
                                                     onClick={handleSendToManager}
                                                     >
                                                         Send to Manager
@@ -238,7 +301,7 @@ function Newest(props) {
                                                 </Menu>
                                                 <Tooltip title='Save for Later'>
                                                     <IconButton 
-                                                    id={index}
+                                                    id={post.id}
                                                     onClick={handleSave}
                                                     className={classes.actionButton}>
                                                         <Bookmark/>
@@ -250,19 +313,19 @@ function Newest(props) {
                                     <CardContent>
                                         <Typography className={classes.text}>{post.text}</Typography>
                                         <TextField 
-                                        id={index}
+                                        id={post.id}
                                         placeholder='Type a reply...'
                                         multiline
                                         variant='outlined'
                                         size='small'
-                                        onChange={handleChange}
+                                        //onChange={handleChange}
                                         className={classes.reply}/>
                                         <Button
-                                        id={index}
+                                        id={post.id}
                                         variant='contained'
                                         color='primary'
                                         disableElevation
-                                        onChange={handleReply}
+                                        onClick={handleReply}
                                         className={classes.replyButton}
                                         >
                                             Reply
@@ -301,6 +364,15 @@ function Newest(props) {
                     </div>
                     ))
                 }
+                {/* <Button
+                variant='contained'
+                color='primary'
+                disableElevation
+                onClick={getReviews}
+                className={classes.replyButton}
+                >
+                    Load More
+                </Button> */}
             {
                 !datasource.length ? 
                     <div className={classes.noNewPost}>
