@@ -95,3 +95,38 @@ class ManagerReview(generics.ListCreateAPIView):
                 'success': True,
                 'message': e.__str__()
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ManagerChart(generics.ListAPIView):
+    permission_classes = (IsAuthenticated, IsManager, )
+    authentication_classes = (JSONWebTokenAuthentication, )
+
+    def get(self, request, *args, **kwargs):
+        try:
+            employees = Review.objects.filter(user=request.user).count()
+            flag0 = Review.objects.filter(user__is_manager=request.user, flag=0).count()
+            flag1 = Review.objects.filter(user__is_manager=request.user, flag=1).count()
+            flag2 = Review.objects.filter(user__is_manager=request.user, flag=2).count()
+            flag3 = Review.objects.filter(user__is_manager=request.user, flag=3).count()
+            flag4 = Review.objects.filter(user__is_manager=request.user, flag=4).count()
+            flag5 = Review.objects.filter(user__is_manager=request.user, flag=5).count()
+
+            return Response({
+                'success': True,
+                'message': 'Fetched data',
+                'data': {
+                    'total_employees': employees,
+                    'flag0': flag0,
+                    'flag1': flag1,
+                    'flag2': flag2,
+                    'flag3': flag3,
+                    'flag4': flag4,
+                    'flag5': flag5
+                }
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': e.__str__()
+            }, status=status.HTTP_400_BAD_REQUEST)
+
