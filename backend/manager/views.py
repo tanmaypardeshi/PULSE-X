@@ -81,7 +81,7 @@ class ManagerReview(generics.ListCreateAPIView):
             review = Review.objects.get(id=request.data['id'])
             flag = request.data['flag']
             visited = request.data['visited']
-            if visited:
+            if not visited:
                 review.flag = flag
             else:
                 review.visited = True
@@ -103,13 +103,14 @@ class ManagerChart(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            employees = Review.objects.filter(user=request.user).count()
-            flag0 = Review.objects.filter(user__is_manager=request.user, flag=0).count()
-            flag1 = Review.objects.filter(user__is_manager=request.user, flag=1).count()
-            flag2 = Review.objects.filter(user__is_manager=request.user, flag=2).count()
-            flag3 = Review.objects.filter(user__is_manager=request.user, flag=3).count()
-            flag4 = Review.objects.filter(user__is_manager=request.user, flag=4).count()
-            flag5 = Review.objects.filter(user__is_manager=request.user, flag=5).count()
+            manager = User.objects.get(email=request.user)
+            employees = User.objects.filter(manager_id=manager.id).count()
+            flag0 = Review.objects.filter(user__manager_id=request.user, flag=0).count()
+            flag1 = Review.objects.filter(user__manager_id=request.user, flag=1).count()
+            flag2 = Review.objects.filter(user__manager_id=request.user, flag=2).count()
+            flag3 = Review.objects.filter(user__manager_id=request.user, flag=3).count()
+            flag4 = Review.objects.filter(user__manager_id=request.user, flag=4).count()
+            flag5 = Review.objects.filter(user__manager_id=request.user, flag=5).count()
 
             return Response({
                 'success': True,
