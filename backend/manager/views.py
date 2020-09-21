@@ -66,7 +66,7 @@ class ManagerReview(generics.ListCreateAPIView):
         employees = User.objects.filter(manager_id=manger)
         review_list = []
         for employee in employees:
-            reviews = Review.objects.filter(user=employee, flag=3)
+            reviews = Review.objects.filter(user=employee, flag=3, visited=False)
             for review in reviews:
                 review_list.append(review)
         return review_list
@@ -81,6 +81,10 @@ class ManagerReview(generics.ListCreateAPIView):
             review = Review.objects.get(id=request.data['id'])
             flag = request.data['flag']
             visited = request.data['visited']
+            if visited:
+                review.flag = flag
+            else:
+                review.visited = True
             review.save()
             return Response({
                 'success': True,

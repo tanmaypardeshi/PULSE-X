@@ -5,4 +5,5 @@ from .models import Review
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['user', 'sentiment', 'flag']
+    list_display = ['user', 'sentiment', 'flag', 'visited']
+    list_filter = ['visited', ]

@@ -7,8 +7,3 @@ urlpatterns = [
     path('review_data/', GetReview.as_view(), name='review'),
     path('flag_data/', GetFlagDetails.as_view(), name='flag')
 ]
-
-"""
-Saved - post
-Add visited
-"""

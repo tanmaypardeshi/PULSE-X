@@ -62,8 +62,21 @@ class SavedReview(generics.ListAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        pass
-
+        try:
+            id = request.data['id']
+            flag = request.data['flag']
+            review = Review.objects.get(id=id)
+            review.flag = flag
+            review.save()
+            return Response({
+                'success': True,
+                'message': 'Edited Review'
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': e.__str__()
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class GetReview(generics.ListAPIView):
     permission_classes = (IsAuthenticated, IsEmployee, )
@@ -101,9 +114,3 @@ class GetFlagDetails(generics.ListAPIView):
             'flag5': flag5,
             'total': total
         }, status=status.HTTP_200_OK)
-
-
-"""
-1 - Getting employee
-2 - Graph generation for total reviews of employee
-"""
