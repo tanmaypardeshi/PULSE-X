@@ -61,6 +61,9 @@ class SavedReview(generics.ListAPIView):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def post(self, request, *args, **kwargs):
+        pass
+
 
 class GetReview(generics.ListAPIView):
     permission_classes = (IsAuthenticated, IsEmployee, )
@@ -100,3 +103,7 @@ class GetFlagDetails(generics.ListAPIView):
         }, status=status.HTTP_200_OK)
 
 
+"""
+1 - Getting employee
+2 - Graph generation for total reviews of employee
+"""

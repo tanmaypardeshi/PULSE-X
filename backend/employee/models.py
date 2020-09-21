@@ -14,6 +14,7 @@ class Review(models.Model):
     product = models.IntegerField(default=0)
     sentiment = models.IntegerField(default=0)
     flag = models.IntegerField(default=0)
+    visited = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
