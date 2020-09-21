@@ -72,6 +72,7 @@ class GetReview(generics.ListAPIView):
 
         return Response({
             'employee_reviews': employee_reviews,
+            'difference': total_reviews - employee_reviews,
             'total_reviews': total_reviews
         }, status=status.HTTP_200_OK)
 

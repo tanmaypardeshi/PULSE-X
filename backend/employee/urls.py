@@ -5,5 +5,5 @@ urlpatterns = [
     path('review/', ReviewView.as_view(), name='get-review'),
     path('saved/', SavedReview.as_view(), name='saved'),
     path('review_data/', GetReview.as_view(), name='review'),
-    path('flag/', GetFlagDetails.as_view(), name='flag')
+    path('flag_data/', GetFlagDetails.as_view(), name='flag')
 ]

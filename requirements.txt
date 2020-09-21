@@ -3,6 +3,10 @@ Django==3.1.1
 django-cors-headers==3.5.0
 djangorestframework==3.11.1
 djangorestframework-jwt==1.11.0
+numpy==1.19.2
+pandas==1.1.2
 PyJWT==1.7.1
+python-dateutil==2.8.1
 pytz==2020.1
+six==1.15.0
 sqlparse==0.3.1

@@ -8,8 +8,8 @@ def get_reviews():
     dataframe = pd.read_csv(path + 'final.csv', index_col=0)
     temp = dataframe.head(1000)
     dataframe = dataframe.iloc[1000:]
-    temp.to_csv('temp.csv')
-    dataframe.to_csv('final.csv')
+    temp.to_csv(path + 'temp.csv')
+    dataframe.to_csv(path + 'final.csv')
 
 
 def get_set():
