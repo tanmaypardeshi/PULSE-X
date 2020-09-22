@@ -27,8 +27,8 @@ def get_set():
     for i in range(10):
         objects['productid'] = temp['ProductId'][iterator[i]]
         objects['userid'] = temp['UserId'][iterator[i]]
-        objects['profile_name'] = temp['ProfileName']
-        objects['time'] = temp['Time']
+        objects['profile_name'] = temp['ProfileName'][iterator[i]]
+        objects['time'] = temp['Time'][iterator[i]]
         objects['text'] = temp['Text'][iterator[i]]
         objects['sentiment'] = temp['Sentiment'][iterator[i]]
         objects['helpfulness'] = temp['Helpfulness'][iterator[i]]

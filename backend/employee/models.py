@@ -14,10 +14,10 @@ class Review(models.Model):
     date = models.DateField()
     flag = models.IntegerField(default=0)
     sarcasm = models.IntegerField(default=0)
-    product = models.IntegerField(default=0)
+    product = models.CharField(max_length=50, default='')
     country = models.CharField(max_length=10, default='')
     lang = models.CharField(max_length=10, default='')
-    url = models.SlugField(default='', max_length=120)
+    url = models.CharField(max_length=120, default='')
     visited = models.BooleanField(default=False)
 
     def __str__(self):

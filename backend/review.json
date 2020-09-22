@@ -1,0 +1,222 @@
+[
+{
+    "model": "employee.review",
+    "pk": 1,
+    "fields": {
+        "user": 9,
+        "productid": "B001GVISJM",
+        "userid": "A1WO0KGLPR5PV6",
+        "profile_name": "mom2emma",
+        "time": 1313452800,
+        "text": "My husband is a Twizzlers addict.  We've bought these many times from Amazon because we're government employees living overseas and can't get them in the country we are assigned to.  They've always been fresh and tasty, packed well and arrive in a timely manner.",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 0,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 2,
+    "fields": {
+        "user": 9,
+        "productid": "B001GVISJM",
+        "userid": "AZOF9E17RGZH8",
+        "profile_name": "Tammy Anderson",
+        "time": 1308960000,
+        "text": "I bought these for my husband who is currently overseas. He loves these, and apparently his staff likes them also.<br />There are generous amounts of Twizzlers in each 16-ounce bag, and this was well worth the price. <a href=\"http://www.amazon.com/gp/product/B001GVISJM\">Twizzlers, Strawberry, 16-Ounce Bags (Pack of 6)</a>",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 1,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 3,
+    "fields": {
+        "user": 9,
+        "productid": "B001GVISJM",
+        "userid": "ARYVQL4N737A1",
+        "profile_name": "Charles Brown",
+        "time": 1304899200,
+        "text": "I can remember buying this candy as a kid and the quality hasn't dropped in all these years. Still a superb product you won't be disappointed with.",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 2,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 4,
+    "fields": {
+        "user": 9,
+        "productid": "B001GVISJM",
+        "userid": "AJ613OLZZUG7V",
+        "profile_name": "Mare's",
+        "time": 1304467200,
+        "text": "I love this candy.  After weight watchers I had to cut back but still have a craving for it.",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 3,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 5,
+    "fields": {
+        "user": 9,
+        "productid": "B001GVISJM",
+        "userid": "A22P2J09NJ9HKE",
+        "profile_name": "S. Cabanaugh \"jilly pepper\"",
+        "time": 1295481600,
+        "text": "I have lived out of the US for over 7 yrs now, and I so miss my Twizzlers!!  When I go back to visit or someone visits me, I always stock up.  All I can say is YUM!<br />Sell these in Mexico and you will have a faithful buyer, more often than I'm able to buy them right now.",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 4,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 6,
+    "fields": {
+        "user": 9,
+        "productid": "B001GVISJM",
+        "userid": "A3FONPR03H3PJS",
+        "profile_name": "Deborah S. Linzer \"Cat Lady\"",
+        "time": 1288310400,
+        "text": "Product received is as advertised.<br /><br /><a href=\"http://www.amazon.com/gp/product/B001GVISJM\">Twizzlers, Strawberry, 16-Ounce Bags (Pack of 6)</a>",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 5,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 7,
+    "fields": {
+        "user": 9,
+        "productid": "B001GVISJM",
+        "userid": "A3RXAU2N8KV45G",
+        "profile_name": "lady21",
+        "time": 1332633600,
+        "text": "The candy is just red , No flavor . Just  plan and chewy .  I would never buy them again",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 3,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 8,
+    "fields": {
+        "user": 9,
+        "productid": "B001GVISJM",
+        "userid": "AAAS38B98HMIK",
+        "profile_name": "Heather Dube",
+        "time": 1331856000,
+        "text": "I was so glad Amazon carried these batteries.  I have a hard time finding them elsewhere because they are such a unique size.  I need them for my garage door opener.<br />Great deal for the price.",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 2,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 9,
+    "fields": {
+        "user": 9,
+        "productid": "B00144C10S",
+        "userid": "A2F4LZVGFLD1OB",
+        "profile_name": "DaisyH",
+        "time": 1338854400,
+        "text": "I got this for my Mum who is not diabetic but needs to watch her sugar intake, and my father who simply chooses to limit unnecessary sugar intake - she's the one with the sweet tooth - they both LOVED these toffees, you would never guess that they're sugar-free and it's so great that you can eat them pretty much guilt free!  i was so impressed that i've ordered some for myself (w dark chocolate) to take to the office so i'll eat them instead of snacking on sugary sweets.<br />These are just EXCELLENT!",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 2,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 10,
+    "fields": {
+        "user": 9,
+        "productid": "B003F6UO7K",
+        "userid": "AFM0O9480F04W",
+        "profile_name": "Sherril",
+        "time": 1297641600,
+        "text": "I have never been a huge coffee fan. However, my mother purchased this little machine and talked me into trying the Latte Macciato. No Coffee Shop has a better one and I like most of the other products, too (as a usually non-coffee drinker!).<br />The little Dolche Guesto Machine is super easy to use and prepares a really good Coffee/Latte/Cappuccino/etc in less than a minute (if water is heated up). I would recommend the Dolce Gusto to anyone. Too good for the price and I'am getting one myself! :)",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "date": "2020-12-12",
+        "flag": 0,
+        "sarcasm": 0,
+        "product": "cauliflower",
+        "country": "US",
+        "lang": "en",
+        "url": "www.twitter.com/faoisejdfo/oijsd.html",
+        "visited": false
+    }
+}
+]
