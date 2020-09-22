@@ -25,16 +25,20 @@ def get_set():
     iterator = temp.index.values
 
     for i in range(10):
-        objects['text'] = temp['text'][iterator[i]]
-        objects['lang'] = temp['lang'][iterator[i]]
-        objects['country_code'] = temp['country_code'][iterator[i]]
-        objects['created_at'] = temp['created_at'][iterator[i]]
-        objects['date'] = temp['date'][iterator[i]]
-        objects['time'] = temp['time'][iterator[i]]
-        objects['hashtag'] = temp['hashtag'][iterator[i]]
-        objects['product'] = temp['Product'][iterator[i]]
+        objects['productid'] = temp['ProductId'][iterator[i]]
+        objects['userid'] = temp['UserId'][iterator[i]]
+        objects['profile_name'] = temp['ProfileName']
+        objects['time'] = temp['Time']
+        objects['text'] = temp['Text'][iterator[i]]
         objects['sentiment'] = temp['Sentiment'][iterator[i]]
+        objects['helpfulness'] = temp['Helpfulness'][iterator[i]]
+        objects['date'] = temp['date'][iterator[i]]
         objects['flag'] = temp['flag'][iterator[i]]
+        objects['sarcasm'] = temp['sarcasm'][iterator[i]]
+        objects['product'] = temp['Product'][iterator[i]]
+        objects['country'] = temp['country'][iterator[i]]
+        objects['lang'] = temp['lang'][iterator[i]]
+        objects['url'] = temp['url'][iterator[i]]
         review.append(objects)
         objects = {}
     return review
