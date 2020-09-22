@@ -6,8 +6,10 @@ from .models import Review
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['text', 'lang', 'country_code', 'created_at', 'flag',
-                  'date', 'time', 'hashtag', 'product', 'sentiment', ]
+        fields = ['productid', 'userid', 'profile_name', 'time',
+                  'text', 'sentiment', 'helpfulness', 'date',
+                  'flag', 'sarcasm', 'product', 'country', 'lang',
+                  'url', 'visited']
 
     def update(self, instance, validated_data):
         employee = Review.objects.create(user=instance, **validated_data)
@@ -21,4 +23,3 @@ class SaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
-
