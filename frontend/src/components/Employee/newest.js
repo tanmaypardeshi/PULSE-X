@@ -103,6 +103,7 @@ function Newest(props) {
             url: '/api/employee/review/'
         })
         .then((res) => {
+            console.log(res.data.review_set)
             for(let i=0; i<res.data.review_set.length; i++) {
                 data.push({
                     id: uuid(),
@@ -153,19 +154,24 @@ function Newest(props) {
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
             data: {
-                "text": current.text,
-                "lang": current.lang,
-                "country_code": current.country_code,
-                "created_at": current.created_at,
-                "date": current.date,
+                "productid": current.productid,
+                "userid": current.userid,
+                "profile_name": current.profile_name,
                 "time": current.time,
-                "hashtag": current.hashtag,
-                "product": current.product,
+                "text": current.text,
                 "sentiment": current.sentiment,
+                "helpfulness": current.helpfulness,
+                "date": current.date,
+                "sarcasm": current.sarcasm,
+                "country": current.country,
+                "product": current.product,
+                "lang": current.lang,
+                "url": current.url,
                 "flag": flag
             },
             url: '/api/employee/review/'
         })
+
         .then((res) => {
             
         })
@@ -219,7 +225,7 @@ function Newest(props) {
                             {/* <Zoom in={post.id}> */}
                                 <Card className={classes.card} variant='outlined'>
                                     <CardHeader
-                                        title={<p className={classes.name}>Tweet</p>}
+                                        title={<p className={classes.name}>{post.profile_name}</p>}
                                         subheader={<p className={classes.date}>{post.date}</p>}
                                         className={classes.heading}
                                         action={

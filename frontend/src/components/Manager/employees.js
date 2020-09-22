@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { makeStyles, 
+         TableContainer,
+         Paper,
          Table,
+         TableHead,
          TableBody,
          TableRow,
          TableCell,
@@ -24,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#f8f8f8'
     },
     button: {
-        float: 'left'
+        float: 'left',
+        marginLeft: '10%'
     },
     textfield: {
         width: '100%',
@@ -38,6 +42,19 @@ const useStyles = makeStyles((theme) => ({
     registerButton: {
         margin: '5% 38%'
     },
+    paper: {
+        marginTop: '1%',
+        padding: '1%',
+        width:'75%',
+    },
+    table: {
+        
+        
+    },
+    tablehead: {
+        backgroundColor: '#ceceeb',
+        color: '#ffffff'
+    }
 }))
 
 function Profile(props) {
@@ -55,6 +72,27 @@ function Profile(props) {
     const [match, setMatch] = useState(true)
     const [success, setSuccess] = useState(false)
  
+
+    useEffect(() => {
+        let data = []
+        axios({
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+            },
+            url: '/api/manager/my_employees/'
+        })
+        .then((res) => {
+            console.log(res.data)
+            setEmployees(res.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }, [])
+
     const handleNewEmployee = (e) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         if(!email || !fname || !lname || !password || !re.test(email)) {
@@ -78,7 +116,7 @@ function Profile(props) {
                     "first_name": fname,
                     "last_name": lname
                 },
-                url: "/api/user/login_employee/"
+                url: "/api/manager/login_employee/"
             })
             .then((res) => {
                 setOpen(false)
@@ -114,6 +152,27 @@ function Profile(props) {
                     Add
                 </Button>
             </div>
+            <TableContainer component={Paper} className={classes.paper}>
+                <Table className={classes.table}>
+                    <TableHead className={classes.tablehead}>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Email</TableCell>
+                            <TableCell>Role</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {employees.map((emp) => (
+                            <TableRow key={emp.id}>
+                                <TableCell>{emp.first_name}&nbsp;{emp.last_name}</TableCell>
+                                <TableCell>{emp.email}</TableCell>
+                                <TableCell>Employee</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+ 
             <Dialog
              open={open}
              onClose={handleClose}

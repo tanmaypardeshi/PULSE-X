@@ -155,7 +155,7 @@ function Newest(props) {
                         <div>
                                 <Card className={classes.card} variant='outlined'>
                                     <CardHeader
-                                        title={<p className={classes.name}>Tweet</p>}
+                                        title={<p className={classes.name}>{post.profile_name}</p>}
                                         subheader={<p className={classes.date}>{post.date}</p>}
                                         className={classes.heading}
                                         action={

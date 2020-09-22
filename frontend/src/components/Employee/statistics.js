@@ -64,8 +64,9 @@ function Statistics() {
             url: '/api/employee/flag_data/'
         })
         .then((res) => {
-            let label = ['Dumped', 'Marked as Read', 'Replied', 'Sent to Developer', 'Sent to Manager', 'Saved' ]
+            let label = ['Dumped', 'Marked as Read', 'Replied', 'Sent to Manager', 'Sent to Developer', 'Saved' ]
             let post = []
+            console.log(res.data.data)
             post.push(res.data.data.flag0)
             post.push(res.data.data.flag1)
             post.push(res.data.data.flag2)
@@ -80,48 +81,88 @@ function Statistics() {
         })
     }, [])
 
-    const generateChart = (names, data, label, colors) => {
-        return({
-            data: {
-                labels:names,
-                datasets:[
-                    {
-                        label: label,
-                        data: data,
-                        text: label,
-                        backgroundColor: colors,
-                        borderColor: colors,
-                        borderWidth: 2,
-                        hoverBorderWidth:2,
-                        hoverBorderColor: colors
-                    }
-                ],
-            },
-            width: 650,
-            height: 430,
-            options: {
-                legend:{
-                    display:true,
-                    position:'right',
-                    onClick: function (e) {
-                        e.stopPropagation();
-                    }
+    const generateChart = (names, data, label, colors, scale) => {
+        if(scale)
+            return({
+                data: {
+                    labels:names,
+                    datasets:[
+                        {
+                            label: label,
+                            data: data,
+                            text: label,
+                            backgroundColor: colors,
+                            borderColor: colors,
+                            borderWidth: 2,
+                            hoverBorderWidth:2,
+                            hoverBorderColor: colors
+                        }
+                    ],
                 },
-                maintainAspectRatio: false,
-                responsive: true
-            }
-        });
+                width: 650,
+                height: 430,
+                options: {
+                    legend:{
+                        display:true,
+                        position:'right',
+                        onClick: function (e) {
+                            e.stopPropagation();
+                        }
+                    },
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true,
+                                min: 0   
+                            }
+                        }]
+                    } 
+                },
+            });
+        else
+            return({
+                data: {
+                    labels:names,
+                    datasets:[
+                        {
+                            label: label,
+                            data: data,
+                            text: label,
+                            backgroundColor: colors,
+                            borderColor: colors,
+                            borderWidth: 2,
+                            hoverBorderWidth:2,
+                            hoverBorderColor: colors
+                        }
+                    ],
+                },
+                width: 650,
+                height: 430,
+                options: {
+                    legend:{
+                        display:true,
+                        position:'right',
+                        onClick: function (e) {
+                            e.stopPropagation();
+                        }
+                    },
+                    maintainAspectRatio: false,
+                    responsive: true,
+                },
+            });
     }
 
     return (
         <div className={classes.root}>
             <Card className={classes.pie}>
                 <h5>My Reviews</h5>
-                <Doughnut {...generateChart(labelPosts, dataPosts, "Posts", colorsPosts)}/>
+                <Doughnut {...generateChart(labelPosts, dataPosts, "Posts", colorsPosts, false)}/>
             </Card>
             <Card className={classes.pie}>
                 <h5>Post Review Statistics</h5>
-                <Bar {...generateChart(labelStats, dataStats, "Reviews", colorsStats)}/>
+                <Bar {...generateChart(labelStats, dataStats, "Reviews", colorsStats, true)}/>
             </Card>
         </div>
     )
