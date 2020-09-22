@@ -120,7 +120,7 @@ function Manager() {
                          label={<div><MailOutline className={classes.icon}/>Received</div>} 
                          className={classes.tabButton}/>
                         <Tab 
-                         label={<div><WorkOutline className={classes.icon}/>Employees</div>}  
+                         label={<div><WorkOutline className={classes.icon}/>My Employees</div>}  
                          className={classes.tabButton}/>
                         <Tab 
                          label={<div><Person className={classes.icon}/>My Profile</div>} 

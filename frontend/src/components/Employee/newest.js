@@ -8,8 +8,6 @@ import { makeStyles,
         Button,
         IconButton, 
         Tooltip,
-        Menu,
-        MenuItem,
         Snackbar,
         Zoom, 
         CircularProgress} from '@material-ui/core'
@@ -17,6 +15,7 @@ import { Alert } from '@material-ui/lab'
 import { Delete,
         Visibility,
         Mail,
+        Send,
         Bookmark } from '@material-ui/icons'
 import GoalsMet from './../../images/goal_met.svg'
 import uuid from 'react-uuid'
@@ -76,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
     },
     noNewText: {
         margin: '0 0 0 32%'
+    },
+    progress: {
+        marginLeft: '50%'
     }
 }))
 
@@ -85,7 +87,6 @@ function Newest(props) {
 
     const [datasource, setDatasource] = useState([])
 
-    const [openSend, setSend] = useState(null)
     const [successbar, setSuccess] = useState(null)
     const [failbar, setFail] = useState(null)
     const [reply, setReply] = useState([])
@@ -117,7 +118,6 @@ function Newest(props) {
     }, [])
 
     const getReviews = (isVisible) => {
-        console.log(isVisible)
         if (isVisible) {
             axios({
                 method: "GET",
@@ -129,14 +129,6 @@ function Newest(props) {
                 url: '/api/employee/review/'
             })
             .then((res) => {
-                // for(let i=0; i<res.data.review_set.length; i++) {
-                //     data.push({
-                //         id: uuid(),
-                //         ...res.data.review_set[i]
-                //     })
-                // }
-                // setDatasource(data)
-                // console.log(datasource)
                 let newData = [...datasource, ...res.data.review_set.map(val => ( {id: uuid(), ...val} ))]
                 setDatasource(newData)
             })
@@ -144,14 +136,6 @@ function Newest(props) {
                 console.log(error)
             })
         }
-    }
-
-    const handleSend = (e) => {
-        setSend(e.currentTarget)
-    }
-
-    const handleClose = (e) => {
-        setSend(null)
     }
 
     const handleRemove = (e, flag) => {
@@ -183,12 +167,12 @@ function Newest(props) {
             url: '/api/employee/review/'
         })
         .then((res) => {
-            console.log(res)
+            
         })
         .catch((error) => {
             console.log(error)
         })
-
+        
         let posts = datasource.filter((post) => {
             if(post.id != e.currentTarget.id)
                 return post
@@ -210,14 +194,12 @@ function Newest(props) {
 
     const handleSendToManager = (e) => {
         handleRemove(e, 3)
-        handleClose()
         //setSuccess('Post sent to Manager!')
     }
 
     const handleSendToDeveloper = (e) => {
         //console.log(e.currentTarget.id)
         handleRemove(e, 4)
-        handleClose()
         //setSuccess('Post sent to Developer!')
     }
 
@@ -258,33 +240,22 @@ function Newest(props) {
                                                         <Visibility/>
                                                     </IconButton>
                                                 </Tooltip>
-                                                <Tooltip title='Send to Higher Authorities'>
+                                                <Tooltip title='Send to Manager'>
                                                     <IconButton 
                                                     id={post.id}
                                                     className={classes.actionButton}
-                                                    onClick={handleSend}>
+                                                    onClick={handleSendToManager}>
+                                                        <Send/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title='Send to Developer'>
+                                                    <IconButton 
+                                                    id={post.id}
+                                                    className={classes.actionButton}
+                                                    onClick={handleSendToDeveloper}>
                                                         <Mail/>
                                                     </IconButton>
                                                 </Tooltip>
-                                                <Menu
-                                                anchorEl={openSend}
-                                                keepMounted
-                                                open={Boolean(openSend)}
-                                                onClose={handleClose}
-                                                className={classes.menu}>
-                                                    <MenuItem 
-                                                    id={post.id}
-                                                    onClick={handleSendToManager}
-                                                    >
-                                                        Send to Manager
-                                                    </MenuItem>
-                                                    <MenuItem 
-                                                    id={post.id}
-                                                    onClick={handleSendToDeveloper}
-                                                    >
-                                                        Send to Developer
-                                                    </MenuItem>
-                                                </Menu>
                                                 <Tooltip title='Save for Later'>
                                                     <IconButton 
                                                     id={post.id}
@@ -350,29 +321,20 @@ function Newest(props) {
                     </div>
                     ))
                 }
-                {/* <Button
-                variant='contained'
-                color='primary'
-                disableElevation
-                onClick={getReviews}
-                className={classes.replyButton}
-                >
-                    Load More
-                </Button> */}
-            {
-                !datasource.length ? 
-                    <div className={classes.noNewPost}>
-                        <img src={GoalsMet} alt='No new posts'/>
-                        <p className={classes.noNewText}>All done for now! Come back later for more.</p>
-                    </div> :
-                    <VisibilitySensor onChange={getReviews}>
-                        <Card className={classes.card}>
-                            <CardContent>
-                                <CircularProgress/>
-                            </CardContent>
-                        </Card>
-                    </VisibilitySensor>
-            }
+                {
+                    !datasource.length ? 
+                        <div className={classes.noNewPost}>
+                            <img src={GoalsMet} alt='No new posts'/>
+                            <p className={classes.noNewText}>All done for now! Come back later for more.</p>
+                        </div> :
+                        <VisibilitySensor onChange={getReviews}>
+                            <Card className={classes.card}>
+                                <CardContent>
+                                    <CircularProgress className={classes.progress}/>
+                                </CardContent>
+                            </Card>
+                        </VisibilitySensor>
+                }
         </div>
     )
 }

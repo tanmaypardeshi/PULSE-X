@@ -8,13 +8,12 @@ import { makeStyles,
         Button,
         IconButton, 
         Tooltip,
-        Menu,
-        MenuItem,
-        Snackbar,
-        Zoom } from '@material-ui/core'
+        Snackbar } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { Mail,
-        BookmarkBorder } from '@material-ui/icons'
+         Delete,
+         Visibility,
+         Send } from '@material-ui/icons'
 import  Saved from './../../images/saved.svg'
 import axios from 'axios'
 
@@ -70,12 +69,12 @@ const useStyles = makeStyles((theme) => ({
         margin: '5% 27%',
     },
     noNewText: {
-        margin: '0 0 0 32%'
+        margin: '0 0 0 33%'
     },
     saved: {
         width: '60%',
         marginTop: '3%',
-        marginLeft: '25%'
+        marginLeft: '22%'
     }
 }))
 
@@ -85,7 +84,6 @@ function Newest(props) {
 
     const [datasource, setDatasource] = useState([])
 
-    const [openSend, setSend] = useState(null)
     const [successbar, setSuccess] = useState(null)
     const [failbar, setFail] = useState(null)
     const [reply, setReply] = useState([])
@@ -102,26 +100,16 @@ function Newest(props) {
             url: '/api/employee/saved/'
         })
         .then((res) => {
-            let reviews = res.data
-            console.log(res.data)
-            setDatasource(reviews)
+            setDatasource(res.data)
         })
         .catch((error) => {
             console.log(error)
         })
     }, [])
 
-    const handleSend = (e) => {
-        setSend(e.currentTarget)
-    }
-
-    const handleClose = (e) => {
-        setSend(null)
-    }
-
     const handleRemove = (e, flag) => {
         let current = datasource.find((post) => {
-            if(post.id == e.currentTarget.id) {
+            if(post.id === parseInt(e.currentTarget.id)) {
                 return post
             }
         })
@@ -133,31 +121,30 @@ function Newest(props) {
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
             data: {
-                "text": current.text,
-                "lang": current.lang,
-                "country_code": current.country_code,
-                "created_at": current.created_at,
-                "date": current.date,
-                "time": current.time,
-                "hashtag": current.hashtag,
-                "product": current.product,
-                "sentiment": current.sentiment,
+                "id": current.id,
                 "flag": flag
             },
-            url: '/api/employee/review/'
+            url: '/api/employee/saved/'
         })
         .then((res) => {
-            console.log(res)
         })
         .catch((error) => {
             console.log(error)
         })
 
         let posts = datasource.filter((post) => {
-            if(post.id != e.currentTarget.id)
+            if(post.id !== parseInt(e.currentTarget.id))
                 return post
         })
         setDatasource(posts)
+    }
+
+    const handleDelete = (e) => {
+        handleRemove(e, 0)
+    }
+
+    const handleRead = (e) => {
+        handleRemove(e, 1)
     }
 
     const handleReply = (e) => {
@@ -166,19 +153,12 @@ function Newest(props) {
 
     const handleSendToManager = (e) => {
         handleRemove(e, 3)
-        handleClose()
         //setSuccess('Post sent to Manager!')
     }
 
     const handleSendToDeveloper = (e) => {
-        //console.log(e.currentTarget.id)
         handleRemove(e, 4)
-        handleClose()
         //setSuccess('Post sent to Developer!')
-    }
-
-    const handleSave = (e) => {
-        handleRemove(e, 5)
     }
 
     // const handleChange = (e) => {
@@ -190,7 +170,6 @@ function Newest(props) {
                 {
                     datasource.map((post, index) => (
                         <div>
-                            {/* <Zoom in={post.id}> */}
                                 <Card className={classes.card} variant='outlined'>
                                     <CardHeader
                                         title={<p className={classes.name}>Tweet</p>}
@@ -198,38 +177,36 @@ function Newest(props) {
                                         className={classes.heading}
                                         action={
                                             <div className={classes.fourButtons}>
-                                                <Tooltip title='Send to Higher Authorities'>
+                                                <Tooltip title='Chuck'>
                                                     <IconButton 
-                                                    className={classes.actionButton}
-                                                    onClick={handleSend}>
-                                                        <Mail/>
+                                                    id={post.id}
+                                                    onClick={handleDelete}
+                                                    className={classes.actionButton}>
+                                                        <Delete/>
                                                     </IconButton>
                                                 </Tooltip>
-                                                <Menu
-                                                anchorEl={openSend}
-                                                keepMounted
-                                                open={Boolean(openSend)}
-                                                onClose={handleClose}
-                                                className={classes.menu}>
-                                                    <MenuItem 
-                                                    id={post.id}
-                                                    onClick={handleSendToManager}
-                                                    >
-                                                        Send to Manager
-                                                    </MenuItem>
-                                                    <MenuItem 
-                                                    id={post.id}
-                                                    onClick={handleSendToDeveloper}
-                                                    >
-                                                        Send to Developer
-                                                    </MenuItem>
-                                                </Menu>
-                                                <Tooltip title='Remove from saved'>
+                                                <Tooltip title='Mark as Read'>
                                                     <IconButton 
                                                     id={post.id}
-                                                    onClick={handleSave}
+                                                    onClick={handleRead}
                                                     className={classes.actionButton}>
-                                                        <BookmarkBorder/>
+                                                        <Visibility/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title='Send to Manager'>
+                                                    <IconButton 
+                                                    id={post.id}
+                                                    className={classes.actionButton}
+                                                    onClick={handleSendToManager}>
+                                                        <Send/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title='Send to Developer'>
+                                                    <IconButton 
+                                                    id={post.id}
+                                                    className={classes.actionButton}
+                                                    onClick={handleSendToDeveloper}>
+                                                        <Mail/>
                                                     </IconButton>
                                                 </Tooltip>
                                             </div>
@@ -257,7 +234,6 @@ function Newest(props) {
                                         </Button>
                                     </CardContent>
                                 </Card>
-                            {/* </Zoom> */}
                             <Snackbar 
                             open={successbar}
                             autoHideDuration={1000}

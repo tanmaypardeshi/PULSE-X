@@ -4,17 +4,16 @@ import { makeStyles,
         CardHeader, 
         CardContent,
         Typography,
-        TextField, 
-        Button,
         IconButton, 
         Tooltip,
-        Dialog,
-        List,
-        ListItem } from '@material-ui/core'
-import { Delete,
-        Visibility,
-        Mail,
-        Bookmark } from '@material-ui/icons'
+        Snackbar } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
+import { Mail,
+         Delete,
+         Visibility,
+         Send } from '@material-ui/icons'
+import  Team from './../../images/team.svg'
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -59,9 +58,21 @@ const useStyles = makeStyles((theme) => ({
             outline: 'none !important',                                                                   
         },
     },
-    listTitle: {
-        marginTop: '20px',
-        marginLeft: '30px'
+    menu: {
+        marginTop: '40px',
+        boxShadow: 'none'
+    },
+    noNewPost: {
+        color: '#999999',
+        margin: '5% 27%',
+    },
+    noNewText: {
+        margin: '5px 0 0 36%'
+    },
+    saved: {
+        width: '60%',
+        marginTop: '10%',
+        marginLeft: '19%'
     }
 }))
 
@@ -70,121 +81,146 @@ function Newest(props) {
     let classes = useStyles()
 
     const [datasource, setDatasource] = useState([])
-    const [openSend, setSend] = useState(false)
+
+    const [successbar, setSuccess] = useState(null)
+    const [failbar, setFail] = useState(null)
 
     useEffect(() => {
-        let data = [
-            {
-                id : 1,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
+        let data = []
+        axios({
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            {
-                id : 2,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            },
-            {
-                id : 3,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            },
-            {
-                id : 4,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            },
-            {
-                id : 5,
-                date : '12-09-2020',
-                data : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
-            }
-        ]
-        setDatasource(data)
+            url: '/api/manager/review/'
+        })
+        .then((res) => {
+            setDatasource(res.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }, [])
 
-    const handleSend = (e) => {
-        setSend(true)
+    const handleRemove = (e, flag, visited) => {
+        let current = datasource.find((post) => {
+            if(post.id === parseInt(e.currentTarget.id)) {
+                return post
+            }
+        })
+
+        axios({
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+            },
+            data: {
+                "id": current.id,
+                "visited": visited,
+                "flag": flag
+            },
+            url: '/api/manager/review/'
+        })
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+        let posts = datasource.filter((post) => {
+            if(post.id !== parseInt(e.currentTarget.id))
+                return post
+        })
+        setDatasource(posts)
     }
 
-    const handleClose = (e) => {
-        setSend(false)
+    const handleRead = (e) => {
+        handleRemove(e, 3, true)
+    }
+
+    const handleSendToDeveloper = (e) => {
+        handleRemove(e, 4, false)
+        //setSuccess('Post sent to Developer!')
     }
 
     return(
-        <div className={classes.root}>
-            <Dialog
-             onClose={handleClose}
-             open={openSend}>
-                 <h5 className={classes.listTitle}>Send Post</h5>
-                 <List>
-                    <ListItem
-                    button
-                    >
-                        Send to Manager
-                    </ListItem>
-                    <ListItem
-                    button
-                    >
-                        Send to Developer
-                    </ListItem>
-                 </List>
-            </Dialog>
-            {
-                datasource.map((post) => (
-                    <Card className={classes.card} variant='outlined'>
-                        <CardHeader
-                            title={<p className={classes.name}>Tweet</p>}
-                            subheader={<p className={classes.date}>{post.date}</p>}
-                            className={classes.heading}
-                            action={
-                                <div className={classes.fourButtons}>
-                                    <Tooltip title='Chuck'>
-                                        <IconButton 
-                                         id={post.id}
-                                         className={classes.actionButton}>
-                                            <Delete/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title='Mark as Read'>
-                                        <IconButton className={classes.actionButton}>
-                                            <Visibility/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title='Send to Higher Authorities'>
-                                        <IconButton 
-                                         className={classes.actionButton}
-                                         onClick={handleSend}>
-                                            <Mail/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title='Save for Later'>
-                                        <IconButton className={classes.actionButton}>
-                                            <Bookmark/>
-                                        </IconButton>
-                                    </Tooltip>
-                                </div>
-                            }
-                        />
-                        <CardContent>
-                            <Typography className={classes.text}>{post.data}</Typography>
-                            <TextField 
-                                placeholder='Type a reply...'
-                                multiline
-                                variant='outlined'
-                                size='small'
-                                className={classes.reply}/>
-                            <Button
-                                variant='contained'
-                                color='primary'
-                                disableElevation
-                                className={classes.replyButton}
+        <div className={classes.root} id='header'>
+                {
+                    datasource.map((post, index) => (
+                        <div>
+                                <Card className={classes.card} variant='outlined'>
+                                    <CardHeader
+                                        title={<p className={classes.name}>Tweet</p>}
+                                        subheader={<p className={classes.date}>{post.date}</p>}
+                                        className={classes.heading}
+                                        action={
+                                            <div className={classes.fourButtons}>
+                                                <Tooltip title='Mark as Read'>
+                                                    <IconButton 
+                                                    id={post.id}
+                                                    onClick={handleRead}
+                                                    className={classes.actionButton}>
+                                                        <Visibility/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title='Send to Developer'>
+                                                    <IconButton 
+                                                    id={post.id}
+                                                    className={classes.actionButton}
+                                                    onClick={handleSendToDeveloper}>
+                                                        <Send/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </div>
+                                        }
+                                    />
+                                    <CardContent>
+                                        <Typography className={classes.text}>{post.text}</Typography>
+                                    </CardContent>
+                                </Card>
+                            <Snackbar 
+                            open={successbar}
+                            autoHideDuration={1000}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
                             >
-                                Reply
-                            </Button>
-                        </CardContent>
-                    </Card>
-                ))
+                            {
+                                successbar ? 
+                                    <Alert severity='success'>{successbar}</Alert> :
+                                    null
+                            }
+                            </Snackbar>
+                            <Snackbar
+                            open={failbar}
+                            autoHideDuration={1000}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            >
+                            {
+                                failbar ? 
+                                    <Alert severity='error'>{failbar}</Alert> :
+                                    null
+                            }
+                            </Snackbar>
+                    </div>
+                    ))
+                }
+            {
+                !datasource.length ? 
+                    <div className={classes.noNewPost}>
+                        <img src={Team} alt='No new posts' className={classes.saved}/>
+                        <p className={classes.noNewText}>Your team has it covered for you!</p>
+                    </div> :
+                    null
             }
         </div>
     )
