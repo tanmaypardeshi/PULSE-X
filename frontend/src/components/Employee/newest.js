@@ -11,7 +11,8 @@ import { makeStyles,
         Menu,
         MenuItem,
         Snackbar,
-        Zoom } from '@material-ui/core'
+        Zoom, 
+        CircularProgress} from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { Delete,
         Visibility,
@@ -20,6 +21,7 @@ import { Delete,
 import GoalsMet from './../../images/goal_met.svg'
 import uuid from 'react-uuid'
 import axios from 'axios'
+import VisibilitySensor from 'react-visibility-sensor'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -114,51 +116,35 @@ function Newest(props) {
         
     }, [])
 
-    const getReviews = () => {
-        let data = datasource
-        console.log(data)
-        axios({
-            method: "GET",
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type" : "application/json",
-                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
-            },
-            url: '/api/employee/review/'
-        })
-        .then((res) => {
-            for(let i=0; i<res.data.review_set.length; i++) {
-                data.push({
-                    id: uuid(),
-                    ...res.data.review_set[i]
-                })
-            }
-            setDatasource(data)
-            console.log(datasource)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    }
-
-    // useEffect(() => {
-    //     document.addEventListener('scroll', trackScrolling)
-    // }, [])
-
-    const isBottom = (el) => {
-            return el.getBoundingClientRect().bottom <= window.innerHeight;
-    }
-
-    const trackScrolling = () => {
-        const wrappedElement = document.getElementById('header');
-        if (isBottom(wrappedElement)) {
-          console.log('header bottom reached');
-          let data = datasource
-          //Fetch
-          console.log(data)
-          setDatasource(data)
+    const getReviews = (isVisible) => {
+        console.log(isVisible)
+        if (isVisible) {
+            axios({
+                method: "GET",
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type" : "application/json",
+                    Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+                },
+                url: '/api/employee/review/'
+            })
+            .then((res) => {
+                // for(let i=0; i<res.data.review_set.length; i++) {
+                //     data.push({
+                //         id: uuid(),
+                //         ...res.data.review_set[i]
+                //     })
+                // }
+                // setDatasource(data)
+                // console.log(datasource)
+                let newData = [...datasource, ...res.data.review_set.map(val => ( {id: uuid(), ...val} ))]
+                setDatasource(newData)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
         }
-    };
+    }
 
     const handleSend = (e) => {
         setSend(e.currentTarget)
@@ -169,6 +155,7 @@ function Newest(props) {
     }
 
     const handleRemove = (e, flag) => {
+
         let current = datasource.find((post) => {
             if(post.id === e.currentTarget.id) {
                 return post
@@ -203,7 +190,7 @@ function Newest(props) {
         })
 
         let posts = datasource.filter((post) => {
-            if(post.id !== e.currentTarget.id)
+            if(post.id != e.currentTarget.id)
                 return post
         })
         setDatasource(posts)
@@ -378,7 +365,13 @@ function Newest(props) {
                         <img src={GoalsMet} alt='No new posts'/>
                         <p className={classes.noNewText}>All done for now! Come back later for more.</p>
                     </div> :
-                    null
+                    <VisibilitySensor onChange={getReviews}>
+                        <Card className={classes.card}>
+                            <CardContent>
+                                <CircularProgress/>
+                            </CardContent>
+                        </Card>
+                    </VisibilitySensor>
             }
         </div>
     )
