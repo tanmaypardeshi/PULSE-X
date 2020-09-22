@@ -7,7 +7,8 @@ from employee.models import Review
 class MyEmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'last_login', 'manager_id']
+        fields = ['id', 'first_name', 'last_name', 
+                'email', 'last_login', 'manager_id']
 
 
 class ManagerReviewSerializer(serializers.ModelSerializer):
@@ -17,7 +18,8 @@ class ManagerReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ['id', 'first_name', 'last_name', 'email',
-                  'text', 'lang', 'country_code', 'created_at',
-                  'date', 'time', 'hashtag', 'product',
-                  'sentiment', 'flag']
+        fields = ['id', 'email', 'first_name', 'last_name', 
+                        'productid', 'userid', 'profile_name', 'time',
+                  'text', 'sentiment', 'helpfulness', 'date',
+                  'flag', 'sarcasm', 'product', 'country', 'lang',
+                  'url', 'visited']
