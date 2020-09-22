@@ -3,9 +3,10 @@ import { makeStyles,
          Card } from '@material-ui/core'
 import { Doughnut,
          Bar } from 'react-chartjs-2'
+import axios from 'axios'
 
-const colorsPosts = ['#6bea83', '#69359c']
-const colorsStats = ['#d11507', '#ffce56', '#6bea83', '#ff6384', '#69359c']
+const colorsPosts = ['#9370db', '#380d0b', '#c7f2f4']
+const colorsStats = ['#cc3333', '#9fa91f', '#185134', '#ff00ff', '#3aa8c1', '#fada5e']
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,15 +32,52 @@ function Statistics() {
     const [dataStats, setStatsData] = useState([])
 
     useEffect(() => {
-        let label = ['Me', 'Others']
-        let post = [105, 2000]
-        let labelStats = ['Dumped', 'Marked as Read', 'Replied', 'Saved', 'Forwarded']
-        let dataStats = [30, 56, 34, 12, 8]
+        axios({
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+            },
+            url: '/api/employee/review_data/'
+        })
+        .then((res) => {
+            let label = ['My reviews', 'Difference', 'Total']
+            let post = []
+            post.push(res.data.data.employee_reviews)
+            post.push(res.data.data.difference)
+            post.push(res.data.data.total_reviews)
+            setPostsLabel(label)
+            setPostsData(post)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 
-        setPostsLabel(label)
-        setPostsData(post)
-        setStatsLabel(labelStats)
-        setStatsData(dataStats)
+        axios({
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+            },
+            url: '/api/employee/flag_data/'
+        })
+        .then((res) => {
+            let label = ['Dumped', 'Marked as Read', 'Replied', 'Sent to Developer', 'Sent to Manager', 'Saved' ]
+            let post = []
+            post.push(res.data.data.flag0)
+            post.push(res.data.data.flag1)
+            post.push(res.data.data.flag2)
+            post.push(res.data.data.flag3)
+            post.push(res.data.data.flag4)
+            post.push(res.data.data.flag5)
+            setStatsLabel(label)
+            setStatsData(post)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }, [])
 
     const generateChart = (names, data, label, colors) => {

@@ -13,10 +13,8 @@ import { makeStyles,
         Snackbar,
         Zoom } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { Delete,
-        Visibility,
-        Mail,
-        Bookmark } from '@material-ui/icons'
+import { Mail,
+        BookmarkBorder } from '@material-ui/icons'
 import  Saved from './../../images/saved.svg'
 import axios from 'axios'
 
@@ -231,7 +229,7 @@ function Newest(props) {
                                                     id={post.id}
                                                     onClick={handleSave}
                                                     className={classes.actionButton}>
-                                                        <Bookmark/>
+                                                        <BookmarkBorder/>
                                                     </IconButton>
                                                 </Tooltip>
                                             </div>

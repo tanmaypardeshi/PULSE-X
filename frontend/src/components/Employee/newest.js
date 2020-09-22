@@ -169,7 +169,6 @@ function Newest(props) {
     }
 
     const handleRemove = (e, flag) => {
-
         let current = datasource.find((post) => {
             if(post.id === e.currentTarget.id) {
                 return post
@@ -204,7 +203,7 @@ function Newest(props) {
         })
 
         let posts = datasource.filter((post) => {
-            if(post.id != e.currentTarget.id)
+            if(post.id !== e.currentTarget.id)
                 return post
         })
         setDatasource(posts)
