@@ -1,24 +1,31 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import * as React from 'react'
 import { ScrollView, View, FlatList, Alert } from 'react-native'
-import { IconButton, Title, Card, Paragraph, ActivityIndicator, List } from 'react-native-paper'
-import { Viewport } from '@skele/components'
+import { IconButton, Card, Paragraph, List, TextInput, Portal, Dialog, Button, Snackbar, useTheme, Caption, Colors, Avatar } from 'react-native-paper'
+// import { Viewport } from '@skele/components'
 import { useFocusEffect } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
 import { SERVER_URI } from '../../config'
+import * as WebBrowser from 'expo-web-browser';
 
-const VPAIndicator = Viewport.Aware(ActivityIndicator)
+// const VPAIndicator = Viewport.Aware(ActivityIndicator)
 
 const Saved = ({navigation}) => {
 
     const [cards, setCards] = React.useState([])
+    const [loading, setLoading] = React.useState(true)
+    const [showReply, setShowReply] = React.useState(false)
+    const [replyField, setReplyField] = React.useState('')
 
-    // React.useEffect(() => {
-    //     setCards(new Array(5).fill(false))
-    // }, [])
     
     useFocusEffect(React.useCallback(() => {
+        console.log('Fetching saved files')
+        fetchCards()
+    }, []))
+
+
+    const fetchCards = () => {
         SecureStore.getItemAsync('token')
         .then(token => 
             Axios.get(
@@ -33,65 +40,149 @@ const Saved = ({navigation}) => {
             )    
         )
         .then(res => {
-            console.log(res.data)
-            setCards(new Array(5).fill(false))
+            setCards(res.data)
+            setLoading(false)
         })
-        .catch(err => Alert(err))
-    }, []))
-
-    const toggleExpansion = (index) => () => {
-        let tempArr = [...cards]
-        tempArr[index] = !tempArr[index]
-        setCards(tempArr)
+        .catch(err => {
+            Alert(err.message)
+            setLoading(false)
+        })
     }
 
-    const fetchCards = () => {
-        console.log('Visible');
-        setCards([...cards, false, false, false, false, false])
+    const changeFlag = (id, flag) => {
+        setLoading(true)
+        SecureStore.getItemAsync('token')
+        .then(token => Axios.post(
+            `${SERVER_URI}/employee/saved/`,
+            {
+                id, flag
+            },
+            {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type" : "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        ))
+        .then(res => {fetchCards()})
+        .catch(err => {
+            alert(err.message)
+            setLoading(false)
+        })
     }
 
     return (
-        <Viewport.Tracker>
+        // <Viewport.Tracker>
+        <>
             <FlatList
                 data={cards}
                 keyExtractor={(item, index) => index.toString()}
                 extraData={cards}
                 renderItem={({index, item}) => 
-                    <Card key={index} style={{marginTop: 20}}>
-                        <Card.Content>
-                            <List.Accordion title={`TITLE-${index}`}>
-                                <Paragraph>
-                                    There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
-                                </Paragraph>
+                    <Card 
+                        key={index} 
+                        style={{marginTop: 20}}
+                    >
+                        <Card.Title
+                            title={item.profile_name}
+                            subtitleNumberOfLines={3}
+                            subtitle={
+                                <Caption 
+                                    onPress={() => 
+                                        WebBrowser.openBrowserAsync("http://" + item.url)
+                                        .then(console.log)
+                                        .catch(console.log)
+                                    }
+                                    style={{color: Colors.blue500}}
+                                >
+                                    {item.url}
+                                </Caption>
+                            }
+                            left = {props => <Avatar.Text {...props} label={
+                                    item.profile_name.split(" ").map((val, index) => {
+                                        if (index < 2)
+                                            return val.slice(0,1)
+                                    }).join('')
+                                }/>
+                            }
+                            right = {props =>
+                                <IconButton
+                                    icon={
+                                        item.sentiment === 1.0 ? 'emoticon-happy' :
+                                        item.sentiment === 0 ? 'emoticon-neutral' :
+                                        'emoticon-sad'
+                                    } 
+                                    color={
+                                        item.sentiment === 1.0 ? Colors.green500 :
+                                        item.sentiment === 0 ? Colors.orange500 :
+                                        Colors.red500
+                                    }
+                                />
+                            }
+                        />
+                        <List.AccordionGroup>
+                            <List.Accordion title="Content" id="1">
+                                <Card.Content>
+                                    <Paragraph>
+                                        {item.text}
+                                    </Paragraph>
+                                </Card.Content>
                             </List.Accordion>
-                        </Card.Content>
-                        <Card.Actions style={{justifyContent: 'space-around'}}>
-                            <IconButton 
-                                icon='delete'
-                            />
-                            <IconButton 
-                                icon='email'
-                            />
-                            <IconButton 
-                                icon='download'
-                            />
-                            <IconButton 
-                                icon='send'
-                            />
-                        </Card.Actions>
+                            <List.Accordion title="Actions" id="2">
+                                <Card.Actions style={{justifyContent: 'space-around'}}>
+                                    <IconButton 
+                                        icon='delete'
+                                        onPress={() => changeFlag(item.id, 0)}
+                                    />
+                                    <IconButton 
+                                        icon='eye'
+                                        onPress={() => changeFlag(item.id, 1)}
+                                    />
+                                    <IconButton 
+                                        icon='account-network'
+                                        onPress={() => changeFlag(item.id, 4)}
+                                    />
+                                    <IconButton 
+                                        icon='account-tie'
+                                        onPress={() => changeFlag(item.id, 3)}
+                                    />
+                                    <IconButton
+                                        icon='send'
+                                        onPress={() => changeFlag(item.id, 2)}
+                                    />
+                                </Card.Actions>
+                            </List.Accordion>
+                        </List.AccordionGroup>
                     </Card>
                 }
                 ListFooterComponent={
-                    <VPAIndicator 
-                        onViewportEnter={() => fetchCards()}
-                        onViewportLeave={() => console.log('Left!')}
-                        size='large' 
-                        animating={true} 
-                        style={{marginVertical: 50}}
-                    />
+                    <Portal>
+                        <Dialog visible={showReply} onDismiss={() => setShowReply(false)}>
+                            <Dialog.Title>Response</Dialog.Title>
+                            <Dialog.Content>
+                                <TextInput
+                                    type='flat'
+                                    placeholder='Your response'
+                                    style={{backgroundColor: 'transparent'}}
+                                    value={replyField}
+                                    onChangeText={val => setReplyField(val)}
+                                />
+                            </Dialog.Content>
+                            <Dialog.Actions>
+                                <Button onPress={() => setShowReply(false)}>Cancel</Button>
+                                <Button onPress={() => setShowReply(false)}>Send</Button>
+                            </Dialog.Actions>
+                        </Dialog>
+                    </Portal>
                 }
             />
-        </Viewport.Tracker>
+            <Snackbar visible={loading} onDismiss={() => {}}>
+                Fetching saved posts
+            </Snackbar>
+        </>
+            
+        // </Viewport.Tracker>
     )
 }
 

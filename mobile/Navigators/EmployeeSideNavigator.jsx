@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer'
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList, useIsDrawerOpen } from '@react-navigation/drawer'
 import EmployeeTabNavigator from './EmployeeTabNavigator'
 import * as SecureStore from 'expo-secure-store'
 import { useFocusEffect } from '@react-navigation/native'
@@ -7,6 +7,7 @@ import Axios from 'axios'
 import { SERVER_URI } from '../config'
 import { View } from 'react-native'
 import { ActivityIndicator, Avatar, Headline, Caption } from 'react-native-paper'
+import Profile from '../screens/Employee/Profile'
 
 const Drawer = createDrawerNavigator()
 
@@ -14,15 +15,17 @@ const Logout = (props) => {
 
     const [profile, setProfile] = React.useState({})
     const [loading, setLoading] = React.useState(true)
+    const isDrawerOpen = useIsDrawerOpen()
 
     useFocusEffect(React.useCallback(() => {
-        getProfileData()
-    },[]))
+        if (isDrawerOpen)
+            getProfileData()
+    },[isDrawerOpen]))
 
     const getProfileData = () => {
         SecureStore.getItemAsync('token')
         .then(token => {
-            return Axios.get(`${SERVER_URI}/user/profile`, {
+            return Axios.get(`${SERVER_URI}/user/profile/`, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Content-Type" : "application/json",
@@ -34,7 +37,7 @@ const Logout = (props) => {
             console.log(res.data)
             setProfile(res.data)
         })
-        .then(res => setLoading(false))
+        .then(() => setLoading(false))
         .catch(err => {
             setLoading(false)
             console.log(err)
@@ -86,6 +89,7 @@ export default ({navigation}) => {
     return (
         <Drawer.Navigator initialRouteName="EmpHome" drawerContent={(props) => <Logout {...props} />}>
             <Drawer.Screen name="EmpHome" component={EmployeeTabNavigator} options={{title: 'Home'}}/>
+            <Drawer.Screen name="Profile" component={Profile}/>
         </Drawer.Navigator>
     )
 }

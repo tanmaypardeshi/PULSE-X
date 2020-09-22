@@ -1,12 +1,13 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import * as React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { Badge, Button, Card, DataTable, IconButton, Title, ActivityIndicator } from 'react-native-paper'
-import { BarChart, PieChart, XAxis } from 'react-native-svg-charts'
+import { Badge, Button, Card, DataTable, IconButton, Title, ActivityIndicator, useTheme } from 'react-native-paper'
+import { BarChart, PieChart, XAxis, Grid } from 'react-native-svg-charts'
 import { useFocusEffect } from '@react-navigation/native'
 import Axios from 'axios'
 import { SERVER_URI } from '../../config'
 import * as SecureStore from 'expo-secure-store'
+import { Text } from 'react-native-svg'
 
 const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
 
@@ -69,7 +70,7 @@ const Stats = ({navigation}) => {
 
     const [reviewData, setReviewData] = React.useState(pieData2)
     const [postData, setPostData] = React.useState(barData1)
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(true)
 
     useFocusEffect(React.useCallback(() => {
         fetchData()
@@ -91,9 +92,9 @@ const Stats = ({navigation}) => {
             )
         })
         .then(res => {
-            const pie = Object.getOwnPropertyNames(res.data).map((name, index) => ({
+            const pie = Object.getOwnPropertyNames(res.data.data).map((name, index) => ({
                 key: index,
-                amount: res.data[name],
+                amount: res.data.data[name],
                 svg: { fill: randomColor() },
                 label: name.split("_").join(" ")
             }))
@@ -116,31 +117,31 @@ const Stats = ({navigation}) => {
             const chart = [
                 {
                     key: 1,
-                    amount: res.data.flag0,
+                    amount: res.data.data.flag0,
                     svg: { fill: '#d11507' },
                     label: 'Dumped'
                 },
                 {
                     key: 2,
-                    amount: res.data.flag1,
+                    amount: res.data.data.flag1,
                     svg: { fill:'#ffce56' },
                     label: 'Read'
                 },
                 {
                     key: 3,
-                    amount: res.data.flag2,
+                    amount: res.data.data.flag2,
                     svg: { fill: '#6bea83' },
                     label: 'Replied'
                 },
                 {
                     key: 4,
-                    amount: res.data.flag5,
+                    amount: res.data.data.flag5,
                     svg: { fill:'#ff6384' },
                     label: 'Saved'
                 },
                 {
                     key: 5,
-                    amount: res.data.flag4 + res.data.flag5,
+                    amount: res.data.data.flag3 + res.data.data.flag4,
                     svg: { fill: '#69359c' },
                     label: 'Forwarded'
                 },
@@ -150,6 +151,22 @@ const Stats = ({navigation}) => {
         })
         .catch(err => console.log(err))
     }
+
+    const Labels = ({x, y, bandwidth, data}) => (
+        postData.map((val, index) => (
+            <Text
+                key={index}
+                x={ x(index) + (bandwidth/2) }
+                y={ val.amount < 20 ? y(val.amount)-10 : y(val.amount) + 15}
+                fontSize={14}
+                fill={ useTheme().colors.text }
+                alignmentBaseline={'middle'}
+                textAnchor={'middle'}
+            >
+                {val.amount}
+            </Text>
+        ))
+    )
     
     return(
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -179,8 +196,13 @@ const Stats = ({navigation}) => {
                             style={{height: 200}}
                             yAccessor={props => props.item.amount}
                             data={postData}
+                            contentInset={{ top: 10, bottom: 10 }}
+                            spacing={0.2}
                             gridMin={0}
-                        />
+                        >
+                            <Grid direction={Grid.Direction.HORIZONTAL}/>
+                            <Labels/>
+                        </BarChart>
                     </Card.Content>
                     
                     <DataTable>
