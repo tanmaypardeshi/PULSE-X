@@ -6,7 +6,6 @@ backend/user/__pycache__
 backend/user/migrations
 backend/employee/__pycache__
 backend/employee/migrations
-backend/employee/data/*.csv
 backend/manager/__pycache__
 backend/manager/migrations
 backend/db.sqlite3
