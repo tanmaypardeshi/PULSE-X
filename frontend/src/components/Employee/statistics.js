@@ -66,7 +66,6 @@ function Statistics() {
         .then((res) => {
             let label = ['Dumped', 'Marked as Read', 'Replied', 'Sent to Manager', 'Sent to Developer', 'Saved' ]
             let post = []
-            console.log(res.data.data)
             post.push(res.data.data.flag0)
             post.push(res.data.data.flag1)
             post.push(res.data.data.flag2)

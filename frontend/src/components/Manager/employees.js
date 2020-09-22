@@ -3,6 +3,7 @@ import { makeStyles,
          TableContainer,
          Paper,
          Table,
+         Card,
          TableHead,
          TableBody,
          TableRow,
@@ -13,18 +14,17 @@ import { makeStyles,
          DialogContent,
          TextField } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
+import { Doughnut } from 'react-chartjs-2'
 import axios from 'axios'
+
+const colors = ['#cc3333', '#9fa91f', '#185134', '#ff00ff', '#3aa8c1', '#fada5e']
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         width: '100%',
         backgroundColor: theme.palette.background.paper,
-        padding: '3% 10%'
-    },
-    table: {
-        margin: '1% 3%',
-        backgroundColor: '#f8f8f8'
+        padding: '3% 7%'
     },
     button: {
         float: 'left',
@@ -43,17 +43,25 @@ const useStyles = makeStyles((theme) => ({
         margin: '5% 38%'
     },
     paper: {
-        marginTop: '1%',
-        padding: '1%',
-        width:'75%',
+        marginTop: '2%',
+        padding: '2%'
     },
-    table: {
-        
-        
+    alert: {
+        position: ''
     },
     tablehead: {
         backgroundColor: '#ceceeb',
         color: '#ffffff'
+    },
+    graph: {
+        width: '48%',
+        padding: '1%',
+        marginTop: '3%'
+    },
+    tableDiv: {
+        float: 'left',
+        width: '50%',
+        marginRight: '2%'
     }
 }))
 
@@ -71,10 +79,36 @@ function Profile(props) {
     const [complete, setComplete] = useState(true)
     const [match, setMatch] = useState(true)
     const [success, setSuccess] = useState(false)
- 
+    const [graph, setGraph] = useState([])
+    const [label, setLabel] = useState(['Dumped', 'Marked as Read', 'Replied', 'Sent to Manager', 'Sent to Developer', 'Saved' ])
 
     useEffect(() => {
-        let data = []
+        getEmployees()
+        axios({
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+            },
+            url: '/api/manager/chart/'
+        })
+        .then((res) => {
+            let post = []
+            post.push(res.data.data.flag0)
+            post.push(res.data.data.flag1)
+            post.push(res.data.data.flag2)
+            post.push(res.data.data.flag3)
+            post.push(res.data.data.flag4)
+            post.push(res.data.data.flag5)
+            setGraph(post)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }, [])
+
+    const getEmployees = () => {
         axios({
             method: "GET",
             headers: {
@@ -85,13 +119,12 @@ function Profile(props) {
             url: '/api/manager/my_employees/'
         })
         .then((res) => {
-            console.log(res.data)
             setEmployees(res.data)
         })
         .catch((error) => {
             console.log(error)
         })
-    }, [])
+    }
 
     const handleNewEmployee = (e) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -124,11 +157,45 @@ function Profile(props) {
                 setTimeout(() => {
                     setSuccess(false)
                 },5000)
+                getEmployees()
             })
             .catch((error) => {
                 console.log(error)
             })
         }
+    }
+
+    const generateChart = (names, data, label, colors) => {
+        return({
+            data: {
+                labels:names,
+                datasets:[
+                    {
+                        label: label,
+                        data: data,
+                        text: label,
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 2,
+                        hoverBorderWidth:2,
+                        hoverBorderColor: colors
+                    }
+                ],
+            },
+            width: 650,
+            height: 430,
+            options: {
+                legend:{
+                    display:true,
+                    position:'right',
+                    onClick: function (e) {
+                        e.stopPropagation();
+                    }
+                },
+                maintainAspectRatio: false,
+                responsive: true,
+            },
+        });
     }
 
     const handleClose = (e) => {
@@ -142,37 +209,42 @@ function Profile(props) {
 
     return (
         <div className={classes.root}>
-            <div className='d-inline-flex'>
-                <Button
-                variant='contained'
-                color='primary'
-                onClick={(e) => { setOpen(true) }}
-                className={classes.button}
-                >
-                    Add
-                </Button>
-            </div>
-            <TableContainer component={Paper} className={classes.paper}>
-                <Table className={classes.table}>
-                    <TableHead className={classes.tablehead}>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Role</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {employees.map((emp) => (
-                            <TableRow key={emp.id}>
-                                <TableCell>{emp.first_name}&nbsp;{emp.last_name}</TableCell>
-                                <TableCell>{emp.email}</TableCell>
-                                <TableCell>Employee</TableCell>
+            <div className={classes.tableDiv}>
+                <div className='d-inline-flex'>
+                    <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={(e) => { setOpen(true) }}
+                    className={classes.button}
+                    >
+                        Add
+                    </Button>
+                </div>
+                <TableContainer component={Paper} className={classes.paper}>
+                    <Table className={classes.table}>
+                        <TableHead className={classes.tablehead}>
+                            <TableRow>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Email</TableCell>
+                                <TableCell>Role</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
- 
+                        </TableHead>
+                        <TableBody>
+                            {employees.map((emp) => (
+                                <TableRow key={emp.id}>
+                                    <TableCell>{emp.first_name}&nbsp;{emp.last_name}</TableCell>
+                                    <TableCell>{emp.email}</TableCell>
+                                    <TableCell>Employee</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
+            <Card className={classes.graph}>
+                <h5>Post Review Statistics</h5>
+                <Doughnut {...generateChart(label, graph, "Reviews", colors)}/>
+            </Card>
             <Dialog
              open={open}
              onClose={handleClose}
@@ -236,7 +308,13 @@ function Profile(props) {
             </Dialog>
             {
                 success ?
-                    <Alert severity='success'>User registered successfully.</Alert> :
+                    <Alert 
+                     severity='success' 
+                     variant='filled'
+                     className={classes.alert}
+                    >
+                        User registered successfully.
+                    </Alert> :
                     null
             }
         </div>

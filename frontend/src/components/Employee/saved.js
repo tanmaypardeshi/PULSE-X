@@ -14,6 +14,9 @@ import { Mail,
          Delete,
          Visibility,
          Send } from '@material-ui/icons'
+import { HiEmojiHappy,
+         HiEmojiSad } from 'react-icons/hi'
+import { ImNeutral2 } from 'react-icons/im'
 import  Saved from './../../images/saved.svg'
 import axios from 'axios'
 
@@ -177,6 +180,33 @@ function Newest(props) {
                                         className={classes.heading}
                                         action={
                                             <div className={classes.fourButtons}>
+                                                {
+                                                    post.sentiment === 1 ?
+                                                        <Tooltip title='Customer seems to be happy'>
+                                                            <IconButton>
+                                                                <HiEmojiHappy style={{color: "#4caf50", fontSize: '25px'}} />
+                                                            </IconButton>
+                                                        </Tooltip> :
+                                                        null
+                                                }
+                                                {
+                                                    post.sentiment === -1 ?
+                                                        <Tooltip title='Customer seems to be disappointed'>
+                                                            <IconButton>
+                                                                <HiEmojiSad style={{color: "#f44336", fontSize: '25px'}} />
+                                                            </IconButton>
+                                                        </Tooltip> :
+                                                        null
+                                                }
+                                                {
+                                                    post.sentiment === 0 ?
+                                                        <Tooltip title='Customer seems to be fine'>
+                                                            <IconButton>
+                                                                <ImNeutral2 style={{color: "#ff9800", fontSize: '20px'}} />
+                                                            </IconButton>
+                                                        </Tooltip> :
+                                                        null
+                                                }
                                                 <Tooltip title='Chuck'>
                                                     <IconButton 
                                                     id={post.id}

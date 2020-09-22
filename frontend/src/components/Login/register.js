@@ -108,7 +108,7 @@ function Register(props) {
             })
             .then((res) => {
                 if(res.data) {
-                    sessionStorage.setItem('user', res.data)
+                    sessionStorage.setItem('user', JSON.stringify(res.data))
                     if(res.data.is_manager) {
                         history.push('/manager')
                     }
