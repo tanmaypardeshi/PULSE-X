@@ -177,7 +177,7 @@ const Saved = ({navigation}) => {
                     </Portal>
                 }
             />
-            <Snackbar visible={loading} onDismiss={() => {}}>
+            <Snackbar visible={loading} onDismiss={() => setLoading(false)}>
                 Fetching saved posts
             </Snackbar>
         </>

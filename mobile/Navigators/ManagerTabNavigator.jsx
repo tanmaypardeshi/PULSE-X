@@ -5,6 +5,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Received from '../screens/Manager/Received'
 import Employees from '../screens/Manager/Employees'
+import Statistics from '../screens/Manager/Statistics'
 
 const Tab = createBottomTabNavigator()
 
@@ -25,6 +26,14 @@ export default () => {
                 component={Received}
                 options={{
                     tabBarIcon: ({focused, color}) => <IconButton icon='inbox-arrow-down' color={color}/>
+                }}
+            />
+            <Tab.Screen 
+                name="StatsManager" 
+                component={Statistics}
+                options={{
+                    tabBarIcon: ({focused, color}) => <IconButton icon='chart-timeline-variant' color={color}/>,
+                    title: 'Statistics'
                 }}
             />
             <Tab.Screen 
