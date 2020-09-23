@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import * as React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { Badge, Button, Card, DataTable, IconButton, Title, ActivityIndicator, useTheme } from 'react-native-paper'
+import { Badge, Button, Card, DataTable, IconButton, Title, ActivityIndicator, useTheme, Colors } from 'react-native-paper'
 import { BarChart, PieChart, XAxis, Grid } from 'react-native-svg-charts'
 import { useFocusEffect } from '@react-navigation/native'
 import Axios from 'axios'
@@ -9,55 +9,7 @@ import { SERVER_URI } from '../../config'
 import * as SecureStore from 'expo-secure-store'
 import { Text } from 'react-native-svg'
 
-const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
-
-const pieData2 = [
-    {
-        key: 1,
-        amount: 105,
-        svg: { fill: '#6bea83' },
-        label: 'Me'
-    },
-    {
-        key: 2,
-        amount: 2000,
-        svg: { fill:'#69359c' },
-        label: 'Others'
-    }
-]
-
-const barData1 = [
-    {
-        key: 1,
-        amount: 30,
-        svg: { fill: '#d11507' },
-        label: 'Dumped'
-    },
-    {
-        key: 2,
-        amount: 56,
-        svg: { fill:'#ffce56' },
-        label: 'Read'
-    },
-    {
-        key: 3,
-        amount: 34,
-        svg: { fill: '#6bea83' },
-        label: 'Replied'
-    },
-    {
-        key: 4,
-        amount: 12,
-        svg: { fill:'#ff6384' },
-        label: 'Saved'
-    },
-    {
-        key: 5,
-        amount: 8,
-        svg: { fill: '#69359c' },
-        label: 'Forwarded'
-    },
-]
+const pieColors = [Colors.lightBlue500, Colors.cyan500, Colors.teal500]
 
 const styles = StyleSheet.create({
     card: {
@@ -68,9 +20,12 @@ const styles = StyleSheet.create({
 
 const Stats = ({navigation}) => {
 
-    const [reviewData, setReviewData] = React.useState(pieData2)
-    const [postData, setPostData] = React.useState(barData1)
+    const [reviewData, setReviewData] = React.useState([])
+    const [postData, setPostData] = React.useState([])
+    const [gPostData, setGPostData] = React.useState([])
     const [loading, setLoading] = React.useState(true)
+    const [avg, setAvg] = React.useState(0)
+    const [gAvg, setGAvg] = React.useState(0)
 
     useFocusEffect(React.useCallback(() => {
         fetchData()
@@ -92,10 +47,11 @@ const Stats = ({navigation}) => {
             )
         })
         .then(res => {
+            console.log(res.data.data)
             const pie = Object.getOwnPropertyNames(res.data.data).map((name, index) => ({
                 key: index,
                 amount: res.data.data[name],
-                svg: { fill: randomColor() },
+                svg: { fill: pieColors[index] },
                 label: name.split("_").join(" ")
             }))
             setReviewData(pie)
@@ -114,39 +70,79 @@ const Stats = ({navigation}) => {
             )
         })
         .then(res => {
-            const chart = [
+            console.log(res.data)
+            let chart = [
                 {
                     key: 1,
                     amount: res.data.data.flag0,
-                    svg: { fill: '#d11507' },
+                    svg: { fill: Colors.red500 },
                     label: 'Dumped'
                 },
                 {
                     key: 2,
                     amount: res.data.data.flag1,
-                    svg: { fill:'#ffce56' },
+                    svg: { fill: Colors.orange500 },
                     label: 'Read'
                 },
                 {
                     key: 3,
                     amount: res.data.data.flag2,
-                    svg: { fill: '#6bea83' },
+                    svg: { fill: Colors.green500 },
                     label: 'Replied'
                 },
                 {
                     key: 4,
                     amount: res.data.data.flag5,
-                    svg: { fill:'#ff6384' },
+                    svg: { fill: Colors.blue500 },
                     label: 'Saved'
                 },
                 {
                     key: 5,
                     amount: res.data.data.flag3 + res.data.data.flag4,
-                    svg: { fill: '#69359c' },
+                    svg: { fill: Colors.purple500 },
                     label: 'Forwarded'
                 },
             ]
+            let findAvg = 0;
+            chart.map(val => {findAvg += val.amount})
+            setAvg(findAvg/chart.length)
             setPostData(chart);
+
+            chart = [
+                {
+                    key: 1,
+                    amount: res.data.data.gflag0,
+                    svg: { fill: Colors.red500 },
+                    label: 'Dumped'
+                },
+                {
+                    key: 2,
+                    amount: res.data.data.gflag1,
+                    svg: { fill: Colors.orange500 },
+                    label: 'Read'
+                },
+                {
+                    key: 3,
+                    amount: res.data.data.gflag2,
+                    svg: { fill: Colors.green500 },
+                    label: 'Replied'
+                },
+                {
+                    key: 4,
+                    amount: res.data.data.gflag5,
+                    svg: { fill: Colors.blue500 },
+                    label: 'Saved'
+                },
+                {
+                    key: 5,
+                    amount: res.data.data.gflag3 + res.data.data.gflag4,
+                    svg: { fill: Colors.purple500 },
+                    label: 'Forwarded'
+                },
+            ]
+            chart.map(val => {findAvg += val.amount})
+            setGAvg(findAvg/chart.length)
+            setGPostData(chart)
             setLoading(false);
         })
         .catch(err => console.log(err))
@@ -157,7 +153,23 @@ const Stats = ({navigation}) => {
             <Text
                 key={index}
                 x={ x(index) + (bandwidth/2) }
-                y={ val.amount < 20 ? y(val.amount)-10 : y(val.amount) + 15}
+                y={ val.amount > avg ? y(val.amount) + 15 : y(val.amount) - 10}
+                fontSize={14}
+                fill={ useTheme().colors.text }
+                alignmentBaseline={'middle'}
+                textAnchor={'middle'}
+            >
+                {val.amount}
+            </Text>
+        ))
+    )
+
+    const GLabels = ({x, y, bandwidth, data}) => (
+        gPostData.map((val, index) => (
+            <Text
+                key={index}
+                x={ x(index) + (bandwidth/2) }
+                y={ val.amount > gAvg ? y(val.amount) + 15 : y(val.amount) - 10}
                 fontSize={14}
                 fill={ useTheme().colors.text }
                 alignmentBaseline={'middle'}
@@ -190,7 +202,7 @@ const Stats = ({navigation}) => {
                     </Card.Actions>
                 </Card>
                 <Card style = {styles.card}>
-                    <Card.Title title="Posts"/>
+                    <Card.Title title="My Posts"/>
                     <Card.Content>
                         <BarChart
                             style={{height: 200}}
@@ -210,7 +222,6 @@ const Stats = ({navigation}) => {
                         {postData.map((val, index) => 
                             <DataTable.Title 
                                 key={index} 
-                                numberOfLines={3}
                                 style={{
                                     alignSelf:'stretch',
                                     justifyContent:"center",
@@ -223,7 +234,44 @@ const Stats = ({navigation}) => {
                         )}
                         </DataTable.Header>
                     </DataTable>
-                </Card></>
+                </Card>
+
+                <Card style = {styles.card}>
+                    <Card.Title title="All Posts"/>
+                    <Card.Content>
+                        <BarChart
+                            style={{height: 200}}
+                            yAccessor={props => props.item.amount}
+                            data={gPostData}
+                            contentInset={{ top: 10, bottom: 10 }}
+                            spacing={0.2}
+                            gridMin={0}
+                        >
+                            <Grid direction={Grid.Direction.HORIZONTAL}/>
+                            <GLabels/>
+                        </BarChart>
+                    </Card.Content>
+                    
+                    <DataTable>
+                        <DataTable.Header>
+                        {gPostData.map((val, index) => 
+                            <DataTable.Title 
+                                key={index} 
+                                style={{
+                                    alignSelf:'stretch',
+                                    justifyContent:"center",
+                                    width:150,
+                                    flexDirection:'row'
+                                }}
+                            >
+                                {val.label}
+                            </DataTable.Title>
+                        )}
+                        </DataTable.Header>
+                    </DataTable>
+                </Card>
+                
+                </>
             }
         </ScrollView>
     )

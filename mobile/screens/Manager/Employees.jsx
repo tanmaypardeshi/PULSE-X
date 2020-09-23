@@ -6,6 +6,7 @@ import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
 import { SERVER_URI } from '../../config'
 import { createStackNavigator } from '@react-navigation/stack'
+import Employee from './Employee'
 
 const defaultPattern = {
     email: '',
@@ -80,6 +81,7 @@ const MyEmployees = ({navigation}) => {
                 <Card
                     key={index}
                     style={{marginTop: 20}}
+                    onPress={() => navigation.navigate('Employee Details', {item})}
                 >
                     <Card.Title
                         title={item.first_name + " " + item.last_name}
@@ -178,6 +180,13 @@ export default ({navigation}) =>
             component={MyEmployees}
             options={{
                 headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>
+            }}
+        />
+        <Stack.Screen
+            name='Employee Details'
+            component={Employee}
+            options={{
+                title: 'Employee Details'
             }}
         />
     </Stack.Navigator>

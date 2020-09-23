@@ -72,13 +72,15 @@ export default ({navigation}) => {
             .then(res => {
                 SecureStore
                 .setItemAsync("token", res.data.token)
-                .then(() => {
+                .then(async () => {
                     setPostLoading(false)
-                    if (res.data.is_employee)
-                        navigation.navigate('Employee')
-                    else if (res.data.is_manager)
-                        navigation.navigate('Manager')
-                    else
+                    if (res.data.is_employee) {
+                        return SecureStore.setItemAsync("type", "Employee")
+                        .then(() => navigation.navigate('Employee'))
+                    } else if (res.data.is_manager) {
+                        return SecureStore.setItemAsync("type", "Manager")
+                        .then(() => navigation.navigate('Manager'))
+                    } else
                         alert("R&D not ready yet")
                 })
                 .catch(() => {

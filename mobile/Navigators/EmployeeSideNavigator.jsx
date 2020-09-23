@@ -77,7 +77,8 @@ const Logout = (props) => {
             label='Logout'
             onPress={() => {
                 SecureStore.deleteItemAsync('token')
-                .then(token => props.navigation.navigate('Auth'))
+                .then(() => SecureStore.deleteItemAsync('type'))
+                .then(() => props.navigation.navigate('Auth'))
                 .catch(alert)
                 //props.navigation.navigate('Auth')
             }}

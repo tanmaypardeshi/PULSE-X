@@ -1,46 +1,13 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import * as React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { Badge, Button, Card, DataTable, IconButton, Title, ActivityIndicator, useTheme } from 'react-native-paper'
+import { Badge, Button, Card, DataTable, IconButton, Title, ActivityIndicator, useTheme, Colors } from 'react-native-paper'
 import { BarChart, PieChart, XAxis, Grid } from 'react-native-svg-charts'
 import { useFocusEffect } from '@react-navigation/native'
 import Axios from 'axios'
 import { SERVER_URI } from '../../config'
 import * as SecureStore from 'expo-secure-store'
 import { Text } from 'react-native-svg'
-
-const barData1 = [
-    {
-        key: 1,
-        amount: 30,
-        svg: { fill: '#d11507' },
-        label: 'Dumped'
-    },
-    {
-        key: 2,
-        amount: 56,
-        svg: { fill:'#ffce56' },
-        label: 'Read'
-    },
-    {
-        key: 3,
-        amount: 34,
-        svg: { fill: '#6bea83' },
-        label: 'Replied'
-    },
-    {
-        key: 4,
-        amount: 12,
-        svg: { fill:'#ff6384' },
-        label: 'Saved'
-    },
-    {
-        key: 5,
-        amount: 8,
-        svg: { fill: '#69359c' },
-        label: 'Forwarded'
-    },
-]
 
 const styles = StyleSheet.create({
     card: {
@@ -51,8 +18,11 @@ const styles = StyleSheet.create({
 
 const Stats = ({navigation}) => {
 
-    const [postData, setPostData] = React.useState(barData1)
+    const [postData, setPostData] = React.useState([])
+    const [helpData, setHelpData] = React.useState([])
+    const [emoData, setEmoData] = React.useState([])
     const [loading, setLoading] = React.useState(true)
+    const [avg, setAvg] = React.useState(0)
 
     useFocusEffect(React.useCallback(() => {
         fetchData()
@@ -73,39 +43,77 @@ const Stats = ({navigation}) => {
             )
         })
         .then(res => {
+            console.log(res.data)
             const chart = [
                 {
                     key: 1,
                     amount: res.data.data.flag0,
-                    svg: { fill: '#d11507' },
+                    svg: { fill: Colors.red500 },
                     label: 'Dumped'
                 },
                 {
                     key: 2,
                     amount: res.data.data.flag1,
-                    svg: { fill:'#ffce56' },
+                    svg: { fill: Colors.orange500 },
                     label: 'Read'
                 },
                 {
                     key: 3,
                     amount: res.data.data.flag2,
-                    svg: { fill: '#6bea83' },
+                    svg: { fill: Colors.green500 },
                     label: 'Replied'
                 },
                 {
                     key: 4,
                     amount: res.data.data.flag5,
-                    svg: { fill:'#ff6384' },
+                    svg: { fill: Colors.blue500 },
                     label: 'Saved'
                 },
                 {
                     key: 5,
                     amount: res.data.data.flag3 + res.data.data.flag4,
-                    svg: { fill: '#69359c' },
+                    svg: { fill: Colors.purple500 },
                     label: 'Forwarded'
                 },
             ]
+            let findAvg = 0;
+            chart.map(val => {findAvg += val.amount})
+            setAvg(findAvg/chart.length)
             setPostData(chart);
+            setHelpData([
+                {
+                    key: 1,
+                    amount: res.data.data.helpfulness_0,
+                    svg: { fill: Colors.redA200 },
+                    label: 'Not Helpful'
+                },
+                {
+                    key: 2,
+                    amount: res.data.data.helpfulness_1,
+                    svg: { fill: Colors.lightGreen500 },
+                    label: 'Helpful'
+                }
+            ])
+            setEmoData([
+                {
+                    key: 1,
+                    amount: res.data.data.negative,
+                    svg: { fill: Colors.redA200 },
+                    label: 'Negative'
+                },
+                {
+                    key: 2,
+                    amount: res.data.data.neutral,
+                    svg: { fill: Colors.orange500 },
+                    label: 'Neutral'
+                },
+                {
+                    key: 3,
+                    amount: res.data.data.positive,
+                    svg: { fill: Colors.lightGreen500 },
+                    label: 'Positive'
+                },
+            ])
             setLoading(false);
         })
         .catch(err => console.log(err))
@@ -116,7 +124,7 @@ const Stats = ({navigation}) => {
             <Text
                 key={index}
                 x={ x(index) + (bandwidth/2) }
-                y={ y(val.amount) + 15}
+                y={ val.amount > avg ? y(val.amount) + 15 : y(val.amount) - 10}
                 fontSize={14}
                 fill={ useTheme().colors.text }
                 alignmentBaseline={'middle'}
@@ -128,11 +136,12 @@ const Stats = ({navigation}) => {
     )
     
     return(
-        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+        <ScrollView>
             {
                 loading ? <ActivityIndicator size='large' animating={true} style={styles.card}/> :
+                <>
                 <Card style = {styles.card}>
-                    <Card.Title title="Posts"/>
+                    <Card.Title title="Post statistics"/>
                     <Card.Content>
                         <BarChart
                             style={{height: 200}}
@@ -166,6 +175,43 @@ const Stats = ({navigation}) => {
                         </DataTable.Header>
                     </DataTable>
                 </Card>
+
+                <Card style={styles.card}>
+                    <Card.Title title="Helpfulness"/>
+                    <Card.Content>
+                        <PieChart
+                            style={{height: 200}}
+                            valueAccessor={({ item }) => item.amount}
+                            data={helpData}
+                        />
+                    </Card.Content>
+                    <Card.Actions style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                        {helpData.map((val, index) => 
+                            <Button icon = "square" key = {index} color={val.svg.fill}>
+                                {val.label}
+                            </Button>
+                        )}
+                    </Card.Actions>
+                </Card>
+
+                <Card style={styles.card}>
+                    <Card.Title title="Sentiment"/>
+                    <Card.Content>
+                        <PieChart
+                            style={{height: 200}}
+                            valueAccessor={({ item }) => item.amount}
+                            data={emoData}
+                        />
+                    </Card.Content>
+                    <Card.Actions style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                        {emoData.map((val, index) => 
+                            <Button icon = "square" key = {index} color={val.svg.fill}>
+                                {val.label}
+                            </Button>
+                        )}
+                    </Card.Actions>
+                </Card>
+                </>
             }
         </ScrollView>
     )
