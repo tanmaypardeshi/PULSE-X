@@ -132,11 +132,13 @@
     <img src="screenshots/mobile/2.jpeg" alt="2.jpeg" width="200" height="400">
     &nbsp;
     <img src="screenshots/mobile/3.jpeg" alt="1.jpeg" width="200" height="400">
+    &nbsp;
     <img src="screenshots/mobile/4.jpeg" alt="2.jpeg" width="200" height="400">
     &nbsp;
     <img src="screenshots/mobile/5.jpeg" alt="1.jpeg" width="200" height="400">
     &nbsp;
     <img src="screenshots/mobile/6.jpeg" alt="2.jpeg" width="200" height="400">
+    &nbsp;
     <img src="screenshots/mobile/7.jpeg" alt="1.jpeg" width="200" height="400">
     &nbsp;
     <img src="screenshots/mobile/8.jpeg" alt="2.jpeg" width="200" height="400">
