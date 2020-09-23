@@ -7,5 +7,5 @@ urlpatterns = [
     path('saved/', SavedReview.as_view(), name='saved'),
     path('review_data/', GetReview.as_view(), name='review'),
     path('flag_data/', GetFlagDetails.as_view(), name='flag'),
-    path('detail/', EmployeeDetailView.as_view(), name='employee-detail')
+    path('detail/<int:id>/', EmployeeDetailView.as_view(), name='employee-detail')
 ]

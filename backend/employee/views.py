@@ -143,7 +143,7 @@ class EmployeeDetailView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            employee = User.objects.get(id=request.data['id'])
+            employee = User.objects.get(id=self.kwargs['id'])
             name = f"{employee.first_name} {employee.last_name}"
             email = employee.email
             manager_id = employee.manager_id.id
