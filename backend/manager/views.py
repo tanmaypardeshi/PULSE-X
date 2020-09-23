@@ -111,7 +111,7 @@ class ManagerChart(generics.ListAPIView):
             flag3 = Review.objects.filter(user__manager_id=request.user, flag=3).count()
             flag4 = Review.objects.filter(user__manager_id=request.user, flag=4).count()
             flag5 = Review.objects.filter(user__manager_id=request.user, flag=5).count()
-            negative = Review.objects.filer(user__manager_id=request.user, sentiment=-1).count()
+            negative = Review.objects.filter(user__manager_id=request.user, sentiment=-1).count()
             neutral = Review.objects.filter(user__manager_id=request.user, sentiment=0).count()
             positive = Review.objects.filter(user__manager_id=request.user, sentiment=1).count()
             helpfulness_0 = Review.objects.filter(user__manager_id=request.user, helpfulness=0).count()
