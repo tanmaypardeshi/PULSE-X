@@ -110,12 +110,18 @@ class GetFlagDetails(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            flag0 = Review.objects.filter(flag=0).count()
-            flag1 = Review.objects.filter(flag=1).count()
-            flag2 = Review.objects.filter(flag=2).count()
-            flag3 = Review.objects.filter(flag=3).count()
-            flag4 = Review.objects.filter(flag=4).count()
-            flag5 = Review.objects.filter(flag=5).count()
+            flag0 = Review.objects.filter(user=request.user, flag=0).count()
+            flag1 = Review.objects.filter(user=request.user, flag=1).count()
+            flag2 = Review.objects.filter(user=request.user, flag=2).count()
+            flag3 = Review.objects.filter(user=request.user, flag=3).count()
+            flag4 = Review.objects.filter(user=request.user, flag=4).count()
+            flag5 = Review.objects.filter(user=request.user, flag=5).count()
+            gflag0 = Review.objects.filter(flag=0).count()
+            gflag1 = Review.objects.filter(flag=1).count()
+            gflag2 = Review.objects.filter(flag=2).count()
+            gflag3 = Review.objects.filter(flag=3).count()
+            gflag4 = Review.objects.filter(flag=4).count()
+            gflag5 = Review.objects.filter(flag=5).count()
             total = Review.objects.all().count()
             return Response({
                 'success': True,
@@ -127,6 +133,12 @@ class GetFlagDetails(generics.ListAPIView):
                     'flag3': flag3,
                     'flag4': flag4,
                     'flag5': flag5,
+                    'gflag0': gflag0,
+                    'gflag1': gflag1,
+                    'gflag2': gflag2,
+                    'gflag3': gflag3,
+                    'gflag4': gflag4,
+                    'gflag5': gflag5,
                     'total': total
                 }
             }, status=status.HTTP_200_OK)
