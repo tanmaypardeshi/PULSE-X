@@ -3,11 +3,15 @@
 ## PULSE - X : The complete social media intelligence platform with dynamic sentiment analysis​
 
 
+#### [Click here for the Drive link to find the csv files and PPT for both rounds](https://drive.google.com/drive/folders/1CWYgf5lB49S3RUyVeBO8lw8L6m6Eba2b?usp=sharing)
+
+#### [Click here for the PPT for judging round]()
+
 ## Prequisites on the local machine to project to be run:
 
 1. Python 3.6 or above 
 2. Node JS v12.0.0 or above 
-3. Yarn 1.22.4 (or npm 6.9.0)
+3. Yarn 1.22.4
 4. Expo SDK 38
 5. pip 3 v20.0.x or above
  
@@ -50,3 +54,26 @@
 4. Once the node modules have been installed, run **yarn start** to start the expo server.
 5. Scan the QR code on your mobile device using the expo app available on play store.
 
+
+### Information about the directories in the repository
+#### (Click on the file name to open the folder)
+
+| Directory Name                     | Description                          |
+| :-----------------------------:  | :--------------------------------    |
+|[backend](backend/))  |Django REST framework app with the APIs|
+|[frontend](frontend/))  |Front end for the web app made in React|
+|[mobile](mobile/))  |Mobile app using React Native and Expo SDK|
+|[Machine_Learning](Machine_Learning/))  |Notebooks used for the multilayered filtering approach|
+|[scripts](scripts))  |Python scripts to extract data from csv|
+
+
+### Information about the notebooks in the Machine_Learning directory
+#### ( Click on the notebook to access )
+
+| Notebook Name                     | Description                          |
+| :-----------------------------:  | :--------------------------------    |
+|[Json_Processing.ipynb](Machine_Learning/Json_Processing.ipynb)|Extracts the data from json format and converts it to a csv|
+|[Text_Preprocessing.ipynb](Machine_Learning/Text_Preprocessing.ipynb)|Preprocesses the data by performing lemmatisation, tokenisation and removes stop words to bring the data in the required format by the models|
+|[SentimentAnalysis.ipynb](Machine_Learning/SentimentAnalysis.ipynb)|The polarity of a tweet is analysed by using a pretrained model from TextBlob|
+|[KeywordsExtraction.ipynb](Machine_Learning/KeywordsExtraction.ipynb)|Extraction of aspects and keywords essential to the product|
+|[SarcasmDetection.ipynb](Machine_Learning/SarcasmDetection.ipynb)|To detect the true intent behind the review|
