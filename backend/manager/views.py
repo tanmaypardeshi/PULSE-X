@@ -114,6 +114,9 @@ class ManagerChart(generics.ListAPIView):
             negative = Review.objects.filer(user__manager_id=request.user, sentiment=-1).count()
             neutral = Review.objects.filter(user__manager_id=request.user, sentiment=0).count()
             positive = Review.objects.filter(user__manager_id=request.user, sentiment=1).count()
+            helpfulness_0 = Review.objects.filter(user__manager_id=request.user, helpfulness=0).count()
+            helpfulness_1 = Review.objects.filter(user__manager_id=request.user, helpfulness=1).count()
+
 
             return Response({
                 'success': True,
@@ -128,7 +131,9 @@ class ManagerChart(generics.ListAPIView):
                     'flag5': flag5,
                     'negative': negative,
                     'neutral': neutral,
-                    'positive': positive
+                    'positive': positive,
+                    'helpfulness_0': helpfulness_0,
+                    'helpfulness_1': helpfulness_1
                 }
             }, status=status.HTTP_200_OK)
         except Exception as e:
