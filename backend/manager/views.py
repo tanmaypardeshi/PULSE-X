@@ -41,8 +41,8 @@ class MangerView(APIView):
 
 
 class MyEmployeeView(generics.ListAPIView):
-    permission_classes = (IsAuthenticated, IsManager, )
-    authentication_classes = (JSONWebTokenAuthentication, )
+    permission_classes = (IsAuthenticated, IsManager,)
+    authentication_classes = (JSONWebTokenAuthentication,)
     serializer_class = MyEmployeeSerializer
 
     def get_queryset(self):
@@ -57,8 +57,8 @@ class MyEmployeeView(generics.ListAPIView):
 
 
 class ManagerReview(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated, IsManager, )
-    authentication_classes = (JSONWebTokenAuthentication, )
+    permission_classes = (IsAuthenticated, IsManager,)
+    authentication_classes = (JSONWebTokenAuthentication,)
     serializer_class = ManagerReviewSerializer
 
     def get_queryset(self):
@@ -98,8 +98,8 @@ class ManagerReview(generics.ListCreateAPIView):
 
 
 class ManagerChart(generics.ListAPIView):
-    permission_classes = (IsAuthenticated, IsManager, )
-    authentication_classes = (JSONWebTokenAuthentication, )
+    permission_classes = (IsAuthenticated, IsManager,)
+    authentication_classes = (JSONWebTokenAuthentication,)
 
     def get(self, request, *args, **kwargs):
         try:
@@ -111,6 +111,9 @@ class ManagerChart(generics.ListAPIView):
             flag3 = Review.objects.filter(user__manager_id=request.user, flag=3).count()
             flag4 = Review.objects.filter(user__manager_id=request.user, flag=4).count()
             flag5 = Review.objects.filter(user__manager_id=request.user, flag=5).count()
+            negative = Review.objects.filer(user__manager_id=request.user, sentiment=-1).count()
+            neutral = Review.objects.filter(user__manager_id=request.user, sentiment=0).count()
+            positive = Review.objects.filter(user__manager_id=request.user, sentiment=1).count()
 
             return Response({
                 'success': True,
@@ -122,7 +125,10 @@ class ManagerChart(generics.ListAPIView):
                     'flag2': flag2,
                     'flag3': flag3,
                     'flag4': flag4,
-                    'flag5': flag5
+                    'flag5': flag5,
+                    'negative': negative,
+                    'neutral': neutral,
+                    'positive': positive
                 }
             }, status=status.HTTP_200_OK)
         except Exception as e:
@@ -130,4 +136,3 @@ class ManagerChart(generics.ListAPIView):
                 'success': False,
                 'message': e.__str__()
             }, status=status.HTTP_400_BAD_REQUEST)
-
