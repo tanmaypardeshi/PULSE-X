@@ -2,7 +2,6 @@
 
 ## PULSE - X : The complete social media intelligence platform with dynamic sentiment analysis​
 
-
 #### [Click here for the Drive link to find the csv files and PPT for both rounds](https://drive.google.com/drive/folders/1CWYgf5lB49S3RUyVeBO8lw8L6m6Eba2b?usp=sharing)
 
 #### [Click here for the PPT for judging round](https://github.com/tanmaypardeshi/Pasckathon_git_commit/blob/master/Judging%20Round%201%20PPT.pdf)
@@ -15,6 +14,7 @@
 4. Expo SDK 38
 5. pip 3 v20.0.x or above
  
+<hr>
 
 ## Steps to run the project on the local machine
 
@@ -54,6 +54,7 @@
 4. Once the node modules have been installed, run **yarn start** to start the expo server.
 5. Scan the QR code on your mobile device using the expo app available on play store.
 
+<hr>
 
 ### Information about the directories in the repository
 #### (Click on the file name to open the folder)
@@ -66,6 +67,7 @@
 |[Machine_Learning](Machine_Learning/)  |Notebooks used for the multilayered filtering approach|
 |[scripts](scripts)  |Python scripts to extract data from csv|
 
+<hr>
 
 ### Information about the notebooks in the Machine_Learning directory
 #### ( Click on the notebook to access )
@@ -77,3 +79,73 @@
 |[SentimentAnalysis.ipynb](Machine_Learning/SentimentAnalysis.ipynb)|The polarity of a tweet is analysed by using a pretrained model from TextBlob|
 |[KeywordsExtraction.ipynb](Machine_Learning/KeywordsExtraction.ipynb)|Extraction of aspects and keywords essential to the product|
 |[SarcasmDetection.ipynb](Machine_Learning/SarcasmDetection.ipynb)|To detect the true intent behind the review|
+
+
+<hr>
+
+### Snippets of the platform:
+
+## Web app
+
+<p float="left">
+    <img src="screenshots/web/1.jpeg" alt="1.jpeg" width="700" height="400">
+    <img src="screenshots/web/2.jpeg" alt="2.jpeg" width="700" height="400">
+</p>
+
+<p float="left">
+    <img src="screenshots/web/3.jpeg" alt="1.jpeg" width="700" height="400">
+    <img src="screenshots/web/4.jpeg" alt="2.jpeg" width="700" height="400">
+</p>
+
+<p float="left">
+    <img src="screenshots/web/5.jpeg" alt="1.jpeg" width="700" height="400">
+    <img src="screenshots/web/6.jpeg" alt="2.jpeg" width="700" height="400">
+</p>
+
+<p float="left">
+    <img src="screenshots/web/7.jpeg" alt="1.jpeg" width="700" height="400">
+    <img src="screenshots/web/8.jpeg" alt="2.jpeg" width="700" height="400">
+</p>
+
+<p float="left">
+    <img src="screenshots/web/9.jpeg" alt="1.jpeg" width="700" height="400">
+    <img src="screenshots/web/10.jpeg" alt="2.jpeg" width="700" height="400">
+</p>
+
+<p float="left">
+    <img src="screenshots/web/11.jpeg" alt="1.jpeg" width="700" height="400">
+    <img src="screenshots/web/12.jpeg" alt="2.jpeg" width="700" height="400">
+</p>
+
+<p float="left">
+    <img src="screenshots/web/13.jpeg" alt="1.jpeg" width="700" height="400">
+    <img src="screenshots/web/14.jpeg" alt="2.jpeg" width="700" height="400">
+</p>
+
+<br>
+
+## Mobile app
+
+<p float="left">
+    <img src="screenshots/mobile/1.jpeg" alt="1.jpeg" width="200" height="400">
+    &nbsp;
+    <img src="screenshots/mobile/2.jpeg" alt="2.jpeg" width="200" height="400">
+    &nbsp;
+    <img src="screenshots/mobile/3.jpeg" alt="1.jpeg" width="200" height="400">
+    <img src="screenshots/mobile/4.jpeg" alt="2.jpeg" width="200" height="400">
+    &nbsp;
+    <img src="screenshots/mobile/5.jpeg" alt="1.jpeg" width="200" height="400">
+    &nbsp;
+    <img src="screenshots/mobile/6.jpeg" alt="2.jpeg" width="200" height="400">
+    <img src="screenshots/mobile/7.jpeg" alt="1.jpeg" width="200" height="400">
+    &nbsp;
+    <img src="screenshots/mobile/8.jpeg" alt="2.jpeg" width="200" height="400">
+    &nbsp;
+    <img src="screenshots/mobile/9.jpeg" alt="1.jpeg" width="200" height="400">
+    &nbsp;
+    <img src="screenshots/mobile/10.jpeg" alt="2.jpeg" width="200" height="450">
+    &nbsp;
+    <img src="screenshots/mobile/11.jpeg" alt="2.jpeg" width="200" height="450">
+    &nbsp;
+    <img src="screenshots/mobile/12.jpeg" alt="2.jpeg" width="200" height="450">
+</p>
