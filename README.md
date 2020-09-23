@@ -60,11 +60,11 @@
 
 | Directory Name                     | Description                          |
 | :-----------------------------:  | :--------------------------------    |
-|[backend](backend/))  |Django REST framework app with the APIs|
-|[frontend](frontend/))  |Front end for the web app made in React|
-|[mobile](mobile/))  |Mobile app using React Native and Expo SDK|
-|[Machine_Learning](Machine_Learning/))  |Notebooks used for the multilayered filtering approach|
-|[scripts](scripts))  |Python scripts to extract data from csv|
+|[backend](backend/)  |Django REST framework app with the APIs|
+|[frontend](frontend/)  |Front end for the web app made in React|
+|[mobile](mobile/)  |Mobile app using React Native and Expo SDK|
+|[Machine_Learning](Machine_Learning/)  |Notebooks used for the multilayered filtering approach|
+|[scripts](scripts)  |Python scripts to extract data from csv|
 
 
 ### Information about the notebooks in the Machine_Learning directory
