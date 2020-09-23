@@ -14,10 +14,8 @@ import { makeStyles,
          DialogContent,
          TextField } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { Doughnut } from 'react-chartjs-2'
 import axios from 'axios'
 
-const colors = ['#cc3333', '#9fa91f', '#185134', '#ff00ff', '#3aa8c1', '#fada5e']
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,28 +38,23 @@ const useStyles = makeStyles((theme) => ({
         marginRight: '1%'
     },
     registerButton: {
-        margin: '5% 38%'
+        margin: '3% 38%'
     },
     paper: {
         marginTop: '2%',
         padding: '2%'
     },
     alert: {
-        position: ''
+        width: '50%'
     },
     tablehead: {
         backgroundColor: '#ceceeb',
         color: '#ffffff'
     },
-    graph: {
-        width: '48%',
-        padding: '1%',
-        marginTop: '3%'
-    },
     tableDiv: {
         float: 'left',
-        width: '50%',
-        marginRight: '2%'
+        width: '100%',
+        marginRight: '1%'
     }
 }))
 
@@ -79,33 +72,9 @@ function Profile(props) {
     const [complete, setComplete] = useState(true)
     const [match, setMatch] = useState(true)
     const [success, setSuccess] = useState(false)
-    const [graph, setGraph] = useState([])
-    const [label, setLabel] = useState(['Dumped', 'Marked as Read', 'Replied', 'Sent to Manager', 'Sent to Developer', 'Saved' ])
 
     useEffect(() => {
         getEmployees()
-        axios({
-            method: "GET",
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type" : "application/json",
-                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
-            },
-            url: '/api/manager/chart/'
-        })
-        .then((res) => {
-            let post = []
-            post.push(res.data.data.flag0)
-            post.push(res.data.data.flag1)
-            post.push(res.data.data.flag2)
-            post.push(res.data.data.flag3)
-            post.push(res.data.data.flag4)
-            post.push(res.data.data.flag5)
-            setGraph(post)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
     }, [])
 
     const getEmployees = () => {
@@ -165,39 +134,6 @@ function Profile(props) {
         }
     }
 
-    const generateChart = (names, data, label, colors) => {
-        return({
-            data: {
-                labels:names,
-                datasets:[
-                    {
-                        label: label,
-                        data: data,
-                        text: label,
-                        backgroundColor: colors,
-                        borderColor: colors,
-                        borderWidth: 2,
-                        hoverBorderWidth:2,
-                        hoverBorderColor: colors
-                    }
-                ],
-            },
-            width: 650,
-            height: 430,
-            options: {
-                legend:{
-                    display:true,
-                    position:'right',
-                    onClick: function (e) {
-                        e.stopPropagation();
-                    }
-                },
-                maintainAspectRatio: false,
-                responsive: true,
-            },
-        });
-    }
-
     const handleClose = (e) => {
         setOpen(false)
         setEmail(null)
@@ -232,7 +168,11 @@ function Profile(props) {
                         <TableBody>
                             {employees.map((emp) => (
                                 <TableRow key={emp.id}>
-                                    <TableCell>{emp.first_name}&nbsp;{emp.last_name}</TableCell>
+                                    <TableCell>
+                                        <a href={`/manager/employees/${emp.id}`} className={classes.link}>
+                                            {emp.first_name}&nbsp;{emp.last_name}
+                                        </a>
+                                    </TableCell>
                                     <TableCell>{emp.email}</TableCell>
                                     <TableCell>Employee</TableCell>
                                 </TableRow>
@@ -241,10 +181,6 @@ function Profile(props) {
                     </Table>
                 </TableContainer>
             </div>
-            <Card className={classes.graph}>
-                <h5>Post Review Statistics</h5>
-                <Doughnut {...generateChart(label, graph, "Reviews", colors)}/>
-            </Card>
             <Dialog
              open={open}
              onClose={handleClose}

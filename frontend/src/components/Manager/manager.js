@@ -8,7 +8,8 @@ import { AppBar,
 import { MailOutline,
         WorkOutline,
         Person ,
-        PowerSettingsNew} from '@material-ui/icons'
+        PowerSettingsNew,
+        ShowChart} from '@material-ui/icons'
 import Routes from './routes'
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -71,11 +72,14 @@ function Manager() {
         if(path === '/manager/received') {
             setTab(0);
         }
-        if(path === '/manager/employees') {
+        if(path.includes('/manager/employees')) {
             setTab(1);
         }
-        if(path === '/manager/profile') {
+        if(path === '/manager/statistics') {
             setTab(2);
+        }
+        if(path === '/manager/profile') {
+            setTab(3);
         }
     }, [location])
 
@@ -91,6 +95,9 @@ function Manager() {
                 history.push('/manager/employees');
                 break;
             case 2:
+                history.push('/manager/statistics');
+                break;
+            case 3:
                 history.push('/manager/profile');
                 break;
             default:
@@ -121,6 +128,9 @@ function Manager() {
                          className={classes.tabButton}/>
                         <Tab 
                          label={<div><WorkOutline className={classes.icon}/>My Employees</div>}  
+                         className={classes.tabButton}/>
+                        <Tab 
+                         label={<div><ShowChart className={classes.icon}/>Statistics</div>}  
                          className={classes.tabButton}/>
                         <Tab 
                          label={<div><Person className={classes.icon}/>My Profile</div>} 

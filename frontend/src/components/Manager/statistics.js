@@ -5,7 +5,8 @@ import { Doughnut,
          Bar } from 'react-chartjs-2'
 import axios from 'axios'
 
-const colorsPosts = ['rgba(255, 99, 132, 0.8)','rgba(54, 162, 235, 0.8)','rgba(255, 206, 86, 0.8)']
+const colorsPosts = ['rgba(75, 192, 192, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(255, 99, 132, 0.8)']
+const colorsHelp = ['rgba(75, 192, 192, 0.8)', 'rgba(255, 99, 132, 0.8)']
 const colorsStats = ['rgba(255, 99, 132, 0.8)','rgba(54, 162, 235, 0.8)','rgba(255, 206, 86, 0.8)','rgba(75, 192, 192, 0.8)','rgba(153, 102, 255, 0.8)','rgba(255, 159, 64, 0.8)','rgba(255, 99, 132, 0.8)']
 
 const useStyles = makeStyles((theme) => ({
@@ -26,11 +27,12 @@ function Statistics() {
 
     let classes = useStyles()
 
-    const [labelPosts, setPostsLabel] = useState([])
-    const [dataPosts, setPostsData] = useState([])
     const [labelStats, setStatsLabel] = useState([])
     const [dataStats, setStatsData] = useState([])
-    const [myStats, setMyStats] = useState([])
+    const [labelSenti, setLabelSenti] = useState([])
+    const [dataSenti, setDataSenti] = useState([])
+    const [labelHelp, setLabelHelp] = useState([])
+    const [dataHelp, setDataHelp] = useState([])
 
     useEffect(() => {
         axios({
@@ -40,51 +42,32 @@ function Statistics() {
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: '/api/employee/review_data/'
+            url: '/api/manager/chart/'
         })
         .then((res) => {
-            let label = ['My reviews', 'Difference', 'Total']
-            let post = []
-            post.push(res.data.data.employee_reviews)
-            post.push(res.data.data.difference)
-            post.push(res.data.data.total_reviews)
-            setPostsLabel(label)
-            setPostsData(post)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-
-        axios({
-            method: "GET",
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type" : "application/json",
-                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
-            },
-            url: '/api/employee/flag_data/'
-        })
-        .then((res) => {
-            let label = ['Dumped', 'Marked as Read', 'Replied', 'Sent to Manager', 'Sent to Developer', 'Saved' ]
             let post = []
             console.log(res.data)
-            post.push(res.data.data.gflag0)
-            post.push(res.data.data.gflag1)
-            post.push(res.data.data.gflag2)
-            post.push(res.data.data.gflag3)
-            post.push(res.data.data.gflag4)
-            post.push(res.data.data.gflag5)
-            setStatsLabel(label)
+            post.push(res.data.data.flag0)
+            post.push(res.data.data.flag1)
+            post.push(res.data.data.flag2)
+            post.push(res.data.data.flag3)
+            post.push(res.data.data.flag4)
+            post.push(res.data.data.flag5)
+            setStatsLabel(['Dumped', 'Marked as Read', 'Replied', 'Sent to Manager', 'Sent to Developer', 'Saved' ])
+            setLabelHelp(['Helpful', 'Not Helpful'])
+            setLabelSenti(['Good', 'Neutral', 'Bad'])
             setStatsData(post)
 
-            let mypost = []
-            mypost.push(res.data.data.flag0)
-            mypost.push(res.data.data.flag1)
-            mypost.push(res.data.data.flag2)
-            mypost.push(res.data.data.flag3)
-            mypost.push(res.data.data.flag4)
-            mypost.push(res.data.data.flag5)
-            setMyStats(mypost)
+            let senti = []
+            senti.push(res.data.data.positive)
+            senti.push(res.data.data.neutral)
+            senti.push(res.data.data.negative)
+            setDataSenti(senti)
+
+            let help = []
+            help.push(res.data.data.helpfulness_0)
+            help.push(res.data.data.helpfulness_1)
+            setDataHelp(help)
         })
         .catch((error) => {
             console.log(error)
@@ -167,16 +150,16 @@ function Statistics() {
     return (
         <div className={classes.root}>
             <Card className={classes.pie}>
-                <h5>Total Reviewed</h5>
-                <Doughnut {...generateChart(labelPosts, dataPosts, "Posts", colorsPosts, false)}/>
+                <h5>Sentiment</h5>
+                <Doughnut {...generateChart(labelSenti, dataSenti, "Sentiment", colorsPosts, false)}/>
             </Card>
             <Card className={classes.pie}>
-                <h5>Overall Post Reviews</h5>
+                <h5>Helpfulness</h5>
+                <Doughnut {...generateChart(labelHelp, dataHelp, "Helpfulness", colorsHelp, false)}/>
+            </Card>
+            <Card className={classes.pie}>
+                <h5>Post Review Statistics</h5>
                 <Bar {...generateChart(labelStats, dataStats, "Reviews", colorsStats, true)}/>
-            </Card>
-            <Card className={classes.pie}>
-                <h5>My Reviews</h5>
-                <Bar {...generateChart(labelStats, myStats, "Reviews", colorsStats, true)}/>
             </Card>
         </div>
     )
