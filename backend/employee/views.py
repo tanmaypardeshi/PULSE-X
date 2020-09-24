@@ -159,7 +159,7 @@ class EmployeeDetailView(generics.ListAPIView):
             name = f"{employee.first_name} {employee.last_name}"
             email = employee.email
             manager_id = employee.manager_id.id
-            last_login = employee.last_name
+            last_login = employee.last_login
             date_joined = employee.date_joined
             flag0 = Review.objects.filter(user=employee, flag=0).count()
             flag1 = Review.objects.filter(user=employee, flag=1).count()
