@@ -8,13 +8,12 @@ import { makeStyles,
         Tooltip,
         Snackbar } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { Visibility,
-         Send } from '@material-ui/icons'
+import { Visibility } from '@material-ui/icons'
 import { HiEmojiHappy,
          HiEmojiSad,
          HiFlag } from 'react-icons/hi'
 import { ImNeutral2 } from 'react-icons/im'
-import  Team from './../../images/team.svg'
+import  Empty from './../../images/empty.svg'
 import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
@@ -69,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '5% 27%',
     },
     noNewText: {
-        margin: '5px 0 0 36%'
+        margin: '5px 0 0 33%'
     },
     saved: {
         width: '60%',
@@ -145,11 +144,6 @@ function Received(props) {
         handleRemove(e, 3, true)
     }
 
-    const handleSendToDeveloper = (e) => {
-        handleRemove(e, 4, false)
-        //setSuccess('Post sent to Developer!')
-    }
-
     return(
         <div className={classes.root} id='header'>
                 {
@@ -206,14 +200,6 @@ function Received(props) {
                                                         <Visibility/>
                                                     </IconButton>
                                                 </Tooltip>
-                                                <Tooltip title='Send to Developer'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    className={classes.actionButton}
-                                                    onClick={handleSendToDeveloper}>
-                                                        <Send/>
-                                                    </IconButton>
-                                                </Tooltip>
                                             </div>
                                         }
                                     />
@@ -255,8 +241,8 @@ function Received(props) {
             {
                 !datasource.length ? 
                     <div className={classes.noNewPost}>
-                        <img src={Team} alt='No new posts' className={classes.saved}/>
-                        <p className={classes.noNewText}>Your team has it covered for you!</p>
+                        <img src={Empty} alt='No new posts' className={classes.saved}/>
+                        <p className={classes.noNewText}>Nothing for you right now. Check in later!</p>
                     </div> :
                     null
             }

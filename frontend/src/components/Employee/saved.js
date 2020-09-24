@@ -15,7 +15,8 @@ import { Mail,
          Visibility,
          Send } from '@material-ui/icons'
 import { HiEmojiHappy,
-         HiEmojiSad } from 'react-icons/hi'
+         HiEmojiSad,
+         HiFlag } from 'react-icons/hi'
 import { ImNeutral2 } from 'react-icons/im'
 import  Saved from './../../images/saved.svg'
 import axios from 'axios'
@@ -180,6 +181,15 @@ function Newest(props) {
                                         className={classes.heading}
                                         action={
                                             <div className={classes.fourButtons}>
+                                                {
+                                                post.sarcasm ?
+                                                    <Tooltip title='Sarcastic comment'>
+                                                        <IconButton>
+                                                            <HiFlag style={{color: "#f44336", fontSize: '25px'}} />
+                                                        </IconButton>
+                                                    </Tooltip> :
+                                                    null
+                                                }
                                                 {
                                                     post.sentiment === 1 ?
                                                         <Tooltip title='Customer seems to be happy'>

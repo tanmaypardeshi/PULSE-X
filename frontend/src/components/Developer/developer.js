@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { AppBar, 
-         Tabs, 
-         Tab, 
-         makeStyles, 
-         Tooltip,
-         Button} from '@material-ui/core'
-import { BookmarkBorder,
-         Autorenew,
-         ShowChart,
-         Person, 
-         PowerSettingsNew} from '@material-ui/icons'
+        Tabs, 
+        Tab, 
+        Tooltip,
+        Button,
+        makeStyles } from '@material-ui/core'
+import { MailOutline,
+         Person,
+         PowerSettingsNew } from '@material-ui/icons'
 import Routes from './routes'
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -59,8 +57,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-
-function Employee(props) {
+function Developer() {
 
     let classes = useStyles()
     let location = useLocation()
@@ -70,22 +67,13 @@ function Employee(props) {
 
     useEffect(() => {
         const path = location.pathname
-        if(path === '/employee/newest') {
+        if(path === '/developer/received') {
             setTab(0);
         }
-        if(path === '/employee/saved') {
+        if(path.includes('/developer/profile')) {
             setTab(1);
-        }
-        if(path === '/employee/statistics') {
-            setTab(2);
-        }
-        if(path === '/employee/profile') {
-            setTab(3);
-        }
-
-        window.addEventListener("beforeunload", handleLogout);
+        }   
     }, [location])
-
 
     const handleTabChange = (e, value) => {
         const tabValue = value
@@ -93,27 +81,18 @@ function Employee(props) {
         
         switch(tabValue) {
             case 0:
-                history.push('/employee/newest');
+                history.push('/developer/received');
                 break;
             case 1:
-                history.push('/employee/saved');
-                break;
-            case 2:
-                history.push('/employee/statistics');
-                break;
-            case 3:
-                history.push('/employee/profile');
+                history.push('/developer/profile');
                 break;
             default:
-                history.push('/employee/newest');
+                history.push('/developer/received');
                 break;
         }
     };
 
     const handleLogout = (e) => {
-        if(sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
-            console.log(JSON.parse(sessionStorage.getItem('data')))
-        }
         sessionStorage.clear()
         history.push('/')
     }
@@ -124,20 +103,14 @@ function Employee(props) {
                 <div className='d-inline-block'>
                     <p className={classes.title}>PULSE &mdash; X</p>
                     <Tabs
-                    value={tabValue}
-                    onChange={handleTabChange}
-                    indicatorColor='primary'
-                    textColor='primary'
-                    className={classes.tab}
+                     value={tabValue}
+                     onChange={handleTabChange}
+                     indicatorColor='primary'
+                     textColor='primary'
+                     className={classes.tab}
                     >
                         <Tab 
-                         label={<div><Autorenew className={classes.icon}/>Newest</div>} 
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><BookmarkBorder className={classes.icon}/>Saved</div>}  
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><ShowChart className={classes.icon}/>Statistics</div>}  
+                         label={<div><MailOutline className={classes.icon}/>Received</div>} 
                          className={classes.tabButton}/>
                         <Tab 
                          label={<div><Person className={classes.icon}/>My Profile</div>} 
@@ -155,4 +128,4 @@ function Employee(props) {
     )
 }
 
-export default Employee;
+export default Developer;

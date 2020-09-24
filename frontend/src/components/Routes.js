@@ -4,6 +4,7 @@ import Login from './Login/login'
 import Register from './Login/register'
 import Employee from './Employee/employee'
 import Manager from './Manager/manager'
+import Developer from './Developer/developer'
 
 const EmployeeRoute = ({ component: Component, ...rest }) => {
     let loggedIn = JSON.parse(sessionStorage.getItem("user"));
@@ -59,6 +60,7 @@ function Routes() {
                 <Route path='/register' component={Register} />
                 <EmployeeRoute path='/employee' component={Employee} />
                 <ManagerRoute path='/manager' component={Manager} />
+                <DeveloperRoute path='/developer' component={Developer} />
             </Switch>
         </BrowserRouter>
     )

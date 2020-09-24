@@ -9,8 +9,7 @@ import { makeStyles,
         IconButton, 
         Tooltip,
         Snackbar,
-        Zoom, 
-        CircularProgress} from '@material-ui/core'
+        CircularProgress } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { Delete,
         Visibility,
@@ -18,7 +17,8 @@ import { Delete,
         Send,
         Bookmark } from '@material-ui/icons'
 import { HiEmojiHappy,
-         HiEmojiSad } from 'react-icons/hi'
+         HiEmojiSad,
+         HiFlag } from 'react-icons/hi'
 import { ImNeutral2 } from 'react-icons/im'
 import GoalsMet from './../../images/goal_met.svg'
 import uuid from 'react-uuid'
@@ -96,30 +96,40 @@ function Newest(props) {
 
     useEffect(() => {
         let data = []
-        axios({
-            method: "GET",
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type" : "application/json",
-                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
-            },
-            url: '/api/employee/review/'
-        })
-        .then((res) => {
-            console.log(res.data.review_set)
-            for(let i=0; i<res.data.review_set.length; i++) {
-                data.push({
-                    id: uuid(),
-                    ...res.data.review_set[i]
-                })
-            }
-            setDatasource(data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-        
+        if(sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
+            setDatasource(JSON.parse(sessionStorage.getItem('data')))
+            sessionStorage.removeItem('data')
+        }
+        else {
+            axios({
+                method: "GET",
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type" : "application/json",
+                    Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+                },
+                url: '/api/employee/review/'
+            })
+            .then((res) => {
+                for(let i=0; i<res.data.review_set.length; i++) {
+                    data.push({
+                        id: uuid(),
+                        ...res.data.review_set[i]
+                    })
+                }
+                setDatasource(data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })       
+        } 
     }, [])
+
+    useEffect(() => {
+        return () => {
+            sessionStorage.setItem('data', JSON.stringify(datasource))
+        }
+    }, [datasource])
 
     const getReviews = (isVisible) => {
         if (isVisible) {
@@ -203,129 +213,128 @@ function Newest(props) {
 
     const handleSendToManager = (e) => {
         handleRemove(e, 3)
-        //setSuccess('Post sent to Manager!')
     }
 
     const handleSendToDeveloper = (e) => {
-        //console.log(e.currentTarget.id)
         handleRemove(e, 4)
-        //setSuccess('Post sent to Developer!')
     }
 
     const handleSave = (e) => {
         handleRemove(e, 5)
     }
 
-    // const handleChange = (e) => {
-    //     console.log(e.target.value, e.target.id)
-    // }
-
     return(
         <div className={classes.root} id='header'>
                 {
                     datasource.map((post, index) => (
                         <div>
-                            {/* <Zoom in={post.id}> */}
-                                <Card className={classes.card} variant='outlined'>
-                                    <CardHeader
-                                        title={<p className={classes.name}>{post.profile_name}</p>}
-                                        subheader={<p className={classes.date}>{post.date}</p>}
-                                        className={classes.heading}
-                                        action={
-                                            <div className={classes.fourButtons}>
-                                                 {
-                                                    post.sentiment === 1 ?
-                                                        <Tooltip title='Customer seems to be happy'>
-                                                            <IconButton>
-                                                                <HiEmojiHappy style={{color: "#4caf50", fontSize: '25px'}} />
-                                                            </IconButton>
-                                                        </Tooltip> :
-                                                        null
-                                                }
-                                                {
-                                                    post.sentiment === -1 ?
-                                                        <Tooltip title='Customer seems to be disappointed'>
-                                                            <IconButton>
-                                                                <HiEmojiSad style={{color: "#f44336", fontSize: '25px'}} />
-                                                            </IconButton>
-                                                        </Tooltip> :
-                                                        null
-                                                }
-                                                {
-                                                    post.sentiment === 0 ?
-                                                        <Tooltip title='Customer seems to be fine'>
-                                                            <IconButton>
-                                                                <ImNeutral2 style={{color: "#ff9800", fontSize: '20px'}} />
-                                                            </IconButton>
-                                                        </Tooltip> :
-                                                        null
-                                                }
-                                                <Tooltip title='Chuck'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    onClick={handleDelete}
-                                                    className={classes.actionButton}>
-                                                        <Delete/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title='Mark as Read'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    onClick={handleRead}
-                                                    className={classes.actionButton}>
-                                                        <Visibility/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title='Send to Manager'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    className={classes.actionButton}
-                                                    onClick={handleSendToManager}>
-                                                        <Send/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title='Send to Developer'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    className={classes.actionButton}
-                                                    onClick={handleSendToDeveloper}>
-                                                        <Mail/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title='Save for Later'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    onClick={handleSave}
-                                                    className={classes.actionButton}>
-                                                        <Bookmark/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </div>
-                                        }
-                                    />
-                                    <CardContent>
-                                        <Typography className={classes.text}>{post.text}</Typography>
-                                        <TextField 
-                                        id={post.id}
-                                        placeholder='Type a reply...'
-                                        multiline
-                                        variant='outlined'
-                                        size='small'
-                                        //onChange={handleChange}
-                                        className={classes.reply}/>
-                                        <Button
-                                        id={post.id}
-                                        variant='contained'
-                                        color='primary'
-                                        disableElevation
-                                        onClick={handleReply}
-                                        className={classes.replyButton}
-                                        >
-                                            Reply
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            {/* </Zoom> */}
+                            <Card className={classes.card} variant='outlined'>
+                                <CardHeader
+                                    title={<p className={classes.name}>{post.profile_name}</p>}
+                                    subheader={<p className={classes.date}>{post.date}</p>}
+                                    className={classes.heading}
+                                    action={
+                                        <div className={classes.fourButtons}>
+                                            {
+                                                post.sarcasm ?
+                                                    <Tooltip title='Sarcastic comment'>
+                                                        <IconButton>
+                                                            <HiFlag style={{color: "#f44336", fontSize: '25px'}} />
+                                                        </IconButton>
+                                                    </Tooltip> :
+                                                    null
+                                            }
+                                            {
+                                                post.sentiment === 1 ?
+                                                    <Tooltip title='Customer seems to be happy'>
+                                                        <IconButton>
+                                                            <HiEmojiHappy style={{color: "#4caf50", fontSize: '25px'}} />
+                                                        </IconButton>
+                                                    </Tooltip> :
+                                                    null
+                                            }
+                                            {
+                                                post.sentiment === -1 ?
+                                                    <Tooltip title='Customer seems to be disappointed'>
+                                                        <IconButton>
+                                                            <HiEmojiSad style={{color: "#f44336", fontSize: '25px'}} />
+                                                        </IconButton>
+                                                    </Tooltip> :
+                                                    null
+                                            }
+                                            {
+                                                post.sentiment === 0 ?
+                                                    <Tooltip title='Customer seems to be fine'>
+                                                        <IconButton>
+                                                            <ImNeutral2 style={{color: "#ff9800", fontSize: '20px'}} />
+                                                        </IconButton>
+                                                    </Tooltip> :
+                                                    null
+                                            }
+                                            <Tooltip title='Chuck'>
+                                                <IconButton 
+                                                id={post.id}
+                                                onClick={handleDelete}
+                                                className={classes.actionButton}>
+                                                    <Delete/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Mark as Read'>
+                                                <IconButton 
+                                                id={post.id}
+                                                onClick={handleRead}
+                                                className={classes.actionButton}>
+                                                    <Visibility/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Send to Manager'>
+                                                <IconButton 
+                                                id={post.id}
+                                                className={classes.actionButton}
+                                                onClick={handleSendToManager}>
+                                                    <Send/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Send to Developer'>
+                                                <IconButton 
+                                                id={post.id}
+                                                className={classes.actionButton}
+                                                onClick={handleSendToDeveloper}>
+                                                    <Mail/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Save for Later'>
+                                                <IconButton 
+                                                id={post.id}
+                                                onClick={handleSave}
+                                                className={classes.actionButton}>
+                                                    <Bookmark/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
+                                    }
+                                />
+                                <CardContent>
+                                    <Typography className={classes.text}>{post.text}</Typography>
+                                    <TextField 
+                                    id={post.id}
+                                    placeholder='Type a reply...'
+                                    multiline
+                                    variant='outlined'
+                                    size='small'
+                                    className={classes.reply}/>
+                                    <Button
+                                    id={post.id}
+                                    variant='contained'
+                                    color='primary'
+                                    disableElevation
+                                    onClick={handleReply}
+                                    className={classes.replyButton}
+                                    >
+                                        Reply
+                                    </Button>
+                                </CardContent>
+                            </Card>
                             <Snackbar 
                             open={successbar}
                             autoHideDuration={1000}

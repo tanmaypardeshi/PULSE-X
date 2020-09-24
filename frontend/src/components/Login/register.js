@@ -113,7 +113,7 @@ function Register(props) {
                         history.push('/manager')
                     }
                     else if(res.data.is_rnd) {
-                        history.push('/')
+                        history.push('/developer')
                     }
                 }
                 else {
