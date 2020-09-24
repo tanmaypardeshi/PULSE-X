@@ -1,10 +1,12 @@
 import * as React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
-import { Avatar, Button, IconButton, TextInput, Title, useTheme, ActivityIndicator, HelperText } from 'react-native-paper'
+import { ScrollView, StyleSheet, View, Image } from 'react-native'
+import { Avatar, Button, IconButton, TextInput, Title, useTheme, ActivityIndicator, HelperText, TouchableRipple } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
 import { SERVER_URI } from '../../config'
+import * as LocalAuthentication from 'expo-local-authentication'
+const biometricGif = require('../../assets/Animations/biometric.gif')
 
 const styles = StyleSheet.create({
     inputStyle: {
@@ -38,6 +40,61 @@ export default ({navigation}) => {
 
     const [authError, setAuthError] = React.useState(false)
     const [authErrMsg, setAuthErrMsg] = React.useState(false)
+    const [bioFailed, setBioFailed] = React.useState(false)
+
+    // useFocusEffect(React.useCallback(() => {
+    //     biometricAuth()
+    // },[]))
+
+    // const biometricAuth = () => {
+    //     SecureStore.getItemAsync('token')
+    //     .then(token => {
+    //         if (token) 
+    //             return LocalAuthentication.hasHardwareAsync()
+    //         else 
+    //             throw new Error('Abort biometric authentication')
+    //     })
+    //     .then(deviceHasBiometrics => {
+    //         if (deviceHasBiometrics)
+    //             return LocalAuthentication.supportedAuthenticationTypesAsync()
+    //         else 
+    //             throw new Error('Abort biometric authentication')
+    //     })
+    //     .then(authTypes => {
+    //         if (authTypes.length)
+    //             return LocalAuthentication.isEnrolledAsync()
+    //         else 
+    //             throw new Error('Abort biometric authentication')
+    //     })
+    //     .then(isEnrolled => {
+    //         if (isEnrolled)
+    //             return LocalAuthentication.authenticateAsync()
+    //         else
+    //             throw new Error('Abort biometric authentication')
+    //     })
+    //     .then(authStatus => {
+    //         if (authStatus.success)
+    //             return SecureStore.getItemAsync('type')
+    //         else
+    //             throw new Error('Biometric authentication failed')
+            
+    //     })
+    //     .then(type => {
+    //         if (type)
+    //             navigation.navigate(type)
+    //         else
+    //             throw new Error('Abort biometric authentication')
+    //     })
+    //     .catch(err => {
+    //         if (err.message === 'Abort biometric authentication')
+    //             setPreLoading(false)
+    //         else if (err.message === 'Biometric authentication failed')
+    //             setBioFailed(true)
+            
+    //         console.log(err.message)
+
+    //     })
+    // }
 
     const handleChange = target => value => {
         setLoginDetails({
@@ -100,6 +157,31 @@ export default ({navigation}) => {
     }
 
     return(
+        // preLoading 
+        // ?
+        // <TouchableRipple 
+        //     style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
+        //     onPress={biometricAuth} 
+        //     onLongPress={() => setPreLoading(false)}
+        // >
+        //     <>
+        //         <Image source={biometricGif}/>
+        //         <HelperText 
+        //             type={bioFailed ? 'error': 'info'} 
+        //             style={{alignSelf: 'center'}}
+        //         >{
+        //             bioFailed
+        //             ?
+        //             "Biometric authentication cancelled. Tap to try again"
+        //             :
+        //             "Token found. Tap to initiate biometric authentication"
+        //         }</HelperText>
+        //         <HelperText style={{alignSelf: 'center'}}>
+        //             Long Press to login again
+        //         </HelperText>
+        //     </>
+        // </TouchableRipple> 
+        // :
         <ScrollView style = {{flex: 1}} contentContainerStyle = {{alignItems: 'center'}}>
             <SafeAreaView/>
             {
@@ -119,6 +201,7 @@ export default ({navigation}) => {
             </Title>
             <TextInput
                 label="Email"
+                autoCompleteType="email"
                 left={<TextInput.Icon name='email'/>}
                 style={styles.inputStyle}
                 value={loginDetails.email.value}
@@ -133,6 +216,7 @@ export default ({navigation}) => {
             }
             <TextInput
                 label="Password"
+                autoCompleteType="password"
                 secureTextEntry={sec}
                 left={<TextInput.Icon name='lock'/>}
                 right={<TextInput.Icon name={sec ? 'eye-off' : 'eye'} onPress={(e) => setSec(!sec)}/>}

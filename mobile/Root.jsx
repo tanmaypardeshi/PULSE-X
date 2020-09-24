@@ -10,10 +10,6 @@ export default () => {
 
     const dark = useColorScheme() === 'dark' ? true : false;
 
-    React.useEffect(() => {
-        console.log(dark);
-    },[dark])
-
     return(
         <PaperProvider theme={dark ? DarkTheme : DefaultTheme}>
             <NavigationContainer theme={dark ? DRKT : DFT}>

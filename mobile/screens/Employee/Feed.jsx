@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import * as React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-deck-swiper'
 import { Button, Card, Dialog, IconButton, Paragraph, Portal, Snackbar, TextInput, useTheme, List, ActivityIndicator, DataTable, Avatar, Colors, Caption } from 'react-native-paper'
 import { useFocusEffect } from '@react-navigation/native'
@@ -9,6 +9,7 @@ import Axios from 'axios'
 import { SERVER_URI } from '../../config'
 import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser';
+import AsyncStorage from '@react-native-community/async-storage'
 
 const styles = StyleSheet.create({
     surface: {
@@ -65,8 +66,14 @@ const Home = ({navigation}) => {
     // },[]))
 
     React.useEffect(() => {
-        console.log('Fetchin cards')
-        fetchCards().catch(err => alert('Error in promise chain'))
+        AsyncStorage.getItem('feed')
+        .then(res => {
+            if (res)
+                setCardData(JSON.parse(res))
+            else
+                return fetchCards()
+        })
+        .catch(err => alert('Error in promise chain'))
     },[])
 
     const fetchCards = () => 
@@ -85,6 +92,9 @@ const Home = ({navigation}) => {
         )
         .then(res => {
             setCardData(res.data.review_set)
+            AsyncStorage.setItem('feed', JSON.stringify(res.data.review_set))
+            .then(() => console.log('Storage successful'))
+            .catch(console.log)
         })
     
     const theme = useTheme()
@@ -125,20 +135,19 @@ const Home = ({navigation}) => {
                 }
             )
         )
-        .then(res => {
-            // if (swipedBool === false) {
-                // let tempCards = [...cardData]
-                // console.log(tempCards[0])
-                // console.log(tempCards[tempCards.length-1])
-                // setCardData(tempCards.slice(1))
-            // }
+        .then(res => AsyncStorage.getItem('feed'))
+        .then(feed => {
+            const newFeed = JSON.parse(feed).slice(1)
+            return AsyncStorage.setItem('feed', JSON.stringify(newFeed))
+        })
+        .then(() => {
             setReplyField('')
             setSnack({...snack, [key]: true})
             setTimeout(() => setSnack(defaultSnack),3000)
-            //setSwiped(false)
         })
         .catch(err => {
-            alert(err.message)
+            alert('There was an error in sending your response, please try again')
+            console.log(err)
             swipeRef.current.swipeBack()
             //setSwiped(false)
         })
