@@ -10,6 +10,10 @@ urlpatterns = [
 
     # manager
     path('api/manager/', include('manager.urls')),
+
+    # rnd
+    path('api/rnd/', include('developer.urls')),
+
     # admin
     path('admin/', admin.site.urls),
 ]
