@@ -15,7 +15,10 @@ class RNDReview(generics.ListCreateAPIView):
     serializer_class = RNDReviewSerializer
 
     def get_queryset(self):
-        review = Review.objects.filter(flag=4, visited=False)
+        if self.kwargs['param'] == 'twitter':
+            review = Review.objects.filter(flag=4, visited=False, is_twitter=True)
+        else:
+            review = Review.objects.filter(flag=4, visited=False, is_twitter=Falseg)
         return review
 
     def get(self, request, *args, **kwargs):

@@ -66,7 +66,10 @@ class ManagerReview(generics.ListCreateAPIView):
         employees = User.objects.filter(manager_id=manger)
         review_list = []
         for employee in employees:
-            reviews = Review.objects.filter(user=employee, flag=3, visited=False)
+            if self.kwargs['param'] == 'twitter':
+                reviews = Review.objects.filter(user=employee, flag=3, visited=False, is_twitter=True)
+            else:
+                reviews = Review.objects.filter(user=employee, flag=3, visited=False, is_twitter=False)
             for review in reviews:
                 review_list.append(review)
         return review_list
