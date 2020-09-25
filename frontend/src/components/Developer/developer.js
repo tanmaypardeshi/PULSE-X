@@ -104,7 +104,7 @@ function Developer() {
 
     return (
         <div className={classes.root}>
-            <AppBar position='static' color='default' className={classes.nav}>
+            <AppBar color='default' className={classes.nav}>
                 <div className='d-inline-block'>
                     <p className={classes.title}>PULSE &mdash; X</p>
                     <Tabs

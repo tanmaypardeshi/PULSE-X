@@ -9,14 +9,16 @@ import { BookmarkBorder,
          Autorenew,
          ShowChart,
          Person, 
-         PowerSettingsNew} from '@material-ui/icons'
+         PowerSettingsNew } from '@material-ui/icons'
 import Routes from './routes'
 import { useHistory, useLocation } from 'react-router-dom';
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         width: '100%',
+        display: 'inline block',
         backgroundColor: theme.palette.background.paper,
     },
     nav: {
@@ -25,10 +27,11 @@ const useStyles = makeStyles((theme) => ({
         height: '48px'
     },
     title: {
-        fontSize: '25px',
+        fontFamily: "'Aldrich', sans-serif",
+        fontSize: '27px',
         letterSpacing: '1px',
         fontWeight: '400',
-        margin: '8px 30px',
+        margin: '8px 25px',
         float: 'left'
     },
     tabButton: {
@@ -117,15 +120,32 @@ function Employee(props) {
 
     const handleLogout = (e) => {
         if(sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
-            console.log(JSON.parse(sessionStorage.getItem('data')))
+            console.log()
+            axios({
+                method: "POST",
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type" : "application/json",
+                    Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
+                },
+                data: JSON.parse(sessionStorage.getItem('data')),
+                url: '/api/employee/logout/'
+            })
+    
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
         }
-        sessionStorage.clear()
-        history.push('/')
+        // sessionStorage.clear()
+        // history.push('/')
     }
 
     return (
         <div className={classes.root}>
-            <AppBar position='static' color='default' className={classes.nav}>
+            <AppBar color='default' className={classes.nav}>
                 <div className='d-inline-block'>
                     <p className={classes.title}>PULSE &mdash; X</p>
                     <Tabs

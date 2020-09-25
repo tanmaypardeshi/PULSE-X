@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { makeStyles, 
-         Table,
-         TableBody,
-         TableRow,
-         TableCell,
-         Card, 
-         Button } from '@material-ui/core'
+import { makeStyles,
+         Card } from '@material-ui/core'
 import { ArrowBack } from '@material-ui/icons'
 import { Bar } from 'react-chartjs-2'
+import Male from './../../images/male_avatar.svg'
 import axios from 'axios'
 
 const colors = ['rgba(255, 99, 132, 0.8)','rgba(54, 162, 235, 0.8)','rgba(255, 206, 86, 0.8)','rgba(75, 192, 192, 0.8)','rgba(153, 102, 255, 0.8)','rgba(255, 159, 64, 0.8)','rgba(255, 99, 132, 0.8)']
@@ -16,12 +12,8 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         width: '100%',
+        marginTop: '27px',
         backgroundColor: theme.palette.background.paper,
-    },
-    table: {
-        width: '50%',
-        margin: '1% 2%',
-        backgroundColor: '#f8f8f8'
     },
     graph: {
         width: '50%',
@@ -30,6 +22,34 @@ const useStyles = makeStyles((theme) => ({
     },
     back: {
         marginLeft: '2%'
+    },
+    card: {
+        margin: '1% 2%',
+        display:'inline block',
+    },
+    profileDetails: {
+        marginTop: '38px'
+    },
+    avatar: {
+        padding: '1% 0',
+        margin:'1% 3%',
+        width: '250px',
+        float: 'left'
+    },
+    name: {
+        fontSize: '250%',
+        letterSpacing: '1px',
+        wordSpacing: '7px',
+        margin: '4px 0'
+    },
+    email: {
+        fontSize: '100%',
+        letterSpacing: '2px',
+        marginBottom: '10px'
+    },
+    dept: {
+        color: '#696969',
+        fontSize: '98%'
     }
 }))
 
@@ -117,22 +137,20 @@ function Employee(props) {
                         <a href='/manager/employees' className={classes.back}>
                             <ArrowBack/>&nbsp;{profile.name}
                         </a>
-                        <Table className={classes.table}>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>{profile.name}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>Email ID</TableCell>
-                                    <TableCell>{profile.email}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>Department</TableCell>
-                                    <TableCell>Employee</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                        <Card className={classes.card}>
+                            <img src={Male} alt='Avatar' className={classes.avatar}/>
+                            <div className={classes.profileDetails}>
+                                {
+                                    profile ?
+                                        <div className={classes.table}>
+                                            <p className={classes.name}>{profile.name}</p>
+                                            <p className={classes.email}>{profile.email}</p>
+                                            <p className={classes.dept}>Manager</p>
+                                        </div> :
+                                        null
+                                }
+                            </div>
+                        </Card>
                         <Card className={classes.graph}>
                             <h5>Post Review Statistics</h5>
                             <Bar {...generateChart(label, graph, "Reviews", colors)}/>

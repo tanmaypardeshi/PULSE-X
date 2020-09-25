@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         padding: '1%'
     },
+    drawer: {
+        flexShrink: 0,
+    },
     title: {
         letterSpacing: '2px',
         color: '#2c387e',

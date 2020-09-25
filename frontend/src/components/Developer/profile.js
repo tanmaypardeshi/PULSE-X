@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         width: '100%',
         height: '94vh',
+        marginTop: '27px',
         backgroundColor: '#dcdbe9',
     },
     card: {

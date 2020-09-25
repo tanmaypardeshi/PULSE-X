@@ -9,16 +9,12 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         width: '100%',
         height: '94vh',
+        marginTop: '27px',
         backgroundColor: '#dcdbe9',
     },
     card: {
         margin: '2%',
         display:'inline block',
-    },
-    table: {
-        width: '50%',
-        margin: '2% 0',
-        float: 'left'
     },
     profileDetails: {
         marginTop: '38px'

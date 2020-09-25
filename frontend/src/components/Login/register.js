@@ -16,12 +16,12 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         width: '100%',
-        backgroundColor: theme.palette.background.paper,
+        height: '100vh',
+        backgroundColor: '#dcdbe9',
     },
     card: {
-        backgroundColor: '#f8f8f8',
         width: '30%',
-        margin: '8% 35%',
+        margin: '6% 35%',
         textAlign: 'center',
         padding: '1%'
     },
@@ -128,6 +128,7 @@ function Register(props) {
 
     return (
         <div className={classes.root}>
+            <br/>
             <Card className={classes.card}>
                 <CardContent>
                     <h3 className={classes.title}>REGISTER</h3>

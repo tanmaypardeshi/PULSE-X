@@ -21,8 +21,9 @@ const useStyles = makeStyles((theme) => ({
     },
     nav: {
         boxShadow: 'none',
+        height: '48px',
         backgroundColor: '#ffffff',
-        height: '48px'
+        postion: 'fixed'
     },
     title: {
         fontSize: '25px',
@@ -118,7 +119,7 @@ function Manager() {
 
     return (
         <div className={classes.root}>
-            <AppBar position='static' color='default' className={classes.nav}>
+            <AppBar color='default' className={classes.nav}>
                 <div className='d-inline-block'>
                     <p className={classes.title}>PULSE &mdash; X</p>
                     <Tabs
