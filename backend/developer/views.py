@@ -33,12 +33,7 @@ class RNDReview(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             review = Review.objects.get(id=request.data['id'])
-            flag = request.data['flag']
-            visited = request.data['visited']
-            if not visited:
-                review.flag = flag
-            else:
-                review.visited = True
+            review.visited = request.data['visited']
             review.save()
             return Response({
                 'success': True,
