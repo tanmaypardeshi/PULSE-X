@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from user.permissions import IsRND
-from user.models import User
 from employee.models import Review
 
 from .serializers import RNDReviewSerializer
@@ -16,7 +15,7 @@ class RNDReview(generics.ListCreateAPIView):
     serializer_class = RNDReviewSerializer
 
     def get_queryset(self):
-        review = Review.objects.filter(flag=4)
+        review = Review.objects.filter(flag=4, visited=False)
         return review
 
     def get(self, request, *args, **kwargs):
