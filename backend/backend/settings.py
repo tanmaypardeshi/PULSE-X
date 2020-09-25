@@ -3,7 +3,7 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'wum_nrt%(2ti0@8a++aff+_6@j)yz76w(@yac=_trgfn(b^wh0'
+SECRET_KEY = 'secret'
 
 DEBUG = True
 
@@ -133,7 +133,7 @@ JWT_AUTH = {
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'credenzuser@gmail.com'
-EMAIL_HOST_PASSWORD = 'credenztechdays'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
