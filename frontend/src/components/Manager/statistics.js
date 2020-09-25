@@ -4,6 +4,7 @@ import { makeStyles,
 import { Doughnut,
          Bar } from 'react-chartjs-2'
 import axios from 'axios'
+import { APP_HOST_NAME } from './../../globals'
 
 const colorsPosts = ['rgba(75, 192, 192, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(255, 99, 132, 0.8)']
 const colorsHelp = ['rgba(75, 192, 192, 0.8)', 'rgba(255, 99, 132, 0.8)']
@@ -39,11 +40,10 @@ function Statistics() {
         axios({
             method: "GET",
             headers: {
-                "Access-Control-Allow-Origin": "*",
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: '/api/manager/chart/'
+            url: `${APP_HOST_NAME}/manager/chart/`
         })
         .then((res) => {
             let post = []

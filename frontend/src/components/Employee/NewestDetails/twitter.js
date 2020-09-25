@@ -24,6 +24,7 @@ import GoalsMet from './../../../images/goal_met.svg'
 import uuid from 'react-uuid'
 import axios from 'axios'
 import VisibilitySensor from 'react-visibility-sensor'
+import { APP_HOST_NAME } from './../../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -104,11 +105,10 @@ function Twitter(props) {
             axios({
                 method: "GET",
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
                     "Content-Type" : "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: '/api/employee/review/'
+                url: `${APP_HOST_NAME}/employee/review/`
             })
             .then((res) => {
                 for(let i=0; i<res.data.review_set.length; i++) {
@@ -136,11 +136,10 @@ function Twitter(props) {
             axios({
                 method: "GET",
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
                     "Content-Type" : "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: '/api/employee/review/'
+                url: `${APP_HOST_NAME}/employee/review/`
             })
             .then((res) => {
                 let newData = [...datasource, ...res.data.review_set.map(val => ( {id: uuid(), ...val} ))]
@@ -162,7 +161,6 @@ function Twitter(props) {
         axios({
             method: "POST",
             headers: {
-                "Access-Control-Allow-Origin": "*",
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
@@ -182,7 +180,7 @@ function Twitter(props) {
                 "url": current.url,
                 "flag": flag
             },
-            url: '/api/employee/review/'
+            url: `${APP_HOST_NAME}/employee/review/`
         })
 
         .then((res) => {

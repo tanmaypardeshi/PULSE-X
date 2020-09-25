@@ -4,6 +4,7 @@ import { makeStyles,
 import { Doughnut,
          Bar } from 'react-chartjs-2'
 import axios from 'axios'
+import { APP_HOST_NAME } from './../../globals'
 
 const colorsPosts = ['rgba(255, 99, 132, 0.8)','rgba(54, 162, 235, 0.8)','rgba(255, 206, 86, 0.8)']
 const colorsStats = ['rgba(255, 99, 132, 0.8)','rgba(54, 162, 235, 0.8)','rgba(255, 206, 86, 0.8)','rgba(75, 192, 192, 0.8)','rgba(153, 102, 255, 0.8)','rgba(255, 159, 64, 0.8)','rgba(255, 99, 132, 0.8)']
@@ -37,11 +38,10 @@ function Statistics() {
         axios({
             method: "GET",
             headers: {
-                "Access-Control-Allow-Origin": "*",
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: '/api/employee/review_data/'
+            url: `${APP_HOST_NAME}/employee/review_data/`
         })
         .then((res) => {
             let label = ['My reviews', 'Difference', 'Total']
@@ -59,11 +59,10 @@ function Statistics() {
         axios({
             method: "GET",
             headers: {
-                "Access-Control-Allow-Origin": "*",
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: '/api/employee/flag_data/'
+            url: `${APP_HOST_NAME}/employee/flag_data/`
         })
         .then((res) => {
             let label = ['Dumped', 'Marked as Read', 'Replied', 'Sent to Manager', 'Sent to Developer', 'Saved' ]

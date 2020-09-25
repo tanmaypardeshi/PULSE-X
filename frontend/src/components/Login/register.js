@@ -10,7 +10,7 @@ import { makeStyles,
 import { Alert } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
-
+import { APP_HOST_NAME } from './../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -93,7 +93,6 @@ function Register(props) {
             axios({
                 method: "POST",
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
                     "Content-Type" : "application/json"
                 },
                 data: {
@@ -104,7 +103,7 @@ function Register(props) {
                     "is_manager": isManager,
                     "is_rnd": isDeveloper
                 },
-                url: "/api/user/register/"
+                url: `${APP_HOST_NAME}/user/register/`
             })
             .then((res) => {
                 if(res.data) {

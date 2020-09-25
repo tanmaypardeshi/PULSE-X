@@ -16,6 +16,7 @@ import { HiEmojiHappy,
 import { ImNeutral2 } from 'react-icons/im'
 import  Team from './../../../images/team.svg'
 import axios from 'axios'
+import { APP_HOST_NAME } from './../../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -93,11 +94,10 @@ function Amazon(props) {
         axios({
             method: "GET",
             headers: {
-                "Access-Control-Allow-Origin": "*",
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: '/api/manager/review/'
+            url: `${APP_HOST_NAME}/manager/review/`
         })
         .then((res) => {
             setDatasource(res.data)
@@ -117,7 +117,6 @@ function Amazon(props) {
         axios({
             method: "POST",
             headers: {
-                "Access-Control-Allow-Origin": "*",
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
@@ -126,7 +125,7 @@ function Amazon(props) {
                 "visited": visited,
                 "flag": flag
             },
-            url: '/api/manager/review/'
+            url: `${APP_HOST_NAME}/manager/review/`
         })
         .then((res) => {
             console.log(res.data)
