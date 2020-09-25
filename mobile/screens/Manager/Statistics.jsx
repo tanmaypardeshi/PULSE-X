@@ -5,9 +5,10 @@ import { Badge, Button, Card, DataTable, IconButton, Title, ActivityIndicator, u
 import { BarChart, PieChart, XAxis, Grid } from 'react-native-svg-charts'
 import { useFocusEffect } from '@react-navigation/native'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 import * as SecureStore from 'expo-secure-store'
 import { Text } from 'react-native-svg'
+import { SourceContext } from '../../Context/SourceContext'
 
 const styles = StyleSheet.create({
     card: {
@@ -35,8 +36,7 @@ const Stats = ({navigation}) => {
                 `${SERVER_URI}/manager/chart/`,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }
@@ -219,14 +219,19 @@ const Stats = ({navigation}) => {
 
 const Stack = createStackNavigator()
 
-export default ({navigation}) => (
+export default ({navigation}) => {
+
+    const {src} = React.useContext(SourceContext)
+
+    return (
     <Stack.Navigator initialRouteName="Statistics">
         <Stack.Screen 
             name="Statistics" 
             component={Stats}
             options={{
-                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>
+                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>,
+                headerRight: () => <IconButton icon={src}/>
             }}
         />
     </Stack.Navigator>
-)
+)}

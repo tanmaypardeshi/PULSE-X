@@ -2,14 +2,15 @@ import { createStackNavigator } from '@react-navigation/stack'
 import * as React from 'react'
 import { StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-deck-swiper'
-import { Button, Card, Dialog, IconButton, Paragraph, Portal, Snackbar, TextInput, useTheme, List, ActivityIndicator, DataTable, Avatar, Colors, Caption } from 'react-native-paper'
+import { Button, Card, Dialog, IconButton, Paragraph, Portal, Snackbar, TextInput, useTheme, List, ActivityIndicator, DataTable, Avatar, Colors, Caption, Badge } from 'react-native-paper'
 import { useFocusEffect } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from '@react-native-community/async-storage'
+import { SourceContext } from '../../Context/SourceContext'
 
 const styles = StyleSheet.create({
     surface: {
@@ -24,17 +25,22 @@ const styles = StyleSheet.create({
 
 const Stack = createStackNavigator()
 
-export default ({navigation}) => (
+export default ({navigation}) => {
+    
+    const {src} = React.useContext(SourceContext)
+
+    return (
     <Stack.Navigator initialRouteName="Posts">
         <Stack.Screen 
             name="Posts" 
             component={Home}
             options={{
-                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>
+                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>,
+                headerRight: () => <IconButton icon={src}/>
             }}
         />
     </Stack.Navigator>
-)
+)}
 
 const defaultSnack = {
     del: false,
@@ -83,8 +89,7 @@ const Home = ({navigation}) => {
                 `${SERVER_URI}/employee/review/`,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }
@@ -92,6 +97,7 @@ const Home = ({navigation}) => {
         )
         .then(res => {
             setCardData(res.data.review_set)
+            console.log(res.data.review_set)
             AsyncStorage.setItem('feed', JSON.stringify(res.data.review_set))
             .then(() => console.log('Storage successful'))
             .catch(console.log)
@@ -128,8 +134,7 @@ const Home = ({navigation}) => {
                 },
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }
@@ -188,27 +193,44 @@ const Home = ({navigation}) => {
                             }
                             right={props => 
                                 <IconButton 
-                                icon={
-                                    innerCardData.sentiment === 1.0 ? 'emoticon-happy' :
-                                    innerCardData.sentiment === 0 ? 'emoticon-neutral' :
-                                    'emoticon-sad'
-                                } 
-                                color={
-                                    innerCardData.sentiment === 1.0 ? Colors.green500 :
-                                    innerCardData.sentiment === 0 ? Colors.orange500 :
-                                    Colors.red500
-                                }
-                            />}
+                                    icon={
+                                        innerCardData.sentiment === 1.0 ? 'emoticon-happy' :
+                                        innerCardData.sentiment === 0 ? 'emoticon-neutral' :
+                                        'emoticon-sad'
+                                    } 
+                                    color={
+                                        innerCardData.sentiment === 1.0 ? Colors.green500 :
+                                        innerCardData.sentiment === 0 ? Colors.orange500 :
+                                        Colors.red500
+                                    }
+                                />
+                            }
                         />
                         <List.AccordionGroup>
-                            <List.Accordion title="Content" id="1">
+                            <List.Accordion 
+                                title="Content" 
+                                id="1"
+                                left={props => 
+                                    <List.Icon {...props} icon={
+                                        innerCardData.sarcasm === 0 ?
+                                        'text' :
+                                        'emoticon-devil'
+                                    }/>
+                                }
+                            >
                                 <Card.Content>
                                     <Paragraph>
                                         {innerCardData.text}
                                     </Paragraph>
                                 </Card.Content>
                             </List.Accordion>
-                            <List.Accordion title='Actions' id='2'>
+                            <List.Accordion 
+                                title='Actions' 
+                                id='2'
+                                left={props => 
+                                    <List.Icon {...props} icon='dip-switch'/>
+                                }
+                            >
                                 <List.Item
                                     title='Delete post'
                                     left={props => <List.Icon {...props} icon='delete'/>} 
@@ -255,6 +277,16 @@ const Home = ({navigation}) => {
                                 />
                             </List.Accordion>
                         </List.AccordionGroup>
+                        {/* <Badge 
+                            visible={innerCardData.sarcasm === 0}
+                            style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                right: 0,
+                            }}
+                        >
+                            SARCASTIC
+                        </Badge> */}
                     </Card>
                 }
                 onSwipedLeft={cardIndex => {

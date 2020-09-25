@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "PulseX",
+    "description": "The complete social media intelligence platform with dynamic sentiment analysis",
+    "scheme": "pulsex",
+    "slug": "pulseX",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,6 +21,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.git_commit.pulseX",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"

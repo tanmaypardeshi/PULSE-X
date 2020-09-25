@@ -6,8 +6,9 @@ import { IconButton, Card, Paragraph, List, TextInput, Portal, Dialog, Button, S
 import { useFocusEffect } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
-import * as WebBrowser from 'expo-web-browser';
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
+import * as WebBrowser from 'expo-web-browser'
+import { SourceContext } from '../../Context/SourceContext'
 
 // const VPAIndicator = Viewport.Aware(ActivityIndicator)
 
@@ -29,8 +30,7 @@ const Received = ({navigation}) => {
                 `${SERVER_URI}/manager/review/`,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }
@@ -46,7 +46,7 @@ const Received = ({navigation}) => {
         })
     }
 
-    const changeFlag = (id, flag, visible) => {
+    const changeFlag = (id, flag, visited) => {
         setLoading(true)
         SecureStore.getItemAsync('token')
         .then(token => Axios.post(
@@ -56,8 +56,7 @@ const Received = ({navigation}) => {
             },
             {
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type" : "application/json",
+                    ...AXIOS_HEADERS,
                     "Authorization": `Bearer ${token}`
                 }
             }
@@ -152,7 +151,7 @@ const Received = ({navigation}) => {
                 }
             />
             <Snackbar visible={loading} onDismiss={() => {}}>
-                Fetching saved posts
+                Fetching received posts
             </Snackbar>
         </>
     )
@@ -160,14 +159,19 @@ const Received = ({navigation}) => {
 
 const Stack = createStackNavigator()
 
-export default ({navigation}) => (
+export default ({navigation}) => {
+
+    const {src} = React.useContext(SourceContext)
+
+    return (
     <Stack.Navigator>
         <Stack.Screen
             name="Received Posts"
             component={Received}
             options={{
-                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>
+                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>,
+                headerRight: () => <IconButton icon={src}/>
             }}
         />
     </Stack.Navigator>
-)
+)}

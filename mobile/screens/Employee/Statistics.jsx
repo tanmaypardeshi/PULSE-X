@@ -1,13 +1,14 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import * as React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet, RefreshControl, View } from 'react-native'
 import { Badge, Button, Card, DataTable, IconButton, Title, ActivityIndicator, useTheme, Colors } from 'react-native-paper'
 import { BarChart, PieChart, XAxis, Grid } from 'react-native-svg-charts'
 import { useFocusEffect } from '@react-navigation/native'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 import * as SecureStore from 'expo-secure-store'
 import { Text } from 'react-native-svg'
+import { SourceContext } from '../../Context/SourceContext'
 
 const pieColors = [Colors.lightBlue500, Colors.cyan500, Colors.teal500]
 
@@ -24,23 +25,27 @@ const Stats = ({navigation}) => {
     const [postData, setPostData] = React.useState([])
     const [gPostData, setGPostData] = React.useState([])
     const [loading, setLoading] = React.useState(true)
+    const [refreshing, setRefreshing] = React.useState(false);
     const [avg, setAvg] = React.useState(0)
     const [gAvg, setGAvg] = React.useState(0)
 
-    useFocusEffect(React.useCallback(() => {
+    // useFocusEffect(React.useCallback(() => {
+    //     if (loading)
+    //         fetchData()
+    // }, []))
+
+    React.useEffect(() => {
         fetchData()
-    }, []))
+    },[])
 
     const fetchData = () => {
         SecureStore.getItemAsync('token')
         .then(token => {
-            setLoading(true)
             return Axios.get(
                 `${SERVER_URI}/employee/review_data/`,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }
@@ -62,8 +67,7 @@ const Stats = ({navigation}) => {
                 `${SERVER_URI}/employee/flag_data/`,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }
@@ -144,6 +148,7 @@ const Stats = ({navigation}) => {
             setGAvg(findAvg/chart.length)
             setGPostData(chart)
             setLoading(false);
+            setRefreshing(false)
         })
         .catch(err => console.log(err))
     }
@@ -179,12 +184,27 @@ const Stats = ({navigation}) => {
             </Text>
         ))
     )
+
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchData()
+    }, []);
     
     return(
-        <ScrollView contentContainerStyle={{flexGrow: 1}}>
-            {
-                loading ? <ActivityIndicator size='large' animating={true} style={styles.card}/> :
-                <><Card style = {styles.card}>
+        loading 
+        ?
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator animating={true} size='large'/>
+        </View>
+        :
+        <ScrollView 
+            contentContainerStyle={{flexGrow: 1}}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+            }
+        >
+            <Card style = {styles.card}>
                     <Card.Title title="My Reviews"/>
                     <Card.Content>
                         <PieChart
@@ -270,23 +290,25 @@ const Stats = ({navigation}) => {
                         </DataTable.Header>
                     </DataTable>
                 </Card>
-                
-                </>
-            }
         </ScrollView>
     )
 }
 
 const Stack = createStackNavigator()
 
-export default ({navigation}) => (
+export default ({navigation}) => {
+    
+    const {src} = React.useContext(SourceContext)
+
+    return (
     <Stack.Navigator initialRouteName="Statistics">
         <Stack.Screen 
             name="Statistics" 
             component={Stats}
             options={{
-                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>
+                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>,
+                headerRight: () => <IconButton icon={src}/>
             }}
         />
     </Stack.Navigator>
-)
+)}

@@ -4,9 +4,7 @@ import { Avatar, Button, IconButton, TextInput, Title, useTheme, ActivityIndicat
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
-import * as LocalAuthentication from 'expo-local-authentication'
-const biometricGif = require('../../assets/Animations/biometric.gif')
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 
 const styles = StyleSheet.create({
     inputStyle: {
@@ -42,60 +40,6 @@ export default ({navigation}) => {
     const [authErrMsg, setAuthErrMsg] = React.useState(false)
     const [bioFailed, setBioFailed] = React.useState(false)
 
-    // useFocusEffect(React.useCallback(() => {
-    //     biometricAuth()
-    // },[]))
-
-    // const biometricAuth = () => {
-    //     SecureStore.getItemAsync('token')
-    //     .then(token => {
-    //         if (token) 
-    //             return LocalAuthentication.hasHardwareAsync()
-    //         else 
-    //             throw new Error('Abort biometric authentication')
-    //     })
-    //     .then(deviceHasBiometrics => {
-    //         if (deviceHasBiometrics)
-    //             return LocalAuthentication.supportedAuthenticationTypesAsync()
-    //         else 
-    //             throw new Error('Abort biometric authentication')
-    //     })
-    //     .then(authTypes => {
-    //         if (authTypes.length)
-    //             return LocalAuthentication.isEnrolledAsync()
-    //         else 
-    //             throw new Error('Abort biometric authentication')
-    //     })
-    //     .then(isEnrolled => {
-    //         if (isEnrolled)
-    //             return LocalAuthentication.authenticateAsync()
-    //         else
-    //             throw new Error('Abort biometric authentication')
-    //     })
-    //     .then(authStatus => {
-    //         if (authStatus.success)
-    //             return SecureStore.getItemAsync('type')
-    //         else
-    //             throw new Error('Biometric authentication failed')
-            
-    //     })
-    //     .then(type => {
-    //         if (type)
-    //             navigation.navigate(type)
-    //         else
-    //             throw new Error('Abort biometric authentication')
-    //     })
-    //     .catch(err => {
-    //         if (err.message === 'Abort biometric authentication')
-    //             setPreLoading(false)
-    //         else if (err.message === 'Biometric authentication failed')
-    //             setBioFailed(true)
-            
-    //         console.log(err.message)
-
-    //     })
-    // }
-
     const handleChange = target => value => {
         setLoginDetails({
             ...loginDetails,
@@ -120,10 +64,7 @@ export default ({navigation}) => {
                 `${SERVER_URI}/user/login/`,
                 data,
                 {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json"
-                    }
+                    headers: AXIOS_HEADERS
                 }
             )
             .then(res => {
@@ -137,8 +78,10 @@ export default ({navigation}) => {
                     } else if (res.data.is_manager) {
                         return SecureStore.setItemAsync("type", "Manager")
                         .then(() => navigation.navigate('Manager'))
-                    } else
-                        alert("R&D not ready yet")
+                    } else {
+                        return SecureStore.setItemAsync("type", "RND")
+                        .then(() => navigation.navigate('RND'))
+                    }
                 })
                 .catch(() => {
                     setPostLoading(false)
@@ -157,31 +100,6 @@ export default ({navigation}) => {
     }
 
     return(
-        // preLoading 
-        // ?
-        // <TouchableRipple 
-        //     style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
-        //     onPress={biometricAuth} 
-        //     onLongPress={() => setPreLoading(false)}
-        // >
-        //     <>
-        //         <Image source={biometricGif}/>
-        //         <HelperText 
-        //             type={bioFailed ? 'error': 'info'} 
-        //             style={{alignSelf: 'center'}}
-        //         >{
-        //             bioFailed
-        //             ?
-        //             "Biometric authentication cancelled. Tap to try again"
-        //             :
-        //             "Token found. Tap to initiate biometric authentication"
-        //         }</HelperText>
-        //         <HelperText style={{alignSelf: 'center'}}>
-        //             Long Press to login again
-        //         </HelperText>
-        //     </>
-        // </TouchableRipple> 
-        // :
         <ScrollView style = {{flex: 1}} contentContainerStyle = {{alignItems: 'center'}}>
             <SafeAreaView/>
             {
@@ -238,13 +156,6 @@ export default ({navigation}) => {
             >
                 Login
             </Button>
-            {/* <Button 
-                mode='contained' 
-                style = {{justifyContent: 'center', alignSelf: 'center', width: '90%', height: 50}}
-                onPress = {() => navigation.navigate('Manager')}
-            >
-                Login as manager
-            </Button> */}
             {
                 authError && 
                 <HelperText type='error' style={styles.helperText}>

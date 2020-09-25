@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet } from 'react-native'
 import { RadioButton, TextInput, Title, Text, List, Button, HelperText, ActivityIndicator } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 
 const styles = StyleSheet.create({
     inputStyle: {
@@ -117,10 +117,7 @@ export default ({navigation}) => {
                     "email": userDetails.email.value
                 },
                 {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json"
-                    }
+                    headers: AXIOS_HEADERS
                 }
             )
             .then(res => {
@@ -149,10 +146,7 @@ export default ({navigation}) => {
                     "otp": userDetails.otp.value
                 },
                 {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json"
-                    }
+                    headers: AXIOS_HEADERS
                 }
             )
             .then(res => {
@@ -182,10 +176,7 @@ export default ({navigation}) => {
                     "new_password": userDetails.password.value
                 },
                 {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json"
-                    }
+                    headers: AXIOS_HEADERS
                 }
             )
             .then(res => {

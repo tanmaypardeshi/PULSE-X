@@ -5,7 +5,7 @@ import { useFocusEffect, useTheme } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
 import { BarChart, Grid } from 'react-native-svg-charts'
-import { SERVER_URI } from '../../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 
 
 const styles = StyleSheet.create({
@@ -35,8 +35,7 @@ export default ({navigation, route}) => {
                 `${SERVER_URI}/employee/detail/${route.params.item.id}`,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }

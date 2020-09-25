@@ -1,8 +1,9 @@
 import React, {useState, useEffect } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { Caption, RadioButton, TextInput, Title, Text, List, Button, HelperText } from 'react-native-paper'
+import { Caption, RadioButton, TextInput, Title, Text, List, Button, HelperText, ActivityIndicator } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as SecureStore from 'expo-secure-store'
+import { AXIOS_HEADERS } from '../../config'
 
 const styles = StyleSheet.create({
     inputStyle: {
@@ -93,10 +94,7 @@ export default ({navigation}) => {
                 `${SERVER_URI}/user/register/`,
                 data,
                 {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json"
-                    },
+                    headers: AXIOS_HEADERS
                 }
             )
             .then(res => {
@@ -104,10 +102,7 @@ export default ({navigation}) => {
                 .setItemAsync("token", res.data.token)
                 .then(() => {
                     setLoading(false)
-                    if (res.data.is_manager)
-                        navigation.navigate('Manager')
-                    else
-                        alert("R&D not ready yet")
+                    navigation.navigate('Login')
                 })
                 .catch(() => {
                     setLoading(false)
@@ -221,13 +216,23 @@ export default ({navigation}) => {
                 <RadioButton.Item label="Manager" value="Manager" style={{...styles.helperText, width: '92%'}}/>
                 <RadioButton.Item label="R and D" value="R and D" style={{...styles.helperText, width: '92%'}}/>
             </RadioButton.Group>
-            <Button
-                mode = 'contained'
-                style = {{justifyContent: 'center', alignSelf: 'center', width: '90%', marginTop: 20}}
-                onPress = {() => handleSubmit()}
-            >
-                Register
-            </Button>
+            {
+                loading 
+                ? 
+                <ActivityIndicator 
+                    animating={true} 
+                    size='large'
+                    style = {{justifyContent: 'center', alignSelf: 'center', width: '90%', marginTop: 20}}
+                />
+                :
+                <Button
+                    mode = 'contained'
+                    style = {{justifyContent: 'center', alignSelf: 'center', width: '90%', marginTop: 20}}
+                    onPress = {() => handleSubmit()}
+                >
+                    Register
+                </Button>
+            }
         </ScrollView>
     )
 }

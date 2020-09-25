@@ -1,13 +1,14 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import * as React from 'react'
-import { ScrollView, View, FlatList, Alert } from 'react-native'
+import { ScrollView, View, FlatList, Alert, RefreshControl } from 'react-native'
 import { IconButton, Card, Paragraph, List, TextInput, Portal, Dialog, Button, Snackbar, useTheme, Caption, Colors, Avatar } from 'react-native-paper'
 // import { Viewport } from '@skele/components'
 import { useFocusEffect } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 import * as WebBrowser from 'expo-web-browser';
+import { SourceContext } from '../../Context/SourceContext'
 
 // const VPAIndicator = Viewport.Aware(ActivityIndicator)
 
@@ -15,14 +16,19 @@ const Saved = ({navigation}) => {
 
     const [cards, setCards] = React.useState([])
     const [loading, setLoading] = React.useState(true)
+    const [refreshing, setRefreshing] = React.useState(false)
     const [showReply, setShowReply] = React.useState(false)
     const [replyField, setReplyField] = React.useState('')
 
     
-    useFocusEffect(React.useCallback(() => {
-        console.log('Fetching saved files')
+    // useFocusEffect(React.useCallback(() => {
+    //     console.log('Fetching saved files')
+    //     fetchCards()
+    // }, []))
+
+    React.useEffect(() => {
         fetchCards()
-    }, []))
+    },[])
 
 
     const fetchCards = () => {
@@ -32,8 +38,7 @@ const Saved = ({navigation}) => {
                 `${SERVER_URI}/employee/saved/`,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }
@@ -42,10 +47,12 @@ const Saved = ({navigation}) => {
         .then(res => {
             setCards(res.data)
             setLoading(false)
+            setRefreshing(false)
         })
         .catch(err => {
             Alert(err.message)
             setLoading(false)
+            setRefreshing(false)
         })
     }
 
@@ -59,8 +66,7 @@ const Saved = ({navigation}) => {
             },
             {
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type" : "application/json",
+                    ...AXIOS_HEADERS,
                     "Authorization": `Bearer ${token}`
                 }
             }
@@ -72,6 +78,11 @@ const Saved = ({navigation}) => {
         })
     }
 
+    const handleRefresh = () => {
+        setRefreshing(true)
+        fetchCards()
+    }
+
     return (
         // <Viewport.Tracker>
         <>
@@ -79,6 +90,9 @@ const Saved = ({navigation}) => {
                 data={cards}
                 keyExtractor={(item, index) => index.toString()}
                 extraData={cards}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>
+                }
                 renderItem={({index, item}) => 
                     <Card 
                         key={index} 
@@ -188,14 +202,19 @@ const Saved = ({navigation}) => {
 
 const Stack = createStackNavigator()
 
-export default ({navigation}) => (
+export default ({navigation}) => {
+    
+    const {src} = React.useContext(SourceContext)
+
+    return (
     <Stack.Navigator>
         <Stack.Screen
             name="Saved Posts"
             component={Saved}
             options={{
-                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>
+                headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>,
+                headerRight: () => <IconButton icon={src}/>
             }}
         />
     </Stack.Navigator>
-)
+)}

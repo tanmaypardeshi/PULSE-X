@@ -7,6 +7,7 @@ import { TouchableRipple, HelperText, useTheme } from 'react-native-paper'
 import { Image } from 'react-native'
 import * as LocalAuthentication from 'expo-local-authentication'
 import * as SecureStore from 'expo-secure-store'
+import RNDSideNavigator from './RNDSideNavigator'
 
 const biometricGif = require('../assets/Animations/biometric.gif')
 
@@ -15,7 +16,6 @@ const Stack = createStackNavigator()
 export default () => {
 
     const [bioFailed, setBioFailed] = React.useState(false)
-    //const [screenStack, setScreenStack] = React.useState([])
     const [initialRoute, setInitialRoute] = React.useState('')
 
     const theme = useTheme()
@@ -55,20 +55,6 @@ export default () => {
         })
         .then(type => {
             if (type) {
-                // if (type === 'Employee') {
-                //     setScreenStack([
-                //         <Stack.Screen name="Employee" component={AuthTabNavigator} key="1"/>,
-                //         <Stack.Screen name="Auth" component={EmployeeSideNavigator} key="2"/>,
-                //         <Stack.Screen name="Manager" component={ManagerSideNavigator} key="3"/>
-                //     ])
-                // }
-                // else {
-                //     setScreenStack([
-                //         <Stack.Screen name="Manager" component={AuthTabNavigator} key="1"/>,
-                //         <Stack.Screen name="Auth" component={EmployeeSideNavigator} key="2"/>,
-                //         <Stack.Screen name="Employee" component={ManagerSideNavigator} key="3"/>
-                //     ])
-                // }
                 console.log(type)
                 setInitialRoute(type)
             }
@@ -86,11 +72,7 @@ export default () => {
         })
     }
 
-    const setDefaultScreenStack = () => setInitialRoute('Auth')/* setScreenStack([
-        <Stack.Screen name="Auth" component={AuthTabNavigator} key="1"/>,
-        <Stack.Screen name="Employee" component={EmployeeSideNavigator} key="2"/>,
-        <Stack.Screen name="Manager" component={ManagerSideNavigator} key="3"/>
-    ]) */
+    const setDefaultScreenStack = () => setInitialRoute('Auth')
 
     return (
         initialRoute.length > 0
@@ -99,6 +81,7 @@ export default () => {
             <Stack.Screen name="Auth" component={AuthTabNavigator} />
             <Stack.Screen name="Employee" component={EmployeeSideNavigator} />
             <Stack.Screen name="Manager" component={ManagerSideNavigator} />
+            <Stack.Screen name="RND" component={RNDSideNavigator} />
         </Stack.Navigator>
         :
         <TouchableRipple 

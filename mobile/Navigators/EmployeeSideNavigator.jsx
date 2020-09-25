@@ -4,10 +4,11 @@ import EmployeeTabNavigator from './EmployeeTabNavigator'
 import * as SecureStore from 'expo-secure-store'
 import { useFocusEffect } from '@react-navigation/native'
 import Axios from 'axios'
-import { SERVER_URI } from '../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../config'
 import { View } from 'react-native'
-import { ActivityIndicator, Avatar, Headline, Caption } from 'react-native-paper'
+import { ActivityIndicator, Avatar, Headline, Caption, ToggleButton } from 'react-native-paper'
 import Profile from '../screens/Employee/Profile'
+import { SourceContext } from '../Context/SourceContext'
 
 const Drawer = createDrawerNavigator()
 
@@ -15,6 +16,9 @@ const Logout = (props) => {
 
     const [profile, setProfile] = React.useState({})
     const [loading, setLoading] = React.useState(true)
+
+    const { src, setSrc } = React.useContext(SourceContext)
+
     const isDrawerOpen = useIsDrawerOpen()
 
     useFocusEffect(React.useCallback(() => {
@@ -27,8 +31,7 @@ const Logout = (props) => {
         .then(token => {
             return Axios.get(`${SERVER_URI}/user/profile/`, {
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type" : "application/json",
+                    ...AXIOS_HEADERS,
                     "Authorization": `Bearer ${token}`
                 }
             })
@@ -83,13 +86,23 @@ const Logout = (props) => {
                 //props.navigation.navigate('Auth')
             }}
         />
+        <View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
+            <ToggleButton.Row onValueChange={setSrc} value={src}>
+                <ToggleButton icon='amazon' value='amazon'/>
+                <ToggleButton icon='twitter' value='twitter'/>
+            </ToggleButton.Row>
+        </View>
     </DrawerContentScrollView>
 )}
 
 export default ({navigation}) => {
     return (
         <Drawer.Navigator initialRouteName="EmpHome" drawerContent={(props) => <Logout {...props} />}>
-            <Drawer.Screen name="EmpHome" component={EmployeeTabNavigator} options={{title: 'Home'}}/>
+            <Drawer.Screen 
+                name="EmpHome" 
+                component={EmployeeTabNavigator} 
+                options={{title: 'Home'}}
+            />
             <Drawer.Screen name="Profile" component={Profile}/>
         </Drawer.Navigator>
     )

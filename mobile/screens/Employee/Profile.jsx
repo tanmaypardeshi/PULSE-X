@@ -6,7 +6,7 @@ import { View, ScrollView } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 
 const Profile = ({navigation}) => {
 
@@ -27,8 +27,7 @@ const Profile = ({navigation}) => {
         .then(token => {
             return Axios.get(`${SERVER_URI}/user/profile/`, {
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type" : "application/json",
+                    ...AXIOS_HEADERS,
                     "Authorization": `Bearer ${token}`
                 }
             })
@@ -57,8 +56,7 @@ const Profile = ({navigation}) => {
                 { first_name, last_name },
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }

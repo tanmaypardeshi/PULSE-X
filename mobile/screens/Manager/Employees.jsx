@@ -4,7 +4,7 @@ import { Text, Card, Avatar, Paragraph, FAB, Portal, Dialog, TextInput, Button, 
 import { useFocusEffect } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
-import { SERVER_URI } from '../../config'
+import { SERVER_URI, AXIOS_HEADERS } from '../../config'
 import { createStackNavigator } from '@react-navigation/stack'
 import Employee from './Employee'
 
@@ -35,8 +35,7 @@ const MyEmployees = ({navigation}) => {
                 `${SERVER_URI}/manager/my_employees/`,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }
@@ -57,8 +56,7 @@ const MyEmployees = ({navigation}) => {
                 empDetails,
                 {
                     headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Content-Type" : "application/json",
+                        ...AXIOS_HEADERS,
                         "Authorization": `Bearer ${token}`
                     }
                 }

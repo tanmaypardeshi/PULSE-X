@@ -4,6 +4,7 @@ import { Provider as PaperProvider, DarkTheme, DefaultTheme } from 'react-native
 import { useColorScheme } from 'react-native-appearance';
 import { StatusBar } from 'expo-status-bar';
 import MainStackNavigator from './Navigators/MainStackNavigator';
+import { SourceProvider } from './Context/SourceContext';
 
 
 export default () => {
@@ -13,8 +14,10 @@ export default () => {
     return(
         <PaperProvider theme={dark ? DarkTheme : DefaultTheme}>
             <NavigationContainer theme={dark ? DRKT : DFT}>
+                <SourceProvider>
                 <StatusBar style={dark ? 'light' : 'dark'} />
                 <MainStackNavigator/>
+                </SourceProvider>
             </NavigationContainer>
         </PaperProvider>
     )
