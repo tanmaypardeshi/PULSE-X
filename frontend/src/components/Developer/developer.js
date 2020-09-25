@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     nav: {
         boxShadow: 'none',
         backgroundColor: '#ffffff',
+        height: '48px'
     },
     title: {
         fontSize: '25px',
@@ -54,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
     },
     tab: {
         float: 'left'
+    },
+    logoutButton: {
+        height: '30px',
+        width: '30px'
     }
 }))
 
@@ -117,7 +122,7 @@ function Developer() {
                          className={classes.tabButton}/>
                     </Tabs>
                     <Tooltip title='Logout' className={classes.logout}>
-                        <Button color='secondary' variant='contained' onClick={handleLogout}>
+                        <Button color='secondary' variant='contained' onClick={handleLogout} className={classes.logoutButton}>
                             <PowerSettingsNew/>
                         </Button>
                     </Tooltip>

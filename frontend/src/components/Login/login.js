@@ -13,10 +13,10 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         width: '100%',
-        backgroundColor: theme.palette.background.paper,
+        height:'100vh',
+        backgroundColor: '#dcdbe9',
     },
     card: {
-        backgroundColor: '#f8f8f8',
         width: '30%',
         margin: '10% 35%',
         textAlign: 'center',
@@ -97,6 +97,7 @@ function Login(props) {
 
     return (
         <div className={classes.root}>
+            <br/>
             <Card className={classes.card}>
                 <CardContent>
                     <h3 className={classes.title}>LOGIN</h3>
