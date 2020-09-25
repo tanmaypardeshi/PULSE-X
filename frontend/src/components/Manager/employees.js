@@ -15,7 +15,6 @@ import { makeStyles,
          TextField } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import axios from 'axios'
-import { APP_HOST_NAME } from './../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -85,7 +84,7 @@ function Profile(props) {
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: `${APP_HOST_NAME}/manager/my_employees/`
+            url: `${process.env.REACT_APP_HOST}/api/manager/my_employees/`
         })
         .then((res) => {
             setEmployees(res.data)
@@ -117,7 +116,7 @@ function Profile(props) {
                     "first_name": fname,
                     "last_name": lname
                 },
-                url: `${APP_HOST_NAME}/manager/login_employee/`
+                url: `${process.env.REACT_APP_HOST}/api/manager/login_employee/`
             })
             .then((res) => {
                 setOpen(false)

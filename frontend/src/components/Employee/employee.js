@@ -13,7 +13,6 @@ import { BookmarkBorder,
 import Routes from './routes'
 import { useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios'
-import { APP_HOST_NAME } from './../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -129,7 +128,7 @@ function Employee(props) {
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
                 data: JSON.parse(sessionStorage.getItem('data')),
-                url: `${APP_HOST_NAME}/employee/logout/`
+                url: `${process.env.REACT_APP_HOST}/api/employee/logout/`
             })
     
             .then((res) => {

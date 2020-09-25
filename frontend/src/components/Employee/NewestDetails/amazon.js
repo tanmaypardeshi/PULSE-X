@@ -24,7 +24,6 @@ import GoalsMet from './../../../images/goal_met.svg'
 import uuid from 'react-uuid'
 import axios from 'axios'
 import VisibilitySensor from 'react-visibility-sensor'
-import { APP_HOST_NAME } from './../../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -108,7 +107,7 @@ function Amazon(props) {
                     "Content-Type" : "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: `${APP_HOST_NAME}/employee/review/`
+                url: `${process.env.REACT_APP_HOST}/api/employee/review/`
             })
             .then((res) => {
                 for(let i=0; i<res.data.review_set.length; i++) {
@@ -140,7 +139,7 @@ function Amazon(props) {
                     "Content-Type" : "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: `${APP_HOST_NAME}/employee/review/`
+                url: `${process.env.REACT_APP_HOST}/api/employee/review/`
             })
             .then((res) => {
                 let newData = [...datasource, ...res.data.review_set.map(val => ( {id: uuid(), ...val} ))]
@@ -181,7 +180,7 @@ function Amazon(props) {
                 "url": current.url,
                 "flag": flag
             },
-            url: `${APP_HOST_NAME}/employee/review/`
+            url: `${process.env.REACT_APP_HOST}/api/employee/review/`
         })
 
         .then((res) => {

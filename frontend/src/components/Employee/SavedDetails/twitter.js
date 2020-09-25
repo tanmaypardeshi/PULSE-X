@@ -20,7 +20,7 @@ import { HiEmojiHappy,
 import { ImNeutral2 } from 'react-icons/im'
 import  Saved from './../../../images/saved.svg'
 import axios from 'axios'
-import { APP_HOST_NAME } from './../../../globals'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -101,7 +101,7 @@ function Twitter(props) {
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: `${APP_HOST_NAME}/employee/saved/`
+            url: `${process.env.REACT_APP_HOST}/api/employee/saved/`
         })
         .then((res) => {
             setDatasource(res.data)
@@ -127,7 +127,7 @@ function Twitter(props) {
                 "id": current.id,
                 "flag": flag
             },
-            url: `${APP_HOST_NAME}/employee/saved/`
+            url: `${process.env.REACT_APP_HOST}/api/employee/saved/`
         })
         .then((res) => {
         })

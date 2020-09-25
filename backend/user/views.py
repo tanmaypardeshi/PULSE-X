@@ -22,26 +22,26 @@ class UserView(APIView):
 
     def post(self, request):
         user_serializer = UserSerializer(data=request.data)
-        if user_serializer.is_valid():
-            user_serializer.save()
-            user = User.objects.get(email=request.data['email'])
-            payload = jwt_payload_handler(user)
-            token = jwt_encode_handler(payload)
+        user_serializer.is_valid(raise_exception=True)
+        user_serializer.save()
+        user = User.objects.get(email=request.data['email'])
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
 
-            response = {
-                'success': True,
-                'message': 'User registered successfully',
-                'token': token,
-                'is_manager': user.is_manager,
-                'is_rnd': user.is_rnd
-            }
-
-            return Response(response, status=status.HTTP_201_CREATED)
         response = {
-            'success': 'False',
-            'message': 'User Already Registered!',
+            'success': True,
+            'message': 'User registered successfully',
+            'token': token,
+            'is_manager': user.is_manager,
+            'is_rnd': user.is_rnd
         }
-        return Response(response, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response(response, status=status.HTTP_201_CREATED)
+        # response = {
+        #     'success': 'False',
+        #     'message': 'User Already Registered!',
+        # }
+        # return Response(response, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class LoginView(APIView):

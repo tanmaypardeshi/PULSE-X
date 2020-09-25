@@ -10,7 +10,6 @@ import { makeStyles,
 import { Alert } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
-import { APP_HOST_NAME } from './../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -103,7 +102,7 @@ function Register(props) {
                     "is_manager": isManager,
                     "is_rnd": isDeveloper
                 },
-                url: `${APP_HOST_NAME}/user/register/`
+                url: `${process.env.REACT_APP_HOST}/api/user/register/`
             })
             .then((res) => {
                 if(res.data) {

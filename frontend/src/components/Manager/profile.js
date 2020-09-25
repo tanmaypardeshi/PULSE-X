@@ -3,7 +3,6 @@ import { makeStyles,
          Card } from '@material-ui/core'
 import Female from './../../images/female_avatar.svg'
 import axios from 'axios'
-import { APP_HOST_NAME } from './../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,7 +55,7 @@ function Profile(props) {
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: `${APP_HOST_NAME}/user/profile/`
+            url: `${process.env.REACT_APP_HOST}/api/user/profile/`
         })
         .then((res) => {
             console.log(res.data)

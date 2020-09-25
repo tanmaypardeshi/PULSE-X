@@ -8,7 +8,6 @@ import { makeStyles,
 import { Alert } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
-import { APP_HOST_NAME } from './../../globals'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -76,7 +75,7 @@ function Login(props) {
                     "email": email,
                     "password": password
                 },
-                url: `${APP_HOST_NAME}/user/login/`
+                url: `${process.env.REACT_APP_HOST}/api/user/login/`
             })
             .then((res) => {
                 if(res.data) {

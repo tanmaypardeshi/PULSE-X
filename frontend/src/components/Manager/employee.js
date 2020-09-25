@@ -5,7 +5,6 @@ import { ArrowBack } from '@material-ui/icons'
 import { Bar } from 'react-chartjs-2'
 import Male from './../../images/male_avatar.svg'
 import axios from 'axios'
-import { APP_HOST_NAME } from './../../globals'
 
 const colors = ['rgba(255, 99, 132, 0.8)','rgba(54, 162, 235, 0.8)','rgba(255, 206, 86, 0.8)','rgba(75, 192, 192, 0.8)','rgba(153, 102, 255, 0.8)','rgba(255, 159, 64, 0.8)','rgba(255, 99, 132, 0.8)']
 
@@ -69,7 +68,7 @@ function Employee(props) {
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: `${APP_HOST_NAME}/employee/detail/${props.match.params.employeeId}`
+            url: `${process.env.REACT_APP_HOST}/api/employee/detail/${props.match.params.employeeId}`
         })
         .then((res) => {
             let post = []
