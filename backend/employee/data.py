@@ -42,3 +42,7 @@ def get_set():
         review.append(objects)
         objects = {}
     return review
+
+
+def save_data(df):
+    df.to_csv(path + 'temp.csv', mode='a', header=False)

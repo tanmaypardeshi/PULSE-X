@@ -1,3 +1,5 @@
+import pandas as pd
+
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -5,8 +7,8 @@ from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from user.models import (User, )
-from user.permissions import (IsEmployee, IsManager, IsRND, )
-from .data import (get_set, )
+from user.permissions import (IsEmployee, IsManager, )
+from .data import (get_set, save_data)
 from .serializers import (ReviewSerializer, SaveSerializer, )
 from .models import (Review, )
 
@@ -186,6 +188,44 @@ class EmployeeDetailView(generics.ListAPIView):
                     'flag5': flag5,
                     'total': total
                 }
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': e.__str__()
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SaveReview(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated, IsEmployee,)
+    authentication_classes = (JSONWebTokenAuthentication,)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            new_list = []
+            objects = {}
+            for df in request.data:
+                objects['ProductId'] = df['productid']
+                objects['UserId'] = df['userid']
+                objects['ProfileName'] = df['profile_name']
+                objects['Time'] = df['time']
+                objects['Text'] = df['text']
+                objects['Sentiment'] = df['sentiment']
+                objects['Helpfulness'] = df['helpfulness']
+                objects['date'] = df['date']
+                objects['flag'] = df['flag']
+                objects['sarcasm'] = df['sarcasm']
+                objects['Product'] = df['product']
+                objects['country'] = df['country']
+                objects['lang'] = df['lang']
+                objects['url'] = df['url']
+                new_list.append(objects)
+                objects = {}
+            d = pd.DataFrame(new_list)
+            save_data(d)
+            return Response({
+                'success': True,
+                'message': 'Done'
             }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({
