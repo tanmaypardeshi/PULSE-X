@@ -19,7 +19,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'user',
     'employee',
-    'manager'
+    'manager',
+    'developer',
 ]
 
 AUTH_USER_MODEL = 'user.User'
