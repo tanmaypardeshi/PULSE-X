@@ -16,14 +16,8 @@ class RNDReview(generics.ListCreateAPIView):
     serializer_class = RNDReviewSerializer
 
     def get_queryset(self):
-        manger = User.objects.get(email=self.request.user).pk
-        employees = User.objects.filter(manager_id=manger)
-        review_list = []
-        for employee in employees:
-            reviews = Review.objects.filter(user=employee, flag=4, visited=False)
-            for review in reviews:
-                review_list.append(review)
-        return review_list
+        review = Review.objects.filter(flag=4)
+        return review
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
