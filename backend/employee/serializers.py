@@ -6,10 +6,8 @@ from .models import Review
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['productid', 'userid', 'profile_name', 'time',
-                  'text', 'sentiment', 'helpfulness', 'date',
-                  'flag', 'sarcasm', 'product', 'country', 'lang',
-                  'url', 'visited']
+        fields = ['text', 'sentiment', 'helpfulness', 'is_twitter',
+                  'flag', 'sarcasm', 'product', 'visited']
 
     def update(self, instance, validated_data):
         employee = Review.objects.create(user=instance, **validated_data)

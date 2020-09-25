@@ -8,9 +8,9 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from user.models import (User, )
 from user.permissions import (IsEmployee, IsManager, )
-from .data import (get_set, save_data)
 from .serializers import (ReviewSerializer, SaveSerializer, )
 from .models import (Review, )
+from .data import (get_twitter, get_amazon, )
 
 
 class ReviewView(generics.GenericAPIView):
@@ -19,8 +19,12 @@ class ReviewView(generics.GenericAPIView):
     serializer_class = ReviewSerializer
 
     def get(self, request, *args, **kwargs):
+        param = self.kwargs['param']
         try:
-            review_set = get_set()
+            if param == 'twitter':
+                review_set = get_twitter()
+            else:
+                review_set = get_amazon()
             return Response({
                 'success': True,
                 'message': 'Sent 10 reviews',

@@ -1,48 +1,42 @@
 import os
+from random import randint
 import pandas as pd
 
 path = os.getcwd() + '/employee/data/'
 
 
-def get_reviews():
-    dataframe = pd.read_csv(path + 'final.csv', index_col=0)
-    temp = dataframe.head(1000)
-    dataframe = dataframe.iloc[1000:]
-    temp.to_csv(path + 'temp.csv')
-    dataframe.to_csv(path + 'final.csv')
-
-
-def get_set():
-    dataframe = pd.read_csv(path + 'temp.csv', index_col=0)
-    if dataframe.shape[0] < 25:
-        get_reviews()
-        dataframe = pd.read_csv(path + 'temp.csv', index_col=0)
-    temp = dataframe.head(10)
-    dataframe = dataframe.iloc[10:]
-    dataframe.to_csv(path + 'temp.csv')
-    review = []
+def get_twitter():
+    df = pd.read_csv(path + 'twitter.csv', index_col=0)
+    twitter_list = []
     objects = {}
-    iterator = temp.index.values
-
     for i in range(10):
-        objects['productid'] = temp['ProductId'][iterator[i]]
-        objects['userid'] = temp['UserId'][iterator[i]]
-        objects['profile_name'] = temp['ProfileName'][iterator[i]]
-        objects['time'] = temp['Time'][iterator[i]]
-        objects['text'] = temp['Text'][iterator[i]]
-        objects['sentiment'] = temp['Sentiment'][iterator[i]]
-        objects['helpfulness'] = temp['Helpfulness'][iterator[i]]
-        objects['date'] = temp['date'][iterator[i]]
-        objects['flag'] = temp['flag'][iterator[i]]
-        objects['sarcasm'] = temp['sarcasm'][iterator[i]]
-        objects['product'] = temp['Product'][iterator[i]]
-        objects['country'] = temp['country'][iterator[i]]
-        objects['lang'] = temp['lang'][iterator[i]]
-        objects['url'] = temp['url'][iterator[i]]
-        review.append(objects)
+        id = randint(0, 38)
+        d = df.iloc[id]
+        objects['text'] = d['text']
+        objects['helpfulness'] = d['helpfulness']
+        objects['sarcasm'] = d['sarcasm']
+        objects['product'] = d['product']
+        objects['sentiment'] = d['sentiment']
+        objects['flag'] = d['flag']
+        twitter_list.append(objects)
         objects = {}
-    return review
+    return twitter_list
 
 
-def save_data(df):
-    df.to_csv(path + 'temp.csv', mode='a', header=False)
+def get_amazon():
+    df = pd.read_csv(path + 'amazon.csv', index_col=0)
+    amazon_list = []
+    objects = {}
+    for i in range(10):
+        id = randint(0, 222)
+        d = df.iloc[id]
+        objects['text'] = d['text']
+        objects['helpfulness'] = d['helpfulness']
+        objects['sarcasm'] = d['sarcasm']
+        objects['product'] = d['product']
+        objects['sentiment'] = d['sentiment']
+        objects['flag'] = d['flag']
+        amazon_list.append(objects)
+        objects = {}
+
+    return amazon_list
