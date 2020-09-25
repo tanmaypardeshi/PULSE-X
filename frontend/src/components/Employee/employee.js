@@ -133,14 +133,13 @@ function Employee(props) {
             })
     
             .then((res) => {
-                console.log(res.data)
+                sessionStorage.clear()
+                history.push('/')
             })
             .catch((error) => {
                 console.log(error)
             })
-        }
-        // sessionStorage.clear()
-        // history.push('/')
+        }   
     }
 
     return (
