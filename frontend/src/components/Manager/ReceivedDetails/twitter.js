@@ -164,8 +164,7 @@ function Twitter(props) {
                         <div>
                             <Card className={classes.card} variant='outlined'>
                                 <CardHeader
-                                    title={<p className={classes.name}>{post.profile_name}</p>}
-                                    subheader={<p className={classes.date}>{post.date}</p>}
+                                    title={<p className={classes.name}>Product : {post.product}</p>}
                                     className={classes.heading}
                                     action={
                                         <div className={classes.fourButtons}>
