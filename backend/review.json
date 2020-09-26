@@ -28,5 +28,440 @@
         "visited": false,
         "is_twitter": false
     }
+},
+{
+    "model": "employee.review",
+    "pk": 15,
+    "fields": {
+        "user": 22,
+        "text": "These are among the best chips I have ever eaten!  I first came upon them when I visited a CostPlus World Market store in Opelika, AL, in the Tiger Town Mall, in 2007.  I wasn't a big fan of dijon-flavored anything, but I decided to give these chips a try.  I was hooked.  I probably ended up buying over a dozen bags within just a few months' time.  I searched all over my part of Alabama (the northwestern part of the state) and could not find them.  I later tried to find them at the World Market in Hoover, at the Patton Creek Shopping Center, and they did not carry this flavor.  However, when I learned that they were available on Amazon.com, and also available for PRIME Shipping - I bought them as soon as I read \"Kettle Chips Honey Dijon, 9-Ounce Bags (Pack of 12)!\"<br /><br />You get a pretty big box, filled with 12 bags of these delicious morsels.  They last quite a while, but I will re-order, very, very soon!  I suggest you buy them, in this bulk form, and enjoy them - you won't be disappointed!  They go great with hamburgers and hot dogs - so they're perfect for spring and this coming summer's outdoor activities and cook-outs!<br /><br />Take my word for it, these chips are a hidden gem lost in the world of snack foods!  Buy some today, and fall in love like me!",
+        "sentiment": 1,
+        "helpfulness": 1,
+        "flag": 0,
+        "sarcasm": 1,
+        "product": "[ 'Kettle'], ['Chips'], [Honey'], ['Dijon']",
+        "visited": false,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 16,
+    "fields": {
+        "user": 22,
+        "text": "@HillaryMonahan Team Twizzler all the way. I wish I could find the chocolate Twizzlers again, that would be fun for iced coffee....",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 0,
+        "sarcasm": 0,
+        "product": " Twizzlers",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 17,
+    "fields": {
+        "user": 22,
+        "text": "@nypost Get this guy a Pastrami sandwich and Dr Brown’s Black Cherry soda.",
+        "sentiment": -1,
+        "helpfulness": 0,
+        "flag": 0,
+        "sarcasm": 1,
+        "product": " Pastrami",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 18,
+    "fields": {
+        "user": 22,
+        "text": "RT @sherrymac67: @ProudAmerica4 @Louissirois17Q Red Twizzlers???",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "flag": 0,
+        "sarcasm": 1,
+        "product": " Twizzlers",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 19,
+    "fields": {
+        "user": 22,
+        "text": "@Juusa5 @man_integrated The Asian markets started the varietal KitKats.  Green Tea, various fruits.",
+        "sentiment": -1,
+        "helpfulness": 1,
+        "flag": 1,
+        "sarcasm": 1,
+        "product": " Tea",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 20,
+    "fields": {
+        "user": 22,
+        "text": "RT @MeTV: The new Zesty Blood Orange and Feisty Cherry Diet Cokes can trace their origins back to these forgotten drinks.\n\nhttps://t.co/7fv…",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 1,
+        "sarcasm": 1,
+        "product": " Cokes",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 21,
+    "fields": {
+        "user": 22,
+        "text": "@ProudAmerica4 @Louissirois17Q Red Twizzlers???",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "flag": 1,
+        "sarcasm": 1,
+        "product": " Twizzlers",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 22,
+    "fields": {
+        "user": 22,
+        "text": "RT @MeTV: The new Zesty Blood Orange and Feisty Cherry Diet Cokes can trace their origins back to these forgotten drinks.\n\nhttps://t.co/7fv…",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 3,
+        "sarcasm": 1,
+        "product": " Cokes",
+        "visited": true,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 23,
+    "fields": {
+        "user": 22,
+        "text": "Where's my Diet Dr Pepper cherry and cream soda? ack! https://t.co/Q9lZQWJcKr",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "flag": 3,
+        "sarcasm": 1,
+        "product": " Pepper",
+        "visited": true,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 24,
+    "fields": {
+        "user": 22,
+        "text": "Where's my Diet Dr Pepper cherry and cream soda? ack! https://t.co/Q9lZQWJcKr",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "flag": 3,
+        "sarcasm": 1,
+        "product": " Pepper",
+        "visited": true,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 25,
+    "fields": {
+        "user": 22,
+        "text": "RT @sherrymac67: @ProudAmerica4 @Louissirois17Q Red Twizzlers???",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "flag": 4,
+        "sarcasm": 1,
+        "product": " Twizzlers",
+        "visited": true,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 26,
+    "fields": {
+        "user": 22,
+        "text": "@Juusa5 @man_integrated The Asian markets started the varietal KitKats.  Green Tea, various fruits.",
+        "sentiment": -1,
+        "helpfulness": 1,
+        "flag": 4,
+        "sarcasm": 1,
+        "product": " Tea",
+        "visited": true,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 27,
+    "fields": {
+        "user": 22,
+        "text": "RT @MeTV: The new Zesty Blood Orange and Feisty Cherry Diet Cokes can trace their origins back to these forgotten drinks.\n\nhttps://t.co/7fv…",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 4,
+        "sarcasm": 1,
+        "product": " Cokes",
+        "visited": true,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 28,
+    "fields": {
+        "user": 22,
+        "text": "Now that I'm older and my tastes have changed a bit, I think I do actually prefer Red Vines to Twizzlers.\n\n...regul… https://t.co/VOWtyDUwy4",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 5,
+        "sarcasm": 0,
+        "product": " Twizzlers",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 29,
+    "fields": {
+        "user": 22,
+        "text": "Pacific Gold Beef Jerky never ceases to satisfy. Great for long trips and crunch time, this beef jerky has a savory… https://t.co/7aOeTg5CUl",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 5,
+        "sarcasm": 0,
+        "product": " Jerky",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 30,
+    "fields": {
+        "user": 22,
+        "text": "I'm obliterating the Twizzlers. https://t.co/eYTPFDLpER",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "flag": 5,
+        "sarcasm": 1,
+        "product": " Twizzlers",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 31,
+    "fields": {
+        "user": 22,
+        "text": "@ProudAmerica4 @Louissirois17Q Red Twizzlers???",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "flag": 5,
+        "sarcasm": 1,
+        "product": " Twizzlers",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 32,
+    "fields": {
+        "user": 22,
+        "text": "RT @MeTV: The new Zesty Blood Orange and Feisty Cherry Diet Cokes can trace their origins back to these forgotten drinks.\n\nhttps://t.co/7fv…",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 5,
+        "sarcasm": 1,
+        "product": " Cokes",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 33,
+    "fields": {
+        "user": 22,
+        "text": "@ProudAmerica4 @Louissirois17Q Red Twizzlers???",
+        "sentiment": 0,
+        "helpfulness": 0,
+        "flag": 5,
+        "sarcasm": 1,
+        "product": " Twizzlers",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 34,
+    "fields": {
+        "user": 22,
+        "text": "@MysterySolvent Baby Yoda in her right hand, twizzlers (?) in her left. \nMust be a secret message in there somewhere.",
+        "sentiment": -1,
+        "helpfulness": 1,
+        "flag": 5,
+        "sarcasm": 1,
+        "product": " Yoda",
+        "visited": false,
+        "is_twitter": true
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 35,
+    "fields": {
+        "user": 22,
+        "text": "Smiles... Thank you Lord, for I have found another healthy snack food that is unsalted, and tastes great. I almost gave up on finding a potato chip like this. The only thing i would ask Kettle to change is the texture. It's slightly hard/crunchy, but not a problem at all. I would just prefer it to be softer. Kettle if you do make that happen, please keep everything else the same. Thank you.",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 0,
+        "sarcasm": 1,
+        "product": "Kettle",
+        "visited": false,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 36,
+    "fields": {
+        "user": 22,
+        "text": "The Spicy Thai chips used to be the best tasting chips on the market.  However, Kettle Foods has changed the ingredients used, with ginger  being the most important that is now missing.  Notice that they removed \"ginger with attitude\" from the bag.  Sadly, the changing of the ingredients has ruined the chips for me.  They aren't that good anymore and the spice level is virtually non-existent.<br /><br />Here are the original and new ingredient listings:<br /><br />Original Ingredients<br />Select Potatoes, Safflower and/or Sunflower Oil, Honey Powder (Evaporated Cane Syrup, Honey)Salt, Garlic Powder, Jalapeno Pepper, Ground ginger, Onion Powder, Habanero Pepper, Dried Parsley, Citric Acid, Cilantro Extract, Ginger Oil, Cayenne Pepper, White Pepper, Lime Oil.<br /><br />New Ingredients<br />Potatoes, safflower and/or sunflower oil, sugar, dried cane syrup, salt, maltodextrin, yeast extract, spices, garlic powder, onion powder, dried parsley, jalapeno powder, citric acid, natural flavors, lime extract<br /><br />I'm assuming they changed the ingredients in order to cut costs for their new owner,  Blue Diamond.  They might want to get rid of  \"Great Taste Naturally\" from their bags as I don't consider maltodextrin to be very natural.<br /><br />Great job Kettle!  Way to ruin a great thing!",
+        "sentiment": 1,
+        "helpfulness": 1,
+        "flag": 0,
+        "sarcasm": 1,
+        "product": "Sunflower, Oil, Honey,  Powder, Evaporated, Cane, Syrup, Onion,  Powder, Habanero,  Pepper, Blue, Diamond",
+        "visited": false,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 37,
+    "fields": {
+        "user": 22,
+        "text": "It is chocolate, what can I say.  Great variety of everything our family loves.  With a family of six it goes fast here.  Perfect variety.  Kit Kat, Reeses, take five and more.",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 5,
+        "sarcasm": 1,
+        "product": " Kit, Kat, Reeses",
+        "visited": false,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 38,
+    "fields": {
+        "user": 22,
+        "text": "We like Plockys<br />They like us.<br />Plockys Plockys.<br />Mean no fuss.<br />Taste so good.<br />And healthy too.<br />Plockys Plockys.<br />Grab a bag or two.<br />Thank you Plockys!!",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 5,
+        "sarcasm": 1,
+        "product": "Plockys",
+        "visited": false,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 39,
+    "fields": {
+        "user": 22,
+        "text": "I have lived out of the US for over 7 yrs now, and I so miss my Twizzlers!!  When I go back to visit or someone visits me, I always stock up.  All I can say is YUM!<br />Sell these in Mexico and you will have a faithful buyer, more often than I'm able to buy them right now.",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 1,
+        "sarcasm": 1,
+        "product": "Twizzlers",
+        "visited": false,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 40,
+    "fields": {
+        "user": 22,
+        "text": "Our Spaniel has tried several foods in her 6 years, and this is the only one she will eat by itself without any \"people food\" being added (of course, we still treat her occasionally).  When we went in for our 12 month tooth-cleaning appointment, the vet told us to take her home as her teeth didn't need any cleaning for another 6 months, at least.  It is specially designed for their teeth and health needs, and she loves it.  And it is actually cheaper here than at the fancy pet store!  What more could you ask?",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 1,
+        "sarcasm": 1,
+        "product": " Spaniel",
+        "visited": false,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 41,
+    "fields": {
+        "user": 22,
+        "text": "I've never heard of the SAFCOL brand before but I was tired of only trying the typical pouches",
+        "sentiment": -1,
+        "helpfulness": 0,
+        "flag": 1,
+        "sarcasm": 0,
+        "product": " Starkist, Chicken,  of,  the, Sea",
+        "visited": false,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 42,
+    "fields": {
+        "user": 22,
+        "text": "Being a fan of Newman's Pineapple salsa for quite a while, I was looking for a comparable salsa.  This is one of the best tasting salsas I've ever had.  My daughters love it too.  They don't like super chunky salsa and the Berry Mango has a nice smooth texture with small mango pieces.  The salsa is not too sweet, just sweet enough and although it's mild, it has a nice little kick to it.  At this price, it's a steal!",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 3,
+        "sarcasm": 1,
+        "product": " Pineapple",
+        "visited": true,
+        "is_twitter": false
+    }
+},
+{
+    "model": "employee.review",
+    "pk": 43,
+    "fields": {
+        "user": 22,
+        "text": "You HAVE to try the VANILLA Tootsie Rolls!  The regular chocolate ones are good, but THESE are the BEST EVER!!",
+        "sentiment": 1,
+        "helpfulness": 0,
+        "flag": 4,
+        "sarcasm": 1,
+        "product": "the,  VANILLA, Tootsie, Rolls",
+        "visited": false,
+        "is_twitter": false
+    }
 }
 ]
