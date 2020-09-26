@@ -2,7 +2,7 @@
 
 ## PULSE - X : The complete social media intelligence platform with dynamic sentiment analysis​
 
-#### [Click here for the Drive link to find the csv files and PPT for both rounds](https://drive.google.com/drive/folders/1CWYgf5lB49S3RUyVeBO8lw8L6m6Eba2b?usp=sharing)
+#### [Click here for the Drive link to find the csv files, PPT for both rounds and the APK for the mobile app of Pulse - X](https://drive.google.com/drive/folders/1CWYgf5lB49S3RUyVeBO8lw8L6m6Eba2b?usp=sharing)
 
 #### [Click here for the PPT for judging round](https://github.com/tanmaypardeshi/Pasckathon_git_commit/blob/master/Judging%20Round.pdf)
 
