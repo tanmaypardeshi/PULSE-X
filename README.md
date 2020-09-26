@@ -6,6 +6,8 @@
 
 #### [Click here for the PPT for judging round](https://github.com/tanmaypardeshi/Pasckathon_git_commit/blob/master/Judging%20Round.pdf)
 
+#### [Click here for the PPT for final round](https://github.com/tanmaypardeshi/Pasckathon_git_commit/blob/master/Final%20PPT.pdf)
+
 ## Prequisites on the local machine to project to be run:
 
 1. Python 3.6 or above 
@@ -79,6 +81,9 @@
 |[SentimentAnalysis.ipynb](Machine_Learning/SentimentAnalysis.ipynb)|The polarity of a tweet is analysed by using a pretrained model from TextBlob|
 |[KeywordsExtraction.ipynb](Machine_Learning/KeywordsExtraction.ipynb)|Extraction of aspects and keywords essential to the product|
 |[SarcasmDetection.ipynb](Machine_Learning/SarcasmDetection.ipynb)|To detect the true intent behind the review|
+|[NER_BERT.ipynb](Machine_Learning/NER_BERT.ipynb)|To detect the product by fine-tuning BERT|
+|[NER_KeywordExtraction.ipynb](Machine_Learning/NER_KeywordExtraction.ipynb)|To detect the product by using the DeepPavlov Library and the keywords using TextRank Algorithm|
+
 
 
 <hr>
