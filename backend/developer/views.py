@@ -18,7 +18,7 @@ class RNDReview(generics.ListCreateAPIView):
         if self.kwargs['param'] == 'twitter':
             review = Review.objects.filter(flag=4, visited=False, is_twitter=True)
         else:
-            review = Review.objects.filter(flag=4, visited=False, is_twitter=Falsege)
+            review = Review.objects.filter(flag=4, visited=False, is_twitter=False)
         return review
 
     def get(self, request, *args, **kwargs):
