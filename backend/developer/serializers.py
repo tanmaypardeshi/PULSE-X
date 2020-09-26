@@ -11,7 +11,6 @@ class RNDReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'email', 'first_name', 'last_name',
-                  'productid', 'userid', 'profile_name', 'time',
-                  'text', 'sentiment', 'helpfulness', 'date',
-                  'flag', 'sarcasm', 'product', 'country', 'lang',
-                  'url', 'visited']
+                  'text', 'sentiment', 'helpfulness',
+                  'flag', 'sarcasm', 'product']
+
