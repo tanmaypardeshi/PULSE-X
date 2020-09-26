@@ -5,7 +5,7 @@ from .views import (ReviewView, SavedReview, GetReview,
 
 urlpatterns = [
     path('review/<str:param>/', ReviewView.as_view(), name='get-review'),
-    path('saved/', SavedReview.as_view(), name='saved'),
+    path('saved/<str:param>/', SavedReview.as_view(), name='saved'),
     path('review_data/', GetReview.as_view(), name='review'),
     path('flag_data/', GetFlagDetails.as_view(), name='flag'),
     path('detail/<int:id>/', EmployeeDetailView.as_view(), name='employee-detail'),

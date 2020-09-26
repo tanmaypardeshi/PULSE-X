@@ -59,7 +59,10 @@ class SavedReview(generics.ListAPIView):
     serializer_class = SaveSerializer
 
     def get_queryset(self):
-        saved = Review.objects.filter(user=self.request.user, flag=5)
+        if self.kwargs['param'] == 'twitter':
+            saved = Review.objects.filter(user=self.request.user, flag=5, is_twitter=True)
+        else:
+            saved = Review.objects.filter(user=self.request.user, flag=5, is_twitter=False)
         return saved
 
     def get(self, request, *args, **kwargs):
