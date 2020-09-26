@@ -83,8 +83,9 @@
 |[SarcasmDetection.ipynb](Machine_Learning/SarcasmDetection.ipynb)|To detect the true intent behind the review|
 |[NER_BERT.ipynb](Machine_Learning/NER_BERT.ipynb)|To detect the product by fine-tuning BERT|
 |[NER_KeywordExtraction.ipynb](Machine_Learning/NER_KeywordExtraction.ipynb)|To detect the product by using the DeepPavlov Library and the keywords using TextRank Algorithm|
-
-
+[BertSentimentAna.ipynb](Machine_Learning/BertSentimentAna.ipynb)|Sentiment analysis module|
+[Helpfulness.ipynb](Machine_Learning/Helpfulness.ipynb)|Measures helpfulness of review|
+[ProfanityDetection.ipynb](Machine_Learning/ProfanityDetection.ipynb)|Checks if the reviews are abusive or not|
 
 <hr>
 
