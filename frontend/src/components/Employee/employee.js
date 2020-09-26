@@ -12,7 +12,6 @@ import { BookmarkBorder,
          PowerSettingsNew } from '@material-ui/icons'
 import Routes from './routes'
 import { useHistory, useLocation } from 'react-router-dom';
-import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -119,26 +118,8 @@ function Employee(props) {
     };
 
     const handleLogout = (e) => {
-        if(sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
-            console.log()
-            axios({
-                method: "POST",
-                headers: {
-                    "Content-Type" : "application/json",
-                    Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
-                },
-                data: JSON.parse(sessionStorage.getItem('data')),
-                url: `${process.env.REACT_APP_HOST}/api/employee/logout/`
-            })
-    
-            .then((res) => {
-                sessionStorage.clear()
-                history.push('/')
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        }   
+        sessionStorage.clear()
+        history.push('/')
     }
 
     return (

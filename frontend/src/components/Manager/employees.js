@@ -45,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
         padding: '2%'
     },
     alert: {
-        width: '50%'
+        width: '50%',
+        float:'right',
+        margin: '4% 0'
     },
     tablehead: {
         backgroundColor: '#ceceeb',
@@ -55,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
         float: 'left',
         width: '100%',
         marginRight: '1%'
+    },
+    error: {
+        color: '#ff0000'
     }
 }))
 
@@ -69,8 +74,9 @@ function Profile(props) {
     const [lname, setLname] = useState(null)
     const [password, setPassword] = useState(null)
     const [confirm, setConfirm] = useState(null)
-    const [complete, setComplete] = useState(true)
-    const [match, setMatch] = useState(true)
+    const [emailError, setEmailError] = useState(false)
+    const [nameError, setNameError] = useState(false)
+    const [passError, setPassError] = useState(false)
     const [success, setSuccess] = useState(false)
 
     useEffect(() => {
@@ -96,11 +102,13 @@ function Profile(props) {
 
     const handleNewEmployee = (e) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        if(!email || !fname || !lname || !password || !re.test(email)) {
-            setComplete(false)
-        }
-        else if(password !== confirm) {
-            setMatch(false)
+        if(!email || !fname || !lname || !password || !confirm || password !== confirm || !re.test(email)) {
+            if(!email || !re.test(email))
+                setEmailError(true)
+            if(!fname || !lname)
+                setNameError(true)
+            if(!password || !confirm || password !== confirm)
+                setPassError(true)
         }
         else {
 
@@ -127,7 +135,10 @@ function Profile(props) {
                 getEmployees()
             })
             .catch((error) => {
-                console.log(error)
+                if(error.response.status === 400)
+                    window.alert('Email already exists!')
+                else
+                    window.alert('Something went wrong!')
             })
         }
     }
@@ -190,7 +201,7 @@ function Profile(props) {
                      label='First Name'
                      onChange={(e) => { 
                          setFname(e.target.value) 
-                         setComplete(true)
+                         setNameError(false)
                      }}
                      className={classes.textfield2}/>
                     <TextField
@@ -198,35 +209,36 @@ function Profile(props) {
                      label='Last Name'
                      onChange={(e) => { 
                          setLname(e.target.value) 
-                         setComplete(true)
+                         setNameError(false)
                      }}
                      className={classes.textfield2}/>
+                    { nameError ? <p className={classes.error}>Full name is required.</p> : null }
                     <TextField
                      variant='outlined'
                      label='Email'
                      onChange={(e) => { 
                          setEmail(e.target.value)
-                         setComplete(true) 
+                         setEmailError(false) 
                      }}
                      className={classes.textfield}/>
+                    { emailError ? <p className={classes.error}>Invalid email.</p> : null }
                     <TextField
                      variant='outlined'
                      label='Password'
                      type='password'
                      onChange={(e) => { 
                          setPassword(e.target.value)
-                         setComplete(true) 
-                         setMatch(true)
+                         setPassError(false)
                      }}
                      className={classes.textfield}/>
+                    { passError ? <p className={classes.error}>Passwords do not match.</p> : null }
                     <TextField
                      variant='outlined'
                      label='Confirm Password'
                      type='password'
                      onChange={(e) => { 
                          setConfirm(e.target.value) 
-                         setComplete(true)
-                         setMatch(true)
+                         setPassError(false)
                      }}
                      className={classes.textfield}/>
                     <Button

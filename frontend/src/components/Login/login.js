@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles, 
          Card, 
          CardContent, 
          TextField, 
-         Button,
-         Snackbar } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+         Button } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 
@@ -47,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
         float: 'left',
         marginTop: '21%',
         marginLeft: '10%'
+    },
+    error: {
+        color: '#ff0000'
     }
 }))
 
@@ -57,12 +58,16 @@ function Login(props) {
 
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
-    const [valid, setValid] = useState(true)
+    const [emailError, setEmailError] = useState(false)
+    const [passError, setPassError] = useState(false)
 
     const handleLogin = (e) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         if(!email || !password || !re.test(email)) {
-            setValid(false)
+            if(!email || !re.test(email))
+                setEmailError(true)
+            if(!password) 
+                setPassError(true)
         }
         else {
 
@@ -92,7 +97,10 @@ function Login(props) {
                 }
             })
             .catch((error) => {
-                console.log(error)
+                if(error.response.status === 401) 
+                    window.alert('Invalid credentials!')
+                else
+                    window.alert('Something went wrong!')
             })
         }
     }
@@ -107,19 +115,21 @@ function Login(props) {
                      variant='outlined'
                      label='Email'
                      onChange={(e) => { 
-                         setValid(true)
+                         setEmailError(false)
                          setEmail(e.target.value) 
                      }}
                      className={classes.textfield}/>
+                     { emailError ? <p className={classes.error}>Invalid email.</p> : null }
                     <TextField
                      variant='outlined'
                      label='Password'
                      type='password'
                      onChange={(e) => { 
-                         setValid(true)
+                         setPassError(false)
                          setPassword(e.target.value) 
                      }}
                      className={classes.textfield}/>
+                     { passError ? <p className={classes.error}>Password is required.</p> : null }
                     <Button
                      variant='contained'
                      color='primary'
@@ -133,16 +143,6 @@ function Login(props) {
                     <a href='/register' className={classes.register}>New to PULSE&mdash;X? Sign up here!</a>
                 </CardContent>
             </Card>
-            <Snackbar
-             open={!valid}
-             autoHideDuration={1000}
-             anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-             }}
-            >
-                <Alert severity='error'>Invalid Credentials.</Alert>
-            </Snackbar>
         </div>
     )
 }

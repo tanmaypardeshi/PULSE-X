@@ -96,9 +96,9 @@ function Amazon(props) {
 
     useEffect(() => {
         let data = []
-        if(sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
-            setDatasource(JSON.parse(sessionStorage.getItem('data')))
-            sessionStorage.removeItem('data')
+        if(sessionStorage.getItem('amazon') && JSON.parse(sessionStorage.getItem('amazon')).length) {
+            setDatasource(JSON.parse(sessionStorage.getItem('amazon')))
+            sessionStorage.removeItem('amazon')
         }
         else {
             axios({
@@ -107,13 +107,23 @@ function Amazon(props) {
                     "Content-Type" : "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: `${process.env.REACT_APP_HOST}/api/employee/review/`
+                url: `${process.env.REACT_APP_HOST}/api/employee/review/amazon`
             })
             .then((res) => {
                 for(let i=0; i<res.data.review_set.length; i++) {
+                    let name = res.data.review_set[i].product
+                    name = name.replace(/\[/gi, "")
+                    name = name.replace(/]/gi, "")
+                    name = name.replace(/'/gi, "")
+                    name = name.replace(/"/gi, "")
                     data.push({
                         id: uuid(),
-                        ...res.data.review_set[i]
+                        product: name,
+                        text: res.data.review_set[i].text,
+                        sentiment: res.data.review_set[i].sentiment,
+                        sarcasm: res.data.review_set[i].sarcasm,
+                        flag: res.data.review_set[i].flag,
+                        helpfulness: res.data.review_set[i].helpfulness,
                     })
                 }
                 setDatasource(data)
@@ -126,12 +136,12 @@ function Amazon(props) {
 
     useEffect(() => {
         return () => {
-            sessionStorage.setItem('data', JSON.stringify(datasource))
-            console.log(sessionStorage.getItem('data'))
+            sessionStorage.setItem('amazon', JSON.stringify(datasource))
         }
     }, [datasource])
 
     const getReviews = (isVisible) => {
+        let data = []
         if (isVisible) {
             axios({
                 method: "GET",
@@ -139,11 +149,26 @@ function Amazon(props) {
                     "Content-Type" : "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: `${process.env.REACT_APP_HOST}/api/employee/review/`
+                url: `${process.env.REACT_APP_HOST}/api/employee/review/amazon`
             })
             .then((res) => {
-                let newData = [...datasource, ...res.data.review_set.map(val => ( {id: uuid(), ...val} ))]
-                setDatasource(newData)
+                for(let i=0; i<res.data.review_set.length; i++) {
+                    let name = res.data.review_set[i].product
+                    name = name.replace(/\[/gi, "")
+                    name = name.replace(/]/gi, "")
+                    name = name.replace(/'/gi, "")
+                    name = name.replace(/"/gi, "")
+                    data.push({
+                        id: uuid(),
+                        product: name,
+                        text: res.data.review_set[i].text,
+                        sentiment: res.data.review_set[i].sentiment,
+                        sarcasm: res.data.review_set[i].sarcasm,
+                        flag: res.data.review_set[i].flag,
+                        helpfulness: res.data.review_set[i].helpfulness,
+                    })
+                }
+                setDatasource(data)
             })
             .catch((error) => {
                 console.log(error)
@@ -165,26 +190,19 @@ function Amazon(props) {
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
             data: {
-                "productid": current.productid,
-                "userid": current.userid,
-                "profile_name": current.profile_name,
-                "time": current.time,
                 "text": current.text,
                 "sentiment": current.sentiment,
                 "helpfulness": current.helpfulness,
-                "date": current.date,
-                "sarcasm": current.sarcasm,
-                "country": current.country,
-                "product": current.product,
-                "lang": current.lang,
-                "url": current.url,
-                "flag": flag
+                "sarcasm": current.sarcasm, 
+                "product": current.product, 
+                "flag": flag,
+                "is_twitter": false
             },
-            url: `${process.env.REACT_APP_HOST}/api/employee/review/`
+            url: `${process.env.REACT_APP_HOST}/api/employee/review/amazon/`
         })
 
         .then((res) => {
-            
+            console.log(res.data)
         })
         .catch((error) => {
             console.log(error)
@@ -228,8 +246,7 @@ function Amazon(props) {
                         <div>
                             <Card className={classes.card} variant='outlined'>
                                 <CardHeader
-                                    title={<p className={classes.name}>{post.profile_name}</p>}
-                                    subheader={<p className={classes.date}>{post.date}</p>}
+                                    title={<p className={classes.name}>Product : {post.product}</p>}
                                     className={classes.heading}
                                     action={
                                         <div className={classes.fourButtons}>

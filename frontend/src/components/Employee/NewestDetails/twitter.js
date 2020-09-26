@@ -96,9 +96,9 @@ function Twitter(props) {
 
     useEffect(() => {
         let data = []
-        if(sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
-            setDatasource(JSON.parse(sessionStorage.getItem('data')))
-            sessionStorage.removeItem('data')
+        if(sessionStorage.getItem('twitter') && JSON.parse(sessionStorage.getItem('twitter')).length) {
+            setDatasource(JSON.parse(sessionStorage.getItem('twitter')))
+            sessionStorage.removeItem('twitter')
         }
         else {
             axios({
@@ -107,9 +107,10 @@ function Twitter(props) {
                     "Content-Type" : "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: `${process.env.REACT_APP_HOST}/api/employee/review/`
+                url: `${process.env.REACT_APP_HOST}/api/employee/review/twitter`
             })
             .then((res) => {
+                console.log(res.data)
                 for(let i=0; i<res.data.review_set.length; i++) {
                     data.push({
                         id: uuid(),
@@ -126,7 +127,7 @@ function Twitter(props) {
 
     useEffect(() => {
         return () => {
-            sessionStorage.setItem('data', JSON.stringify(datasource))
+            sessionStorage.setItem('twitter', JSON.stringify(datasource))
         }
     }, [datasource])
 
@@ -138,7 +139,7 @@ function Twitter(props) {
                     "Content-Type" : "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: `${process.env.REACT_APP_HOST}/api/employee/review/`
+                url: `${process.env.REACT_APP_HOST}/api/employee/review/twitter`
             })
             .then((res) => {
                 let newData = [...datasource, ...res.data.review_set.map(val => ( {id: uuid(), ...val} ))]
@@ -164,26 +165,18 @@ function Twitter(props) {
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
             data: {
-                "productid": current.productid,
-                "userid": current.userid,
-                "profile_name": current.profile_name,
-                "time": current.time,
                 "text": current.text,
                 "sentiment": current.sentiment,
                 "helpfulness": current.helpfulness,
-                "date": current.date,
-                "sarcasm": current.sarcasm,
-                "country": current.country,
+                "sarcasm": current.sarcasm, 
                 "product": current.product,
-                "lang": current.lang,
-                "url": current.url,
-                "flag": flag
+                "flag": flag,
+                "is_twitter": true
             },
-            url: `${process.env.REACT_APP_HOST}/api/employee/review/`
+            url: `${process.env.REACT_APP_HOST}/api/employee/review/twitter/`
         })
-
         .then((res) => {
-            
+            console.log(res.data)
         })
         .catch((error) => {
             console.log(error)
@@ -227,8 +220,7 @@ function Twitter(props) {
                         <div>
                             <Card className={classes.card} variant='outlined'>
                                 <CardHeader
-                                    title={<p className={classes.name}>{post.profile_name}</p>}
-                                    subheader={<p className={classes.date}>{post.date}</p>}
+                                    title={<p className={classes.name}>Product : {post.product}</p>}
                                     className={classes.heading}
                                     action={
                                         <div className={classes.fourButtons}>

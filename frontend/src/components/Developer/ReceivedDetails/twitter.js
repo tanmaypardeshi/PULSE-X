@@ -94,7 +94,7 @@ function Twitter(props) {
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: `${process.env.REACT_APP_HOST}/api/rnd/review/`
+            url: `${process.env.REACT_APP_HOST}/api/rnd/review/twitter/`
         })
         .then((res) => {
             setDatasource(res.data)
@@ -121,7 +121,7 @@ function Twitter(props) {
                 "id": current.id,
                 "visited": visited
             },
-            url: `${process.env.REACT_APP_HOST}/api/rnd/review/`
+            url: `${process.env.REACT_APP_HOST}/api/rnd/review/twitter/`
         })
         .then((res) => {
             console.log(res.data)

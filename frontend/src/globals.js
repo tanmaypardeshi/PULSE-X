@@ -1,4 +1,4 @@
-let context = "PROD"; //TEST (for testing) and PROD (for Production)
+let context = "TEST"; //TEST (for testing) and PROD (for Production)
 
 export const APP_HOST_NAME =
   context === "PROD"

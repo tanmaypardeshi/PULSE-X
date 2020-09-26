@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles, 
          Card, 
          CardContent, 
@@ -7,7 +7,6 @@ import { makeStyles,
          FormControl,
          Select,
          InputLabel } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 
@@ -51,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
         float: 'left',
         marginTop: '21%',
         marginLeft: '10%'
+    },
+    error: {
+        color: '#ff0000'
     }
 }))
 
@@ -65,18 +67,19 @@ function Register(props) {
     const [dept, setDept] = useState('manager')
     const [password, setPassword] = useState(null)
     const [confirm, setConfirm] = useState(null)
-    const [complete, setComplete] = useState(true)
-    const [match, setMatch] = useState(true)
-    const [sucess, setSucess] = useState(false)
-    const [fail, setFail] = useState(false)
+    const [emailError, setEmailError] = useState(false)
+    const [nameError, setNameError] = useState(false)
+    const [passError, setPassError] = useState(false)
 
     const handleRegister = (e) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        if(!email || !fname || !lname || !dept || !password || !re.test(email)) {
-            setComplete(false)
-        }
-        else if(password !== confirm) {
-            setMatch(false)
+        if(!email || !fname || !lname || !dept || !password || !confirm || password !== confirm || !re.test(email)) {
+            if(!email || !re.test(email))
+                setEmailError(true)
+            if(!fname || !lname)
+                setNameError(true)
+            if(!password || !confirm || password !== confirm)
+                setPassError(true)
         }
         else {
             let isManager = false
@@ -114,12 +117,12 @@ function Register(props) {
                         history.push('/developer')
                     }
                 }
-                else {
-                    setFail(true)
-                }
             })
             .catch((error) => {
-                console.log(error)
+                if(error.response.status)
+                    window.alert('Email already registered!')
+                else
+                    window.alert('Something went wrong!')
             })
         }
     }
@@ -131,36 +134,37 @@ function Register(props) {
                 <CardContent>
                     <h3 className={classes.title}>REGISTER</h3>
                     <TextField
-                     variant='outlined'
-                     label='First Name'
-                     onChange={(e) => { 
-                         setFname(e.target.value) 
-                         setComplete(true)
-                     }}
-                     className={classes.textfield2}/>
+                    variant='outlined'
+                    label='First Name'
+                    onChange={(e) => { 
+                        setFname(e.target.value) 
+                        setNameError(false)
+                    }}
+                    className={classes.textfield2}/>
                     <TextField
                      variant='outlined'
                      label='Last Name'
                      onChange={(e) => { 
                          setLname(e.target.value) 
-                         setComplete(true)
+                         setNameError(false)
                      }}
                      className={classes.textfield2}/>
+                    { nameError ? <p className={classes.error}>Full name is required.</p> : null }
                     <TextField
                      variant='outlined'
                      label='Email'
                      onChange={(e) => { 
                          setEmail(e.target.value)
-                         setComplete(true) 
+                         setEmailError(false) 
                      }}
                      className={classes.textfield}/>
+                    { emailError ? <p className={classes.error}>Invalid email.</p> : null }
                     <FormControl variant="outlined" className={classes.textfield}>
                         <InputLabel>Department</InputLabel>
                         <Select
                          native
                          onChange={(e) => { 
-                             setDept(e.target.value) 
-                             setComplete(true)
+                             setDept(e.target.value)
                          }}
                          label='Department'
                         >
@@ -174,18 +178,17 @@ function Register(props) {
                      type='password'
                      onChange={(e) => { 
                          setPassword(e.target.value)
-                         setComplete(true) 
-                         setMatch(true)
+                         setPassError(false) 
                      }}
                      className={classes.textfield}/>
+                    { passError ? <p className={classes.error}>Passwords do not match.</p> : null }
                     <TextField
                      variant='outlined'
                      label='Confirm Password'
                      type='password'
                      onChange={(e) => { 
                          setConfirm(e.target.value) 
-                         setComplete(true)
-                         setMatch(true)
+                         setPassError(false)
                      }}
                      className={classes.textfield}/>
                     <Button
@@ -200,26 +203,6 @@ function Register(props) {
                     <a href='/' className={classes.forgot}>Already registered? Sign in here!</a>
                 </CardContent>
             </Card>
-            {
-                sucess ?
-                    <Alert severity='success'>User registered successfully.</Alert> :
-                    null
-            }
-            {
-                fail ?
-                    <Alert severity='error'>Could not register user.</Alert> :
-                    null
-            }
-            {
-                !complete ?
-                    <Alert severity='error'>Please enter valid data.</Alert> :
-                    null
-            }
-            {
-                !match ?
-                    <Alert severity='error'>Passwords do not match.</Alert> :
-                    null
-            }
         </div>
     )
 }

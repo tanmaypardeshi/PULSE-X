@@ -101,7 +101,7 @@ function Twitter(props) {
                 "Content-Type" : "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: `${process.env.REACT_APP_HOST}/api/employee/saved/`
+            url: `${process.env.REACT_APP_HOST}/api/employee/saved/twitter/`
         })
         .then((res) => {
             setDatasource(res.data)
@@ -127,7 +127,7 @@ function Twitter(props) {
                 "id": current.id,
                 "flag": flag
             },
-            url: `${process.env.REACT_APP_HOST}/api/employee/saved/`
+            url: `${process.env.REACT_APP_HOST}/api/employee/saved/twitter/`
         })
         .then((res) => {
         })
@@ -173,134 +173,106 @@ function Twitter(props) {
                 {
                     datasource.map((post, index) => (
                         <div>
-                                <Card className={classes.card} variant='outlined'>
-                                    <CardHeader
-                                        title={<p className={classes.name}>{post.profile_name}</p>}
-                                        subheader={<p className={classes.date}>{post.date}</p>}
-                                        className={classes.heading}
-                                        action={
-                                            <div className={classes.fourButtons}>
-                                                {
-                                                post.sarcasm ?
-                                                    <Tooltip title='Sarcastic comment'>
+                            <Card className={classes.card} variant='outlined'>
+                                <CardHeader
+                                    title={<p className={classes.name}>Product : {post.product}</p>}
+                                    subheader={<p className={classes.date}>{post.date}</p>}
+                                    className={classes.heading}
+                                    action={
+                                        <div className={classes.fourButtons}>
+                                            {
+                                            post.sarcasm ?
+                                                <Tooltip title='Sarcastic comment'>
+                                                    <IconButton>
+                                                        <HiFlag style={{color: "#f44336", fontSize: '25px'}} />
+                                                    </IconButton>
+                                                </Tooltip> :
+                                                null
+                                            }
+                                            {
+                                                post.sentiment === 1 ?
+                                                    <Tooltip title='Customer seems to be happy'>
                                                         <IconButton>
-                                                            <HiFlag style={{color: "#f44336", fontSize: '25px'}} />
+                                                            <HiEmojiHappy style={{color: "#4caf50", fontSize: '25px'}} />
                                                         </IconButton>
                                                     </Tooltip> :
                                                     null
-                                                }
-                                                {
-                                                    post.sentiment === 1 ?
-                                                        <Tooltip title='Customer seems to be happy'>
-                                                            <IconButton>
-                                                                <HiEmojiHappy style={{color: "#4caf50", fontSize: '25px'}} />
-                                                            </IconButton>
-                                                        </Tooltip> :
-                                                        null
-                                                }
-                                                {
-                                                    post.sentiment === -1 ?
-                                                        <Tooltip title='Customer seems to be disappointed'>
-                                                            <IconButton>
-                                                                <HiEmojiSad style={{color: "#f44336", fontSize: '25px'}} />
-                                                            </IconButton>
-                                                        </Tooltip> :
-                                                        null
-                                                }
-                                                {
-                                                    post.sentiment === 0 ?
-                                                        <Tooltip title='Customer seems to be fine'>
-                                                            <IconButton>
-                                                                <ImNeutral2 style={{color: "#ff9800", fontSize: '20px'}} />
-                                                            </IconButton>
-                                                        </Tooltip> :
-                                                        null
-                                                }
-                                                <Tooltip title='Chuck'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    onClick={handleDelete}
-                                                    className={classes.actionButton}>
-                                                        <Delete/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title='Mark as Read'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    onClick={handleRead}
-                                                    className={classes.actionButton}>
-                                                        <Visibility/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title='Send to Manager'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    className={classes.actionButton}
-                                                    onClick={handleSendToManager}>
-                                                        <Send/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title='Send to Developer'>
-                                                    <IconButton 
-                                                    id={post.id}
-                                                    className={classes.actionButton}
-                                                    onClick={handleSendToDeveloper}>
-                                                        <Mail/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </div>
-                                        }
-                                    />
-                                    <CardContent>
-                                        <Typography className={classes.text}>{post.text}</Typography>
-                                        <TextField 
-                                        id={post.id}
-                                        placeholder='Type a reply...'
-                                        multiline
-                                        variant='outlined'
-                                        size='small'
-                                        //onChange={handleChange}
-                                        className={classes.reply}/>
-                                        <Button
-                                        id={post.id}
-                                        variant='contained'
-                                        color='primary'
-                                        disableElevation
-                                        onClick={handleReply}
-                                        className={classes.replyButton}
-                                        >
-                                            Reply
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            <Snackbar 
-                            open={successbar}
-                            autoHideDuration={1000}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            >
-                            {
-                                successbar ? 
-                                    <Alert severity='success'>{successbar}</Alert> :
-                                    null
-                            }
-                            </Snackbar>
-                            <Snackbar
-                            open={failbar}
-                            autoHideDuration={1000}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            >
-                            {
-                                failbar ? 
-                                    <Alert severity='error'>{failbar}</Alert> :
-                                    null
-                            }
-                            </Snackbar>
+                                            }
+                                            {
+                                                post.sentiment === -1 ?
+                                                    <Tooltip title='Customer seems to be disappointed'>
+                                                        <IconButton>
+                                                            <HiEmojiSad style={{color: "#f44336", fontSize: '25px'}} />
+                                                        </IconButton>
+                                                    </Tooltip> :
+                                                    null
+                                            }
+                                            {
+                                                post.sentiment === 0 ?
+                                                    <Tooltip title='Customer seems to be fine'>
+                                                        <IconButton>
+                                                            <ImNeutral2 style={{color: "#ff9800", fontSize: '20px'}} />
+                                                        </IconButton>
+                                                    </Tooltip> :
+                                                    null
+                                            }
+                                            <Tooltip title='Chuck'>
+                                                <IconButton 
+                                                id={post.id}
+                                                onClick={handleDelete}
+                                                className={classes.actionButton}>
+                                                    <Delete/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Mark as Read'>
+                                                <IconButton 
+                                                id={post.id}
+                                                onClick={handleRead}
+                                                className={classes.actionButton}>
+                                                    <Visibility/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Send to Manager'>
+                                                <IconButton 
+                                                id={post.id}
+                                                className={classes.actionButton}
+                                                onClick={handleSendToManager}>
+                                                    <Send/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Send to Developer'>
+                                                <IconButton 
+                                                id={post.id}
+                                                className={classes.actionButton}
+                                                onClick={handleSendToDeveloper}>
+                                                    <Mail/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
+                                    }
+                                />
+                                <CardContent>
+                                    <Typography className={classes.text}>{post.text}</Typography>
+                                    <TextField 
+                                    id={post.id}
+                                    placeholder='Type a reply...'
+                                    multiline
+                                    variant='outlined'
+                                    size='small'
+                                    //onChange={handleChange}
+                                    className={classes.reply}/>
+                                    <Button
+                                    id={post.id}
+                                    variant='contained'
+                                    color='primary'
+                                    disableElevation
+                                    onClick={handleReply}
+                                    className={classes.replyButton}
+                                    >
+                                        Reply
+                                    </Button>
+                                </CardContent>
+                            </Card>
                     </div>
                     ))
                 }
