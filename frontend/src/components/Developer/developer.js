@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
         height: '48px'
     },
     title: {
+        fontFamily: "'Aldrich', sans-serif",
         fontSize: '25px',
         letterSpacing: '1px',
         fontWeight: '400',

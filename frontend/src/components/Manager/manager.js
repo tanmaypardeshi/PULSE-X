@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         postion: 'fixed'
     },
     title: {
+        fontFamily: "'Aldrich', sans-serif",
         fontSize: '25px',
         letterSpacing: '1px',
         fontWeight: '400',
