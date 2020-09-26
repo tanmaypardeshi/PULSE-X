@@ -4,7 +4,7 @@ const config = {
 }
 
 const PROD_URI="https://api.pulsex.tk/api"
-const DEV_URI="http://192.168.29.126/8000/api"
+const DEV_URI="http://192.168.29.126:8000/api"
 
 export const SERVER_URI = (mode === 'PROD' ? PROD_URI : DEV_URI);
 

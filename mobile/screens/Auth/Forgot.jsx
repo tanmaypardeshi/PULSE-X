@@ -125,6 +125,7 @@ export default ({navigation}) => {
                 setLoading(false)
             })
             .catch(err => {
+                console.log(err)
                 setUserDetails({...userDetails, email: {
                     ...userDetails.email,
                     error: true,

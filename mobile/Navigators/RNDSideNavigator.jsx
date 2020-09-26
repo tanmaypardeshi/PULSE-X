@@ -16,8 +16,6 @@ const DrawerContent = props => {
     const [profile, setProfile] = React.useState()
     const [loading, setLoading] = React.useState(false)
 
-    const {src, setSrc} = React.useContext(SourceContext)
-
     const isDrawerOpen = useIsDrawerOpen()
 
     useFocusEffect(React.useCallback(() => {
@@ -86,12 +84,12 @@ const DrawerContent = props => {
                 //props.navigation.navigate('Auth')
             }}
         />
-        <View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
+        {/* <View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
             <ToggleButton.Row onValueChange={setSrc} value={src}>
                 <ToggleButton icon='amazon' value='amazon'/>
                 <ToggleButton icon='twitter' value='twitter'/>
             </ToggleButton.Row>
-        </View>
+        </View> */}
         </DrawerContentScrollView>
     )
 }

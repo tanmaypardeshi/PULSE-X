@@ -298,7 +298,7 @@ const Stack = createStackNavigator()
 
 export default ({navigation}) => {
     
-    const {src} = React.useContext(SourceContext)
+    // const {src} = React.useContext(SourceContext)
 
     return (
     <Stack.Navigator initialRouteName="Statistics">
@@ -307,7 +307,7 @@ export default ({navigation}) => {
             component={Stats}
             options={{
                 headerLeft: () => <IconButton icon='menu' onPress={() => navigation.toggleDrawer()}/>,
-                headerRight: () => <IconButton icon={src}/>
+                // headerRight: () => <IconButton icon={src}/>
             }}
         />
     </Stack.Navigator>

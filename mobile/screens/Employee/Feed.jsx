@@ -3,7 +3,7 @@ import * as React from 'react'
 import { StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-deck-swiper'
 import { Button, Card, Dialog, IconButton, Paragraph, Portal, Snackbar, TextInput, useTheme, List, ActivityIndicator, DataTable, Avatar, Colors, Caption, Badge } from 'react-native-paper'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store'
 import Axios from 'axios'
 import { SERVER_URI, AXIOS_HEADERS } from '../../config'
@@ -55,38 +55,27 @@ const Home = ({navigation}) => {
 
     const [showReply, setShowReply] = React.useState(false)
     const [replyIndex, setReplyIndex] = React.useState('')
-    //const [swiped, setSwiped] = React.useState(false)
     const [snack, setSnack] = React.useState(defaultSnack)
     const [cardData, setCardData] = React.useState([])
     const [loading, setLoading] = React.useState(true)
     const [replyField, setReplyField] = React.useState('')
 
-    // useFocusEffect(React.useCallback(() => {
-    //     // if (cardData.length !== 0) {
-    //         console.log('Fetchin cards')
-    //         fetchCards().catch(err => alert('Error in promise chain'))
-    //     // }
-    //     // else {
-    //     //     console.log('Using the same cards')
-    //     // }
-    // },[]))
+    const {src} = React.useContext(SourceContext)
+
+    const isFocused = useIsFocused()
 
     React.useEffect(() => {
-        AsyncStorage.getItem('feed')
-        .then(res => {
-            if (res)
-                setCardData(JSON.parse(res))
-            else
-                return fetchCards()
-        })
-        .catch(err => alert('Error in promise chain'))
-    },[])
+        console.log('Focused: ' + isFocused)
+        if (isFocused) {
+            fetchCards()
+        }
+    },[src])
 
-    const fetchCards = () => 
+    const fetchCards = () => {
         SecureStore.getItemAsync('token')
         .then(token => 
             Axios.get(
-                `${SERVER_URI}/employee/review/`,
+                `${SERVER_URI}/employee/review/${src}/`,
                 {
                     headers: {
                         ...AXIOS_HEADERS,
@@ -97,11 +86,11 @@ const Home = ({navigation}) => {
         )
         .then(res => {
             setCardData(res.data.review_set)
-            console.log(res.data.review_set)
-            AsyncStorage.setItem('feed', JSON.stringify(res.data.review_set))
-            .then(() => console.log('Storage successful'))
-            .catch(console.log)
         })
+        .catch(err => {
+            console.log(err)
+        })
+    }
     
     const theme = useTheme()
 
@@ -128,9 +117,9 @@ const Home = ({navigation}) => {
         SecureStore.getItemAsync('token')
         .then(token => 
             Axios.post(
-                `${SERVER_URI}/employee/review/`,
+                `${SERVER_URI}/employee/review/${src}/`,
                 {
-                    ...cardData[index], flag: newFlag
+                    ...cardData[index], flag: newFlag, is_twitter: src === 'twitter'
                 },
                 {
                     headers: {
@@ -140,11 +129,11 @@ const Home = ({navigation}) => {
                 }
             )
         )
-        .then(res => AsyncStorage.getItem('feed'))
-        .then(feed => {
-            const newFeed = JSON.parse(feed).slice(1)
-            return AsyncStorage.setItem('feed', JSON.stringify(newFeed))
-        })
+        // .then(res => AsyncStorage.getItem('feed'))
+        // .then(feed => {
+        //     const newFeed = JSON.parse(feed).slice(1)
+        //     return AsyncStorage.setItem('feed', JSON.stringify(newFeed))
+        // })
         .then(() => {
             setReplyField('')
             setSnack({...snack, [key]: true})
@@ -170,26 +159,15 @@ const Home = ({navigation}) => {
                 renderCard={(innerCardData, cardIndex) =>
                     <Card index={cardIndex}>
                         <Card.Title
-                            title={innerCardData.profile_name}
-                            subtitleNumberOfLines={3}
-                            subtitle={
-                                <Caption 
-                                    onPress={() => 
-                                        WebBrowser.openBrowserAsync("http://" + innerCardData.url)
-                                        .then(console.log)
-                                        .catch(console.log)
-                                    }
-                                    style={{color: Colors.blue500}}
-                                >
-                                    {innerCardData.url}
-                                </Caption>
+                            title={
+                                innerCardData.product
+                                .replace(/\[/gi, "")
+                                .replace(/]/gi, "")
+                                .replace(/'/gi, "")
+                                .replace(/"/gi, "")
                             }
-                            left={props => <Avatar.Text {...props} label={
-                                    innerCardData.profile_name.split(" ").map((val, index) => {
-                                        if (index < 2)
-                                            return val.slice(0,1)
-                                    }).join('')
-                                }/>
+                            subtitleNumberOfLines={3}
+                            left={props => <IconButton icon={innerCardData.helpfulness === 1 ? 'account-check' : 'account'}/>
                             }
                             right={props => 
                                 <IconButton 
@@ -304,7 +282,21 @@ const Home = ({navigation}) => {
                     setShowReply(true)
                 }}
                 onSwipedAll={() => {
-                    fetchCards()
+                    SecureStore.getItemAsync('token')
+                    .then(token => 
+                        Axios.get(
+                            `${SERVER_URI}/employee/review/${src}/`,
+                            {
+                                headers: {
+                                    ...AXIOS_HEADERS,
+                                    "Authorization": `Bearer ${token}`
+                                }
+                            }
+                        )    
+                    )
+                    .then(res => {
+                        setCardData(res.data.review_set)
+                    })
                     .then(() => swipeRef.current.jumpToCardIndex(0))
                     .catch(err => alert('Error in cards'))
                 }}
