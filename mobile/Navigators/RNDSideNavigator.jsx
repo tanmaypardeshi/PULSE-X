@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator()
 
 const DrawerContent = props => {
     const [profile, setProfile] = React.useState()
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(true)
 
     const isDrawerOpen = useIsDrawerOpen()
 
@@ -37,8 +37,8 @@ const DrawerContent = props => {
         .then(res => {
             console.log(res.data)
             setProfile(res.data)
+            setLoading(false)
         })
-        .then(() => setLoading(false))
         .catch(err => {
             setLoading(false)
             console.log(err)
