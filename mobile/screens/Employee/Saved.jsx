@@ -20,6 +20,8 @@ const Saved = ({navigation}) => {
     const [showReply, setShowReply] = React.useState(false)
     const [replyField, setReplyField] = React.useState('')
 
+    const {src} = React.useContext(SourceContext)
+
     
     // useFocusEffect(React.useCallback(() => {
     //     console.log('Fetching saved files')
@@ -28,14 +30,14 @@ const Saved = ({navigation}) => {
 
     React.useEffect(() => {
         fetchCards()
-    },[])
+    },[src])
 
 
     const fetchCards = () => {
         SecureStore.getItemAsync('token')
         .then(token => 
             Axios.get(
-                `${SERVER_URI}/employee/saved/`,
+                `${SERVER_URI}/employee/saved/${src}/`,
                 {
                     headers: {
                         ...AXIOS_HEADERS,
@@ -45,6 +47,7 @@ const Saved = ({navigation}) => {
             )    
         )
         .then(res => {
+            // console.log(res)
             setCards(res.data)
             setLoading(false)
             setRefreshing(false)
@@ -60,7 +63,7 @@ const Saved = ({navigation}) => {
         setLoading(true)
         SecureStore.getItemAsync('token')
         .then(token => Axios.post(
-            `${SERVER_URI}/employee/saved/`,
+            `${SERVER_URI}/employee/saved/${src}`,
             {
                 id, flag
             },
@@ -99,26 +102,14 @@ const Saved = ({navigation}) => {
                         style={{marginTop: 20}}
                     >
                         <Card.Title
-                            title={item.profile_name}
-                            subtitleNumberOfLines={3}
-                            subtitle={
-                                <Caption 
-                                    onPress={() => 
-                                        WebBrowser.openBrowserAsync("http://" + item.url)
-                                        .then(console.log)
-                                        .catch(console.log)
-                                    }
-                                    style={{color: Colors.blue500}}
-                                >
-                                    {item.url}
-                                </Caption>
+                            title={item.product
+                                .replace(/\[/gi, "")
+                                .replace(/]/gi, "")
+                                .replace(/'/gi, "")
+                                .replace(/"/gi, "")
                             }
-                            left = {props => <Avatar.Text {...props} label={
-                                    item.profile_name.split(" ").map((val, index) => {
-                                        if (index < 2)
-                                            return val.slice(0,1)
-                                    }).join('')
-                                }/>
+                            subtitleNumberOfLines={3}
+                            left={props => <IconButton icon={item.helpfulness === 1 ? 'account-check' : 'account'}/>
                             }
                             right = {props =>
                                 <IconButton
@@ -136,14 +127,30 @@ const Saved = ({navigation}) => {
                             }
                         />
                         <List.AccordionGroup>
-                            <List.Accordion title="Content" id="1">
+                            <List.Accordion 
+                                title="Content" 
+                                id="1"
+                                left={props => 
+                                    <List.Icon {...props} icon={
+                                        item.sarcasm === 0 ?
+                                        'text' :
+                                        'emoticon-devil'
+                                    }/>
+                                }
+                            >
                                 <Card.Content>
                                     <Paragraph>
                                         {item.text}
                                     </Paragraph>
                                 </Card.Content>
                             </List.Accordion>
-                            <List.Accordion title="Actions" id="2">
+                            <List.Accordion 
+                                title="Actions" 
+                                id="2"
+                                left={props => 
+                                    <List.Icon {...props} icon='dip-switch'/>
+                                }
+                            >
                                 <Card.Actions style={{justifyContent: 'space-around'}}>
                                     <IconButton 
                                         icon='delete'

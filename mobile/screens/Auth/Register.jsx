@@ -3,7 +3,8 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { Caption, RadioButton, TextInput, Title, Text, List, Button, HelperText, ActivityIndicator } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as SecureStore from 'expo-secure-store'
-import { AXIOS_HEADERS } from '../../config'
+import Axios from 'axios'
+import { AXIOS_HEADERS, SERVER_URI } from '../../config'
 
 const styles = StyleSheet.create({
     inputStyle: {
@@ -102,7 +103,10 @@ export default ({navigation}) => {
                 .setItemAsync("token", res.data.token)
                 .then(() => {
                     setLoading(false)
-                    navigation.navigate('Login')
+                    if (department === 'Manager')
+                        navigation.navigate('Manager')
+                    else
+                        navigation.navigate('RND')
                 })
                 .catch(() => {
                     setLoading(false)

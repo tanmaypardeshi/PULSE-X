@@ -3,11 +3,13 @@ import { createStackNavigator } from '@react-navigation/stack'
 import AuthTabNavigator from './AuthTabNavigator'
 import EmployeeSideNavigator from './EmployeeSideNavigator'
 import ManagerSideNavigator from './ManagerSideNavigator'
-import { TouchableRipple, HelperText, useTheme } from 'react-native-paper'
-import { Image } from 'react-native'
+import { TouchableRipple, HelperText, useTheme, ActivityIndicator } from 'react-native-paper'
+import { Image, View } from 'react-native'
 import * as LocalAuthentication from 'expo-local-authentication'
 import * as SecureStore from 'expo-secure-store'
 import RNDSideNavigator from './RNDSideNavigator'
+import Axios from 'axios'
+import { SERVER_URI, AXIOS_HEADERS } from '../config'
 
 const biometricGif = require('../assets/Animations/biometric.gif')
 
@@ -17,17 +19,31 @@ export default () => {
 
     const [bioFailed, setBioFailed] = React.useState(false)
     const [initialRoute, setInitialRoute] = React.useState('')
+    const [isTokenValid, setIsTokenValid] = React.useState(false)
 
     const theme = useTheme()
 
-    const biometricAuth = () => {
+    React.useEffect(() => {
         SecureStore.getItemAsync('token')
         .then(token => {
-            if (token) 
-                return LocalAuthentication.hasHardwareAsync()
-            else 
-                throw new Error('Abort biometric authentication')
+            if (token)
+                return Axios.get(`${SERVER_URI}/user/profile`, {
+                    headers: {
+                        ...AXIOS_HEADERS,
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+            else
+                throw new Error('Token Not Found')
         })
+        .then(res => {
+            setIsTokenValid(true)
+        })
+        .catch(err => setInitialRoute('Auth'))
+    }, [])
+
+    const biometricAuth = () => {
+        LocalAuthentication.hasHardwareAsync()
         .then(deviceHasBiometrics => {
             if (deviceHasBiometrics)
                 return LocalAuthentication.supportedAuthenticationTypesAsync()
@@ -84,6 +100,8 @@ export default () => {
             <Stack.Screen name="RND" component={RNDSideNavigator} />
         </Stack.Navigator>
         :
+        isTokenValid
+        ?
         <TouchableRipple 
             style={{ 
                 flex: 1, 
@@ -110,6 +128,19 @@ export default () => {
                     Long Press to login again
                 </HelperText>
             </>
-        </TouchableRipple> 
+        </TouchableRipple>
+        :
+        <View 
+            style={{
+                flex: 1, 
+                justifyContent: 'center', 
+                alignItems: 'center',
+                backgroundColor: theme.dark ? 'black' : 'white'
+            }}>
+            <ActivityIndicator size='large' animating={true}/>
+            <HelperText>
+                Checking for credentials, please wait.
+            </HelperText>
+        </View> 
     )
 }

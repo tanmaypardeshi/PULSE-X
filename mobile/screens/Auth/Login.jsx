@@ -89,6 +89,7 @@ export default ({navigation}) => {
                 })
             })
             .catch(err => {
+                console.log(err)
                 setPostLoading(false)
                 setAuthError(true)
                 setAuthErrMsg(err.message + '\n' + "Swipe right to reset password or left to create an account")

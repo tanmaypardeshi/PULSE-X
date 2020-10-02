@@ -14,9 +14,7 @@ const Drawer = createDrawerNavigator()
 
 const DrawerContent = props => {
     const [profile, setProfile] = React.useState()
-    const [loading, setLoading] = React.useState(false)
-
-    const {src, setSrc} = React.useContext(SourceContext)
+    const [loading, setLoading] = React.useState(true)
 
     const isDrawerOpen = useIsDrawerOpen()
 
@@ -39,8 +37,8 @@ const DrawerContent = props => {
         .then(res => {
             console.log(res.data)
             setProfile(res.data)
+            setLoading(false)
         })
-        .then(() => setLoading(false))
         .catch(err => {
             setLoading(false)
             console.log(err)
@@ -86,12 +84,12 @@ const DrawerContent = props => {
                 //props.navigation.navigate('Auth')
             }}
         />
-        <View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
+        {/* <View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
             <ToggleButton.Row onValueChange={setSrc} value={src}>
                 <ToggleButton icon='amazon' value='amazon'/>
                 <ToggleButton icon='twitter' value='twitter'/>
             </ToggleButton.Row>
-        </View>
+        </View> */}
         </DrawerContentScrollView>
     )
 }
